@@ -11,6 +11,7 @@ import org.hibernate.id.SequenceGenerator;
 import org.hibernate.type.Type;
 
 import java.sql.Types;
+import java.util.Properties;
 
 public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
 
@@ -19,10 +20,10 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
      */
     public PostgresqlExtensionsDialect() {
         super();
-        registerColumnType(Types.ARRAY, "array")
-        registerColumnType(LongArrayType.SQLTYPE, "int8[]")
-        registerColumnType(IntegerArrayType.SQLTYPE, "int[]")
-        registerColumnType(StringArrayType.SQLTYPE, "varchar[]")
+        registerColumnType(Types.ARRAY, "array");
+        registerColumnType(LongArrayType.SQLTYPE, "int8[]");
+        registerColumnType(IntegerArrayType.SQLTYPE, "int[]");
+        registerColumnType(StringArrayType.SQLTYPE, "varchar[]");
     }
 
     /**

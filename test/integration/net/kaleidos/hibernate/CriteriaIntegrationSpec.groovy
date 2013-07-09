@@ -11,7 +11,7 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
     def criteriaService
 
     @Unroll
-    void 'search in an array of integers'() {
+    void 'search #number in an array of integers'() {
         setup:
             def like1 = new Like(favoriteNumbers:[3, 7], favoriteLongNumbers:[], favoriteMovies:[])
             def user1 = new User(name:'John', like:like1.save())
@@ -36,16 +36,19 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-            number | resultSize
-               3   |     2
-               17  |     1
-               9   |     2
-               4   |     2
-               1   |     0
+            number    | resultSize
+               3      |     2
+               17     |     1
+               9      |     2
+               4      |     2
+               1      |     0
+               [3,4]  |     1     
+               [4]    |     2
+               []     |     4
     }
 
     @Unroll
-    void 'search in an array of longs'() {
+    void 'search #number in an array of longs'() {
         setup:
             def like1 = new Like(favoriteNumbers:[], favoriteLongNumbers:[12383L, 2392348L, 3498239L], favoriteMovies:[])
             def user1 = new User(name:'John', like:like1.save())
@@ -70,15 +73,18 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-              number    | resultSize
-              12383L    |     3
-              98978L    |     2
-            -983893849L |     1
-              48574L    |     0
+              number            | resultSize
+              12383L            |     3
+              98978L            |     2
+            -983893849L         |     1
+              48574L            |     0
+              [12383L, 98978L]  |     1
+              [12383L]          |     3
+              []                |     4
     }
 
     @Unroll
-    void 'search in an array of strings'() {
+    void 'search #movie in an array of strings'() {
         setup:
             def like1 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["The Matrix", "The Lord of the Rings"])
             def user1 = new User(name:'John', like:like1.save())
@@ -103,12 +109,15 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-                      movie         | resultSize
-            "The Matrix"            |     1
-            "The Lord of the Rings" |     2
-            "Blade Runner"          |     2
-            "Starwars"              |     2
-            "The Usual Suspects"    |     0
+            movie                                       | resultSize
+            "The Matrix"                                |     1
+            "The Lord of the Rings"                     |     2
+            "Blade Runner"                              |     2
+            "Starwars"                                  |     2
+            "The Usual Suspects"                        |     0
+            ["Starwars", "Romeo & Juliet"]              |     1
+            ["The Lord of the Rings"]                   |     2
+            []                                          |     4
     }
 
     void 'search in an array of strings with join with another domain class'() {
