@@ -1,52 +1,57 @@
 package net.kaleidos.hibernate
 
+import org.hibernate.HibernateException;
+
 import grails.plugin.spock.*
 import spock.lang.*
 
 import test.criteria.User
 import test.criteria.Like
 
-class CriteriaIntegrationSpec extends IntegrationSpec {
+class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
-    def criteriaService
+    def pgContainsCriteriaTestService
 
     @Unroll
     void 'search #number in an array of integers'() {
         setup:
-            def like1 = new Like(favoriteNumbers:[3, 7], favoriteLongNumbers:[], favoriteMovies:[])
+            def like1 = new Like(favoriteNumbers:[3, 7, 20], favoriteLongNumbers:[], favoriteMovies:[])
             def user1 = new User(name:'John', like:like1.save())
             user1.save()
 
-            def like2 = new Like(favoriteNumbers:[5, 17, 9, 6], favoriteLongNumbers:[], favoriteMovies:[])
+            def like2 = new Like(favoriteNumbers:[5, 17, 9, 6, 20], favoriteLongNumbers:[], favoriteMovies:[])
             def user2 = new User(name:'Peter', like:like2.save())
             user2.save()
 
-            def like3 = new Like(favoriteNumbers:[3, 4], favoriteLongNumbers:[], favoriteMovies:[])
+            def like3 = new Like(favoriteNumbers:[3, 4, 20], favoriteLongNumbers:[], favoriteMovies:[])
             def user3 = new User(name:'Mary', like:like3.save())
             user3.save()
 
-            def like4 = new Like(favoriteNumbers:[9, 4], favoriteLongNumbers:[], favoriteMovies:[])
+            def like4 = new Like(favoriteNumbers:[9, 4, 20], favoriteLongNumbers:[], favoriteMovies:[])
             def user4 = new User(name:'Jonhny', like:like4.save())
             user4.save()
 
         when:
-            def result = criteriaService.searchWithCriteriaIntegerArray(number)
+            def result = pgContainsCriteriaTestService.searchWithCriteriaIntegerArray(number)
 
         then:
             result.size() == resultSize
 
         where:
-            number    | resultSize
-               3      |     2
-               17     |     1
-               9      |     2
-               4      |     2
-               1      |     0
-               [3,4]  |     1     
-               [4]    |     2
-               []     |     4
+            number      | resultSize
+               3        |     2
+               17       |     1
+               9        |     2
+               4        |     2
+               1        |     0
+               20       |     4
+               [3,4]    |     1     
+               [3,4,7]  |     0
+               [4]      |     2
+               [3,20]   |     2
+               []       |     4
     }
-
+    
     @Unroll
     void 'search #number in an array of longs'() {
         setup:
@@ -67,7 +72,7 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             user4.save()
 
         when:
-            def result = criteriaService.searchWithCriteriaLongArray(number)
+            def result = pgContainsCriteriaTestService.searchWithCriteriaLongArray(number)
 
         then:
             result.size() == resultSize
@@ -103,7 +108,7 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             user4.save()
 
         when:
-            def result = criteriaService.searchWithCriteriaStringArray(movie)
+            def result = pgContainsCriteriaTestService.searchWithCriteriaStringArray(movie)
 
         then:
             result.size() == resultSize
@@ -139,7 +144,7 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             user4.save()
 
         when:
-            def result = criteriaService.searchStringWithJoin(movie)
+            def result = pgContainsCriteriaTestService.searchStringWithJoin(movie)
 
         then:
             result.size() == 2
@@ -169,7 +174,7 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
             user4.save()
 
         when:
-            def result = criteriaService.searchStringOrIntergetWithJoin(movie, number)
+            def result = pgContainsCriteriaTestService.searchStringOrIntergetWithJoin(movie, number)
 
         then:
             result.size() == 3
@@ -180,6 +185,42 @@ class CriteriaIntegrationSpec extends IntegrationSpec {
         where:
             movie = "Starwars"
             number = 4
+    }
+    
+    @Unroll
+    void 'search a invalid list inside the array of integers'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaIntegerArray(number)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            number << [["Test"], [1, "Test"], [1L], [1, 1L]]
+    }
+
+    @Unroll
+    void 'search a invalid list inside the array of long'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaLongArray(number)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            number << [["Test"], [1L, "Test"], [1], [1L, 1]]
+    }
+    
+    @Unroll
+    void 'search a invalid list inside the array of string'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaStringArray(movie)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
     }
 
 }

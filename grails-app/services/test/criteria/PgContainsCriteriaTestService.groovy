@@ -1,6 +1,6 @@
 package test.criteria
 
-class CriteriaService {
+class PgContainsCriteriaTestService {
     static transactional = true
 
     /**
