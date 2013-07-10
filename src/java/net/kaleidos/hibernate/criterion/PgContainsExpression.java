@@ -1,5 +1,6 @@
 package net.kaleidos.hibernate.criterion;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -38,11 +39,11 @@ public class PgContainsExpression implements Criterion {
         
         Object[] arrValue;
         if ("net.kaleidos.hibernate.usertype.IntegerArrayType".equals(propertyTypeName)) {
-            arrValue = getValueAsInteger(value);
+            arrValue = getValueAs(value, Integer.class);
         } else if ("net.kaleidos.hibernate.usertype.LongArrayType".equals(propertyTypeName)) {
-            arrValue = getValueAsLong(value);
+            arrValue = getValueAs(value, Long.class);
         } else if ("net.kaleidos.hibernate.usertype.StringArrayType".equals(propertyTypeName)) {
-            arrValue = getValueAsString(value);
+            arrValue = getValueAs(value, String.class);
         } else {
             throw new HibernateException("Native array for this type is not supported");
         }
@@ -52,77 +53,27 @@ public class PgContainsExpression implements Criterion {
         };
     }
     
-    private Object[] getValueAsInteger(Object assignedValue) {
-        Integer[] arrValue;
-        if (assignedValue instanceof Integer) {
-            arrValue = new Integer[1];
-            arrValue[0] = (Integer) assignedValue;
+    @SuppressWarnings("unchecked")    
+    private Object[] getValueAs(Object assignedValue, Class<?> classType) {
+        Object[] arrValue;
+        if (classType.isInstance(assignedValue)) {
+            arrValue = (Object[]) Array.newInstance(classType, 1);
+            arrValue[0] = classType.cast(assignedValue);
         } else if (assignedValue instanceof List) {
             List<Object> valueAsList = (List<Object>)assignedValue;
-            arrValue = new Integer[valueAsList.size()];
+            arrValue = (Object[]) Array.newInstance(classType, valueAsList.size());
             
             // We will iterate the collection and if the value it's not an Integer we throw the exception
             for(int i=0; i<valueAsList.size(); i++) {
-                if (valueAsList.get(i) instanceof Integer) {
-                    arrValue[i] = (Integer)valueAsList.get(i); 
+                if (classType.isInstance(valueAsList.get(i))) {
+                    arrValue[i] = classType.cast(valueAsList.get(i));
                 } else {
-                    throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: Integer or List<Integer>");
+                    throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: " + classType + " or List<" + classType + ">");
                 }
             }
         } else {
-            throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: Integer or List<Integer>");
+            throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: " + classType + " or List<" + classType + ">");
         }
         return arrValue;
     }
-    
-    private Object[] getValueAsLong(Object assignedValue) {
-        Long[] arrValue;
-        if (assignedValue instanceof Long) {
-            arrValue = new Long[1];
-            arrValue[0] = (Long) assignedValue;
-        } else if (assignedValue instanceof List) {
-            List<Object> valueAsList = (List<Object>)assignedValue;
-            arrValue = new Long[valueAsList.size()];
-            
-            // We will iterate the collection and if the value it's not an Integer we throw the exception
-            for(int i=0; i<valueAsList.size(); i++) {
-                if (valueAsList.get(i) instanceof Long) {
-                    arrValue[i] = (Long)valueAsList.get(i); 
-                } else {
-                    throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: Long or List<Long>");
-                }
-            }
-        } else {
-            throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: Long or List<Long>");
-        }
-        return arrValue;
-    }
-
-    private Object[] getValueAsString(Object assignedValue) {
-        String[] arrValue;
-        if (assignedValue instanceof String) {
-            arrValue = new String[1];
-            arrValue[0] = (String) assignedValue;
-        } else if (assignedValue instanceof List) {
-            List<Object> valueAsList = (List<Object>)assignedValue;
-            arrValue = new String[valueAsList.size()];
-            
-            // We will iterate the collection and if the value it's not an Integer we throw the exception
-            for(int i=0; i<valueAsList.size(); i++) {
-                if (valueAsList.get(i) instanceof String) {
-                    arrValue[i] = (String)valueAsList.get(i); 
-                } else {
-                    throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: String or List<String>");
-                }
-            }
-        } else {
-            throw new HibernateException("pgContains doesn't support values of type: " + assignedValue.getClass().getName() + ". Try: String or List<String>");
-        }
-        return arrValue;
-    }
-
-    public String toString() {
-        return propertyName + " @> ARRAY[" + value + "]";
-    }
-
 }
