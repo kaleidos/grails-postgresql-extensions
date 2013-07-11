@@ -15,22 +15,11 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search #number in an array of integers'() {
         setup:
-            def like1 = new Like(favoriteNumbers:[3, 7, 20], favoriteLongNumbers:[], favoriteMovies:[])
-            def user1 = new User(name:'John', like:like1.save())
-            user1.save()
-
-            def like2 = new Like(favoriteNumbers:[5, 17, 9, 6, 20], favoriteLongNumbers:[], favoriteMovies:[])
-            def user2 = new User(name:'Peter', like:like2.save())
-            user2.save()
-
-            def like3 = new Like(favoriteNumbers:[3, 4, 20], favoriteLongNumbers:[], favoriteMovies:[])
-            def user3 = new User(name:'Mary', like:like3.save())
-            user3.save()
-
-            def like4 = new Like(favoriteNumbers:[9, 4, 20], favoriteLongNumbers:[], favoriteMovies:[])
-            def user4 = new User(name:'Jonhny', like:like4.save())
-            user4.save()
-
+            new Like(favoriteNumbers:[3, 7, 20]).save()
+            new Like(favoriteNumbers:[5, 17, 9, 6, 20]).save()
+            new Like(favoriteNumbers:[3, 4, 20]).save()
+            new Like(favoriteNumbers:[9, 4, 20]).save()
+            
         when:
             def result = pgContainsCriteriaTestService.searchWithCriteriaIntegerArray(number)
 
@@ -55,22 +44,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search #number in an array of longs'() {
         setup:
-            def like1 = new Like(favoriteNumbers:[], favoriteLongNumbers:[12383L, 2392348L, 3498239L], favoriteMovies:[])
-            def user1 = new User(name:'John', like:like1.save())
-            user1.save()
-
-            def like2 = new Like(favoriteNumbers:[], favoriteLongNumbers:[12383L, 98978L], favoriteMovies:[])
-            def user2 = new User(name:'Peter', like:like2.save())
-            user2.save()
-
-            def like3 = new Like(favoriteNumbers:[], favoriteLongNumbers:[-983893849L, 398432423L, 98978L], favoriteMovies:[])
-            def user3 = new User(name:'Mary', like:like3.save())
-            user3.save()
-
-            def like4 = new Like(favoriteNumbers:[], favoriteLongNumbers:[12383L], favoriteMovies:[])
-            def user4 = new User(name:'Jonhny', like:like4.save())
-            user4.save()
-
+            new Like(favoriteLongNumbers:[12383L, 2392348L, 3498239L]).save()
+            new Like(favoriteLongNumbers:[12383L, 98978L]).save()
+            new Like(favoriteLongNumbers:[-983893849L, 398432423L, 98978L]).save()
+            new Like(favoriteLongNumbers:[12383L]).save()
         when:
             def result = pgContainsCriteriaTestService.searchWithCriteriaLongArray(number)
 
@@ -91,21 +68,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search #movie in an array of strings'() {
         setup:
-            def like1 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["The Matrix", "The Lord of the Rings"])
-            def user1 = new User(name:'John', like:like1.save())
-            user1.save()
-
-            def like2 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])
-            def user2 = new User(name:'Peter', like:like2.save())
-            user2.save()
-
-            def like3 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])
-            def user3 = new User(name:'Mary', like:like3.save())
-            user3.save()
-
-            def like4 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])
-            def user4 = new User(name:'Jonhny', like:like4.save())
-            user4.save()
+            new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()
+            new Like(favoriteMovies:["Spiderman", "Blade Runner", "Starwars"]).save()
+            new Like(favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"]).save()
+            new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
 
         when:
             def result = pgContainsCriteriaTestService.searchWithCriteriaStringArray(movie)
@@ -127,22 +93,11 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def like1 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["The Matrix", "The Lord of the Rings"])
-            def user1 = new User(name:'John', like:like1.save())
-            user1.save()
-
-            def like2 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])
-            def user2 = new User(name:'Peter', like:like2.save())
-            user2.save()
-
-            def like3 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])
-            def user3 = new User(name:'Mary', like:like3.save())
-            user3.save()
-
-            def like4 = new Like(favoriteNumbers:[], favoriteLongNumbers:[], favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])
-            def user4 = new User(name:'Jonhny', like:like4.save())
-            user4.save()
-
+            def user1 = new User(name:'John', like: new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
+            def user2 = new User(name:'Peter', like: new Like(favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])).save()
+            def user3 = new User(name:'Mary', like: new Like(favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+            def user4 = new User(name:'Jonhny', like: new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            
         when:
             def result = pgContainsCriteriaTestService.searchStringWithJoin(movie)
 
@@ -157,22 +112,11 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
     void 'search in an array of strings with join with another domain class and or statement'() {
         setup:
-            def like1 = new Like(favoriteNumbers:[3, 7], favoriteLongNumbers:[], favoriteMovies:["The Matrix", "The Lord of the Rings"])
-            def user1 = new User(name:'John', like:like1.save())
-            user1.save()
-
-            def like2 = new Like(favoriteNumbers:[5, 17, 9, 6], favoriteLongNumbers:[], favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])
-            def user2 = new User(name:'Peter', like:like2.save())
-            user2.save()
-
-            def like3 = new Like(favoriteNumbers:[3, 4], favoriteLongNumbers:[], favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])
-            def user3 = new User(name:'Mary', like:like3.save())
-            user3.save()
-
-            def like4 = new Like(favoriteNumbers:[9, 4], favoriteLongNumbers:[], favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])
-            def user4 = new User(name:'Jonhny', like:like4.save())
-            user4.save()
-
+            def user1 = new User(name:'John', like: new Like(favoriteNumbers:[3, 7], favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
+            def user2 = new User(name:'Peter', like: new Like(favoriteNumbers:[5, 17, 9, 6], favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])).save()
+            def user3 = new User(name:'Mary', like: new Like(favoriteNumbers:[3, 4], favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+            def user4 = new User(name:'Jonhny', like: new Like(favoriteNumbers:[9, 4], favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            
         when:
             def result = pgContainsCriteriaTestService.searchStringOrIntergetWithJoin(movie, number)
 
