@@ -31,12 +31,12 @@ class PgCriteriaUtils {
                 if (expectedType.isInstance(valueAsList.get(i))) {
                     arrValue[i] = expectedType.cast(valueAsList.get(i));
                 } else {
-                    throw new HibernateException("pgContains doesn't support values of type: " + 
+                    throw new HibernateException("criteria doesn't support values of type: " + 
                                targetValue.getClass().getName() + ". Try: " + expectedType + " or List<" + expectedType + "> instead");
                 }
             }
         } else {
-            throw new HibernateException("pgContains doesn't support values of type: " + 
+            throw new HibernateException("criteria doesn't support values of type: " + 
                         targetValue.getClass().getName() + ". Try: " + expectedType + " or List<" + expectedType + "> instead");
         }
         return arrValue;
