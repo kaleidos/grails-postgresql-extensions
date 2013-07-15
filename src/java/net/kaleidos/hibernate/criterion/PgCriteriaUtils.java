@@ -16,7 +16,7 @@ class PgCriteriaUtils {
      * @param expectedType The expected type of the returned array
      * @return
      */
-    @SuppressWarnings("unchecked")    
+    @SuppressWarnings("unchecked")
     public Object[] getValueAsArrayOfType(Object targetValue, Class<?> expectedType) {
         Object[] arrValue;
         if (expectedType.isInstance(targetValue)) {
@@ -25,18 +25,18 @@ class PgCriteriaUtils {
         } else if (targetValue instanceof List) {
             List<Object> valueAsList = (List<Object>)targetValue;
             arrValue = (Object[]) Array.newInstance(expectedType, valueAsList.size());
-            
-            // We will iterate the collection and if the value it's not an Integer we throw the exception
+
+            // We will iterate the collection and if the value it's not a valid value we throw the exception
             for(int i=0; i<valueAsList.size(); i++) {
                 if (expectedType.isInstance(valueAsList.get(i))) {
                     arrValue[i] = expectedType.cast(valueAsList.get(i));
                 } else {
-                    throw new HibernateException("criteria doesn't support values of type: " + 
+                    throw new HibernateException("criteria doesn't support values of type: " +
                                targetValue.getClass().getName() + ". Try: " + expectedType + " or List<" + expectedType + "> instead");
                 }
             }
         } else {
-            throw new HibernateException("criteria doesn't support values of type: " + 
+            throw new HibernateException("criteria doesn't support values of type: " +
                         targetValue.getClass().getName() + ". Try: " + expectedType + " or List<" + expectedType + "> instead");
         }
         return arrValue;

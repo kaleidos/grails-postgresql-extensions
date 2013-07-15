@@ -9,17 +9,17 @@ import org.hibernate.type.Type;
 import org.hibernate.util.StringHelper;
 
 /**
- * Constrains a property in an array to a value
+ * Check if two arrays overlaps
  */
-public class PgIsContainedByExpression implements Criterion {
-    
-    private static final long serialVersionUID = 5472619803952496831L;
-    
+public class PgOverlapExpression implements Criterion {
+
+    private static final long serialVersionUID = 8263961731207700428L;
+
     private final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
     private final String propertyName;
     private final Object value;
 
-    protected PgIsContainedByExpression(String propertyName, Object value) {
+    protected PgOverlapExpression(String propertyName, Object value) {
         this.propertyName = propertyName;
         this.value = value;
     }
@@ -27,7 +27,7 @@ public class PgIsContainedByExpression implements Criterion {
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
             " and ",
-            StringHelper.suffix( criteriaQuery.findColumns(propertyName, criteria), " <@ ARRAY[?]" )
+            StringHelper.suffix( criteriaQuery.findColumns(propertyName, criteria), " && ARRAY[?]" )
         );
     }
 
