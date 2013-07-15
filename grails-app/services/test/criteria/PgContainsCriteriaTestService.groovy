@@ -1,7 +1,7 @@
 package test.criteria
 
 class PgContainsCriteriaTestService {
-    static transactional = true
+    static transactional = false
 
     /**
      * Search "likes" with integer in array
@@ -35,7 +35,7 @@ class PgContainsCriteriaTestService {
 
         return result
     }
-    
+
     /**
      * Search "likes" with n integers in array
      */

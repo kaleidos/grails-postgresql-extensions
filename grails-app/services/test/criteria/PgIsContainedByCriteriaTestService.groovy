@@ -3,8 +3,8 @@ package test.criteria
 import java.util.List;
 
 class PgIsContainedByCriteriaTestService {
-    static transactional = true
-    
+    static transactional = false
+
         /**
          * Search for "likes" which elements are equals to the parameter
          */
@@ -12,7 +12,7 @@ class PgIsContainedByCriteriaTestService {
             def result = Like.withCriteria {
                 pgIsContainedBy 'favoriteNumbers', number
             }
-    
+
             return result
         }
 
@@ -23,10 +23,10 @@ class PgIsContainedByCriteriaTestService {
             def result = Like.withCriteria {
                 pgIsContainedBy 'favoriteNumbers', numberList
             }
-    
+
             return result
         }
-        
+
         /**
          * Search for "likes" which elements are equals to the parameter
          */
@@ -34,7 +34,7 @@ class PgIsContainedByCriteriaTestService {
             def result = Like.withCriteria {
                 pgIsContainedBy 'favoriteLongNumbers', number
             }
-    
+
             return result
         }
 
@@ -45,10 +45,10 @@ class PgIsContainedByCriteriaTestService {
             def result = Like.withCriteria {
                 pgIsContainedBy 'favoriteLongNumbers', numberList
             }
-    
+
             return result
         }
-        
+
         /**
          * Search for "likes" which elements are equals to the parameter
          */
@@ -56,7 +56,7 @@ class PgIsContainedByCriteriaTestService {
             def result = Like.withCriteria {
                 pgIsContainedBy 'favoriteMovies', movie
             }
-    
+
             return result
         }
 
@@ -67,10 +67,10 @@ class PgIsContainedByCriteriaTestService {
             def result = Like.withCriteria {
                 pgIsContainedBy 'favoriteMovies', movieList
             }
-    
+
             return result
         }
-        
+
         /**
          * Search with a join
          */
@@ -80,10 +80,10 @@ class PgIsContainedByCriteriaTestService {
                     pgIsContainedBy 'favoriteMovies', movie
                 }
             }
-    
+
             return results
         }
-    
+
         /**
          * Search with a join and an 'or'
          */
@@ -96,7 +96,7 @@ class PgIsContainedByCriteriaTestService {
                     }
                 }
             }
-    
+
             return results
         }
 }
