@@ -31,6 +31,11 @@ grails.project.dependency.resolution = {
             export = false
         }
 
+        compile (":guard:1.0.7") {
+            export = false
+        }
+
+
         runtime ":hibernate:$grailsVersion"
     }
 }
