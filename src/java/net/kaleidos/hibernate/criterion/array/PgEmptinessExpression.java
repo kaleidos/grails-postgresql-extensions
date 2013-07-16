@@ -10,22 +10,24 @@ import org.hibernate.util.StringHelper;
 /**
  * Constrains a property in an array to be empty
  */
-public class PgIsEmptyExpression implements Criterion {
+public class PgEmptinessExpression implements Criterion {
 
     private static final long serialVersionUID = 2169068982401072268L;
 
     private final String propertyName;
+    private final String op;
 
     private static final TypedValue[] NO_VALUES = new TypedValue[0];
 
-    protected PgIsEmptyExpression(String propertyName) {
+    protected PgEmptinessExpression(String propertyName, String op) {
         this.propertyName = propertyName;
+        this.op = op;
     }
 
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
                 " and ",
-                StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " = '{}'")
+                StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " '{}'")
             );
     }
 

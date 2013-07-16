@@ -3,7 +3,7 @@ package net.kaleidos.hibernate.postgresql
 import grails.orm.HibernateCriteriaBuilder
 import net.kaleidos.hibernate.criterion.array.PgContainsExpression
 import net.kaleidos.hibernate.criterion.array.PgIsContainedByExpression
-import net.kaleidos.hibernate.criterion.array.PgIsEmptyExpression
+import net.kaleidos.hibernate.criterion.array.PgEmptinessExpression
 import net.kaleidos.hibernate.criterion.array.PgOverlapsExpression
 
 import org.hibernate.criterion.Restrictions
@@ -106,16 +106,16 @@ class PostgresqlArrays {
             return addToCriteria(Restrictions.pgArrayOverlaps(propertyName, propertyValue))
         }
     }
-    
+
     private void addIsEmptyOperator() {
         /**
-         * Apply a "pgArrayOverlaps" constraint to the named property
+         * Apply a "pgArrayIsEmpty" constraint to the named property
          * @param propertyName
          * @param value value
          * @return Criterion
          */
         org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayIsEmpty = { String propertyName ->
-            return new PgIsEmptyExpression(propertyName)
+            return new PgEmptinessExpression(propertyName, "=")
         }
 
         /**
