@@ -1,9 +1,9 @@
 package net.kaleidos.hibernate.postgresql
 
 import grails.orm.HibernateCriteriaBuilder
-import net.kaleidos.hibernate.criterion.PgContainsExpression
-import net.kaleidos.hibernate.criterion.PgIsContainedByExpression
-import net.kaleidos.hibernate.criterion.PgOverlapExpression;
+import net.kaleidos.hibernate.criterion.arrays.PgContainsExpression
+import net.kaleidos.hibernate.criterion.arrays.PgIsContainedByExpression
+import net.kaleidos.hibernate.criterion.arrays.PgOverlapsExpression
 
 import org.hibernate.criterion.Restrictions
 
@@ -11,40 +11,21 @@ class PostgresqlArrays {
 
     public PostgresqlArrays() {
         addContainsOperator()
+        addIsContainedByOperator()
+        addOverlapsOperator()
     }
 
     private void addContainsOperator() {
 
         /**
-         * Apply a "pgContains" constraint to the named property
+         * Apply a "pgArrayContains" constraint to the named property
          * @param propertyName
          * @param value value
          * @return Criterion
          */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgContains = { String propertyName, Object value ->
+        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayContains = { String propertyName, Object value ->
             return new PgContainsExpression(propertyName, value)
         }
-
-        /**
-         * Apply a "pgIsContainedBy" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgIsContainedBy = { String propertyName, Object value ->
-            return new PgIsContainedByExpression(propertyName, value)
-        }
-
-        /**
-         * Apply a "pgOverlaps" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgOverlaps = { String propertyName, Object value ->
-            return new PgOverlapExpression(propertyName, value)
-        }
-
 
         /**
          * Creates a "contains in native array" Criterion based on the specified property name and value
@@ -52,16 +33,28 @@ class PostgresqlArrays {
          * @param propertyValue The property value
          * @return A Criterion instance
          */
-        HibernateCriteriaBuilder.metaClass.pgContains = { String propertyName, Object propertyValue ->
+        HibernateCriteriaBuilder.metaClass.pgArrayContains = { String propertyName, Object propertyValue ->
             if (!validateSimpleExpression()) {
-                throwRuntimeException(new IllegalArgumentException("Call to [pgContains] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."));
+                throwRuntimeException(new IllegalArgumentException("Call to [pgArrayContains] with propertyName [" +
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
-            propertyName = calculatePropertyName(propertyName);
-            propertyValue = calculatePropertyValue(propertyValue);
+            propertyName = calculatePropertyName(propertyName)
+            propertyValue = calculatePropertyValue(propertyValue)
 
-            return addToCriteria(Restrictions.pgContains(propertyName, propertyValue));
+            return addToCriteria(Restrictions.pgArrayContains(propertyName, propertyValue))
+        }
+    }
+
+    private void addIsContainedByOperator() {
+        /**
+         * Apply a "pgArrayIsContainedBy" constraint to the named property
+         * @param propertyName
+         * @param value value
+         * @return Criterion
+         */
+        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayIsContainedBy = { String propertyName, Object value ->
+            return new PgIsContainedByExpression(propertyName, value)
         }
 
         /**
@@ -70,16 +63,29 @@ class PostgresqlArrays {
          * @param propertyValue The property value
          * @return A Criterion instance
          */
-        HibernateCriteriaBuilder.metaClass.pgIsContainedBy = { String propertyName, Object propertyValue ->
+        HibernateCriteriaBuilder.metaClass.pgArrayIsContainedBy = { String propertyName, Object propertyValue ->
             if (!validateSimpleExpression()) {
-                throwRuntimeException(new IllegalArgumentException("Call to [pgIsContainedBy] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."));
+                throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsContainedBy] with propertyName [" +
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
-            propertyName = calculatePropertyName(propertyName);
-            propertyValue = calculatePropertyValue(propertyValue);
+            propertyName = calculatePropertyName(propertyName)
+            propertyValue = calculatePropertyValue(propertyValue)
 
-            return addToCriteria(Restrictions.pgIsContainedBy(propertyName, propertyValue));
+            return addToCriteria(Restrictions.pgArrayIsContainedBy(propertyName, propertyValue))
+        }
+
+    }
+
+    private void addOverlapsOperator() {
+        /**
+         * Apply a "pgArrayOverlaps" constraint to the named property
+         * @param propertyName
+         * @param value value
+         * @return Criterion
+         */
+        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayOverlaps = { String propertyName, Object value ->
+            return new PgOverlapsExpression(propertyName, value)
         }
 
         /**
@@ -88,17 +94,18 @@ class PostgresqlArrays {
          * @param propertyValue The property value
          * @return A Criterion instance
          */
-        HibernateCriteriaBuilder.metaClass.pgOverlaps = { String propertyName, Object propertyValue ->
+        HibernateCriteriaBuilder.metaClass.pgArrayOverlaps = { String propertyName, Object propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgOverlap] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."));
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
-            propertyName = calculatePropertyName(propertyName);
-            propertyValue = calculatePropertyValue(propertyValue);
+            propertyName = calculatePropertyName(propertyName)
+            propertyValue = calculatePropertyValue(propertyValue)
 
-            return addToCriteria(Restrictions.pgOverlaps(propertyName, propertyValue));
+            return addToCriteria(Restrictions.pgArrayOverlaps(propertyName, propertyValue))
         }
     }
+
 
 }
