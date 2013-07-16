@@ -16,7 +16,6 @@ class PgIsEmptyCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
         setup:
             new Like(favoriteNumbers:[3, 7, 20]).save()
             new Like(favoriteNumbers:[]).save()
-            new Like(favoriteNumbers:[4, 20]).save()
             new Like(favoriteNumbers:[]).save()
 
         when:
@@ -30,7 +29,6 @@ class PgIsEmptyCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
         setup:
             new Like(favoriteLongNumbers:[3L, 7L, 20L]).save()
             new Like(favoriteLongNumbers:[]).save()
-            new Like(favoriteLongNumbers:[4L, 20L]).save()
             new Like(favoriteLongNumbers:[]).save()
 
         when:
@@ -45,7 +43,6 @@ class PgIsEmptyCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()
             new Like(favoriteMovies:[]).save()
             new Like(favoriteMovies:[]).save()
-            new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
 
         when:
             def result = pgIsEmptyCriteriaTestService.searchEmptyStringArray()
@@ -59,7 +56,6 @@ class PgIsEmptyCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             def user1 = new User(name:'John', like: new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
             def user2 = new User(name:'Peter', like: new Like(favoriteMovies:[])).save()
             def user3 = new User(name:'Mary', like: new Like(favoriteMovies:[])).save()
-            def user4 = new User(name:'Jonhny', like: new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
 
         when:
             def result = pgIsEmptyCriteriaTestService.searchEmptyStringArrayWithJoin()
