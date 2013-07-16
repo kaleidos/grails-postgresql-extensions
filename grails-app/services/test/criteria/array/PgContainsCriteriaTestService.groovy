@@ -1,4 +1,4 @@
-package test.criteria
+package test.criteria.array
 
 class PgContainsCriteriaTestService {
     static transactional = false
@@ -8,7 +8,7 @@ class PgContainsCriteriaTestService {
      */
     public List<Like> searchWithCriteriaIntegerArray(Integer number) {
         def result = Like.withCriteria {
-            pgContains 'favoriteNumbers', number
+            pgArrayContains 'favoriteNumbers', number
         }
 
         return result
@@ -19,7 +19,7 @@ class PgContainsCriteriaTestService {
      */
     public List<Like> searchWithCriteriaLongArray(Long number) {
         def result = Like.withCriteria {
-            pgContains 'favoriteLongNumbers', number
+            pgArrayContains 'favoriteLongNumbers', number
         }
 
         return result
@@ -30,7 +30,7 @@ class PgContainsCriteriaTestService {
      */
     public List<Like> searchWithCriteriaStringArray(String movie) {
         def result = Like.withCriteria {
-            pgContains 'favoriteMovies', movie
+            pgArrayContains 'favoriteMovies', movie
         }
 
         return result
@@ -41,7 +41,7 @@ class PgContainsCriteriaTestService {
      */
     public List<Like> searchWithCriteriaIntegerArray(List<Integer> number) {
         def result = Like.withCriteria {
-            pgContains 'favoriteNumbers', number
+            pgArrayContains 'favoriteNumbers', number
         }
 
         return result
@@ -52,7 +52,7 @@ class PgContainsCriteriaTestService {
      */
     public List<Like> searchWithCriteriaLongArray(List<Long> number) {
         def result = Like.withCriteria {
-            pgContains 'favoriteLongNumbers', number
+            pgArrayContains 'favoriteLongNumbers', number
         }
 
         return result
@@ -63,7 +63,7 @@ class PgContainsCriteriaTestService {
      */
     public List<Like> searchWithCriteriaStringArray(List<String> movie) {
         def result = Like.withCriteria {
-            pgContains 'favoriteMovies', movie
+            pgArrayContains 'favoriteMovies', movie
         }
 
         return result
@@ -75,7 +75,7 @@ class PgContainsCriteriaTestService {
     public List<User> searchStringWithJoin(String movie) {
         def results = User.withCriteria {
             like {
-                pgContains 'favoriteMovies', movie
+                pgArrayContains 'favoriteMovies', movie
             }
         }
 
@@ -89,8 +89,8 @@ class PgContainsCriteriaTestService {
         def results = User.withCriteria {
             like {
                 or {
-                    pgContains 'favoriteMovies', movie
-                    pgContains 'favoriteNumbers', number
+                    pgArrayContains 'favoriteMovies', movie
+                    pgArrayContains 'favoriteNumbers', number
                 }
             }
         }

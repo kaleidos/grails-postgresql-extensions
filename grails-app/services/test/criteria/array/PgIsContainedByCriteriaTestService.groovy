@@ -1,4 +1,4 @@
-package test.criteria
+package test.criteria.array
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ class PgIsContainedByCriteriaTestService {
          */
         public List<Like> searchIsContainedByInteger(Integer number) {
             def result = Like.withCriteria {
-                pgIsContainedBy 'favoriteNumbers', number
+                pgArrayIsContainedBy 'favoriteNumbers', number
             }
 
             return result
@@ -21,7 +21,7 @@ class PgIsContainedByCriteriaTestService {
          */
         public List<Like> searchIsContainedByInteger(List<Integer> numberList) {
             def result = Like.withCriteria {
-                pgIsContainedBy 'favoriteNumbers', numberList
+                pgArrayIsContainedBy 'favoriteNumbers', numberList
             }
 
             return result
@@ -32,7 +32,7 @@ class PgIsContainedByCriteriaTestService {
          */
         public List<Like> searchIsContainedByLong(Long number) {
             def result = Like.withCriteria {
-                pgIsContainedBy 'favoriteLongNumbers', number
+                pgArrayIsContainedBy 'favoriteLongNumbers', number
             }
 
             return result
@@ -43,7 +43,7 @@ class PgIsContainedByCriteriaTestService {
          */
         public List<Like> searchIsContainedByLong(List<Long> numberList) {
             def result = Like.withCriteria {
-                pgIsContainedBy 'favoriteLongNumbers', numberList
+                pgArrayIsContainedBy 'favoriteLongNumbers', numberList
             }
 
             return result
@@ -54,7 +54,7 @@ class PgIsContainedByCriteriaTestService {
          */
         public List<Like> searchIsContainedByString(String movie) {
             def result = Like.withCriteria {
-                pgIsContainedBy 'favoriteMovies', movie
+                pgArrayIsContainedBy 'favoriteMovies', movie
             }
 
             return result
@@ -65,7 +65,7 @@ class PgIsContainedByCriteriaTestService {
          */
         public List<Like> searchIsContainedByString(List<String> movieList) {
             def result = Like.withCriteria {
-                pgIsContainedBy 'favoriteMovies', movieList
+                pgArrayIsContainedBy 'favoriteMovies', movieList
             }
 
             return result
@@ -77,7 +77,7 @@ class PgIsContainedByCriteriaTestService {
         public List<User> searchIsContainedByWithJoin(List<String> movie) {
             def results = User.withCriteria {
                 like {
-                    pgIsContainedBy 'favoriteMovies', movie
+                    pgArrayIsContainedBy 'favoriteMovies', movie
                 }
             }
 
@@ -91,8 +91,8 @@ class PgIsContainedByCriteriaTestService {
             def results = User.withCriteria {
                 like {
                     or {
-                        pgIsContainedBy 'favoriteMovies', movies
-                        pgIsContainedBy 'favoriteNumbers', numbers
+                        pgArrayIsContainedBy 'favoriteMovies', movies
+                        pgArrayIsContainedBy 'favoriteNumbers', numbers
                     }
                 }
             }

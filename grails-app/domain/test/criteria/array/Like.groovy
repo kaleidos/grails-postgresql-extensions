@@ -1,4 +1,4 @@
-package test.criteria
+package test.criteria.array
 
 import net.kaleidos.hibernate.usertype.IntegerArrayType
 import net.kaleidos.hibernate.usertype.LongArrayType

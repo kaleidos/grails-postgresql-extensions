@@ -1,4 +1,4 @@
-package net.kaleidos.hibernate
+package net.kaleidos.hibernate.array
 
 import grails.plugin.spock.*
 import spock.lang.*

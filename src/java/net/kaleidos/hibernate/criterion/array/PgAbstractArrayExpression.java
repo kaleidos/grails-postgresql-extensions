@@ -1,4 +1,4 @@
-package net.kaleidos.hibernate.criterion;
+package net.kaleidos.hibernate.criterion.arrays;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -6,35 +6,20 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.engine.TypedValue;
 import org.hibernate.type.Type;
-import org.hibernate.util.StringHelper;
 
-/**
- * Constrains a property in an array to a value
- */
-public class PgContainsExpression implements Criterion {
+public abstract class PgAbstractArrayExpression implements Criterion {
 
-    private static final long serialVersionUID = 1154636989071050823L;
+    private static final long serialVersionUID = 8243965673902347268L;
 
-    private final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
-    private final String propertyName;
-    private final Object value;
+    protected final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
+    protected String propertyName;
+    protected Object value;
 
-    protected PgContainsExpression(String propertyName, Object value) {
-        this.propertyName = propertyName;
-        this.value = value;
-    }
-
-    public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
-        return StringHelper.join(
-            " and ",
-            StringHelper.suffix( criteriaQuery.findColumns(propertyName, criteria), " @> ARRAY[?]" )
-        );
-    }
-
+    @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         Type propertyType = criteriaQuery.getType(criteria, propertyName);
         String propertyTypeName = propertyType.getName();
-        
+
         Object[] arrValue;
         if ("net.kaleidos.hibernate.usertype.IntegerArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Integer.class);
@@ -45,9 +30,10 @@ public class PgContainsExpression implements Criterion {
         } else {
             throw new HibernateException("Native array for this type is not supported");
         }
-        
+
         return new TypedValue[] {
             criteriaQuery.getTypedValue(criteria, propertyName, arrValue)
         };
     }
+
 }

@@ -1,12 +1,12 @@
-package net.kaleidos.hibernate
+package net.kaleidos.hibernate.array
 
-import org.hibernate.HibernateException;
+import org.hibernate.HibernateException
 
 import grails.plugin.spock.*
 import spock.lang.*
 
-import test.criteria.User
-import test.criteria.Like
+import test.criteria.array.User
+import test.criteria.array.Like
 
 class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
@@ -36,8 +36,8 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
                [1,2,3,4,5,6,7,8,9,10]   |     4
                []                       |     0
     }
-    
-    
+
+
     @Unroll
     void 'search #number in an array of long'() {
         setup:
@@ -62,8 +62,8 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
                [1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L]    |     4
                []                                           |     0
     }
-    
-    
+
+
     @Unroll
     void 'search #movie in an array of strings'() {
         setup:
@@ -87,8 +87,8 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
                ["A", "B", "C", "D", "E", "F", "G", "H", "I", "Z"]   |     4
                []                                                   |     0
     }
-    
-    
+
+
     void 'search in an array of strings with join with another domain class'() {
         setup:
             def user1 = new User(name:'Abe',        like:new Like(favoriteMovies:["A", "B", "D"])).save()
@@ -128,7 +128,7 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
             movies = ["A","B", "C"]
             numbers = [1, 2]
     }
-    
+
     @Unroll
     void 'search a invalid list inside the array of integers'() {
         when:
@@ -152,7 +152,7 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
         where:
             number << [["Test"], [1L, "Test"], [1], [1L, 1]]
     }
-    
+
     @Unroll
     void 'search a invalid list inside the array of string'() {
         when:

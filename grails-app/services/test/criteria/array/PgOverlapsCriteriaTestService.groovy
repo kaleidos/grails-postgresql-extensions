@@ -1,4 +1,4 @@
-package test.criteria
+package test.criteria.array
 
 class PgOverlapsCriteriaTestService {
     static transactional = false
@@ -8,7 +8,7 @@ class PgOverlapsCriteriaTestService {
      */
     public List<Like> overlapsIntegerArray(Integer number) {
         def result = Like.withCriteria {
-            pgOverlaps 'favoriteNumbers', number
+            pgArrayOverlaps 'favoriteNumbers', number
         }
 
         return result
@@ -19,7 +19,7 @@ class PgOverlapsCriteriaTestService {
      */
     public List<Like> overlapsIntegerArray(List<Integer> numbers) {
         def result = Like.withCriteria {
-            pgOverlaps 'favoriteNumbers', numbers
+            pgArrayOverlaps 'favoriteNumbers', numbers
         }
 
         return result
@@ -30,7 +30,7 @@ class PgOverlapsCriteriaTestService {
      */
     public List<Like> overlapsLongArray(Long number) {
         def result = Like.withCriteria {
-            pgOverlaps 'favoriteLongNumbers', number
+            pgArrayOverlaps 'favoriteLongNumbers', number
         }
 
         return result
@@ -41,7 +41,7 @@ class PgOverlapsCriteriaTestService {
      */
     public List<Like> overlapsLongArray(List<Long> numbers) {
         def result = Like.withCriteria {
-            pgOverlaps 'favoriteLongNumbers', numbers
+            pgArrayOverlaps 'favoriteLongNumbers', numbers
         }
 
         return result
@@ -52,7 +52,7 @@ class PgOverlapsCriteriaTestService {
      */
     public List<Like> overlapsStringArray(String movie) {
         def result = Like.withCriteria {
-            pgOverlaps 'favoriteMovies', movie
+            pgArrayOverlaps 'favoriteMovies', movie
         }
 
         return result
@@ -63,7 +63,7 @@ class PgOverlapsCriteriaTestService {
      */
     public List<Like> overlapsStringArray(List<String> movie) {
         def result = Like.withCriteria {
-            pgOverlaps 'favoriteMovies', movie
+            pgArrayOverlaps 'favoriteMovies', movie
         }
 
         return result
@@ -75,7 +75,7 @@ class PgOverlapsCriteriaTestService {
     public List<User> overlapsStringWithJoin(List<String> movies) {
         def results = User.withCriteria {
             like {
-                pgOverlaps 'favoriteMovies', movies
+                pgArrayOverlaps 'favoriteMovies', movies
             }
         }
 
@@ -89,8 +89,8 @@ class PgOverlapsCriteriaTestService {
         def results = User.withCriteria {
             like {
                 and {
-                    pgOverlaps 'favoriteMovies', movies
-                    pgOverlaps 'favoriteNumbers', numbers
+                    pgArrayOverlaps 'favoriteMovies', movies
+                    pgArrayOverlaps 'favoriteNumbers', numbers
                 }
             }
         }

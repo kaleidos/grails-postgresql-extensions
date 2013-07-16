@@ -1,4 +1,4 @@
-package test.criteria
+package test.criteria.array
 
 class User {
 

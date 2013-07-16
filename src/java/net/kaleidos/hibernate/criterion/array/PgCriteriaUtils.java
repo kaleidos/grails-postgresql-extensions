@@ -1,4 +1,4 @@
-package net.kaleidos.hibernate.criterion;
+package net.kaleidos.hibernate.criterion.arrays;
 
 import java.lang.reflect.Array;
 import java.util.List;
