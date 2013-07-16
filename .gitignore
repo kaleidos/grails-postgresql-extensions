@@ -2,4 +2,11 @@
 .classpath
 .settings
 *sublime*
+cobertura.ser
 target*
+plugin.xml
+grails-app/views
+grails-app/controllers
+grails-app/conf/UrlMappings.groovy
+web-app/*
+grails-postgresql-extensions-*.zip
