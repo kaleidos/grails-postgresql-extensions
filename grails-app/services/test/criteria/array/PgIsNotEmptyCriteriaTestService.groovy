@@ -1,0 +1,53 @@
+package test.criteria.array
+
+class PgIsNotEmptyCriteriaTestService {
+    static transactional = false
+
+    /**
+     * Search "non empty" integer arrays
+     */
+    public List<Like> searchNonEmptyIntegerArray() {
+        def result = Like.withCriteria {
+            pgArrayIsNotEmpty 'favoriteNumbers'
+        }
+
+        return result
+    }
+
+    /**
+     * Search "non empty" long arrays
+     */
+    public List<Like> searchNonEmptyLongArray() {
+        def result = Like.withCriteria {
+            pgArrayIsNotEmpty 'favoriteLongNumbers'
+        }
+
+        return result
+    }
+
+    /**
+     * Search "non empty" string arrays
+     */
+    public List<Like> searchNonEmptyStringArray() {
+        def result = Like.withCriteria {
+            pgArrayIsNotEmpty 'favoriteMovies'
+        }
+
+        return result
+    }
+
+    /**
+     * Search "non empty" arrays with a join
+     */
+    public List<User> searchNonEmptyStringArrayWithJoin() {
+        def results = User.withCriteria {
+            like {
+                pgArrayIsNotEmpty 'favoriteMovies'
+            }
+        }
+
+        return results
+    }
+
+
+}

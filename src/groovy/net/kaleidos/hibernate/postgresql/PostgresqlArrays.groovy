@@ -15,6 +15,7 @@ class PostgresqlArrays {
         addIsContainedByOperator()
         addOverlapsOperator()
         addIsEmptyOperator()
+        addIsNotEmptyOperator()
     }
 
     private void addContainsOperator() {
@@ -132,6 +133,34 @@ class PostgresqlArrays {
             propertyName = calculatePropertyName(propertyName)
 
             return addToCriteria(Restrictions.pgArrayIsEmpty(propertyName))
+        }
+    }
+
+    private void addIsNotEmptyOperator() {
+        /**
+         * Apply a "pgArrayIsNotEmpty" constraint to the named property
+         * @param propertyName
+         * @param value value
+         * @return Criterion
+         */
+        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayIsNotEmpty = { String propertyName ->
+            return new PgEmptinessExpression(propertyName, "<>")
+        }
+
+        /**
+         * Creates an "is empty array" Criterion based on the specified property name
+         * @param propertyName The property name
+         * @return A Criterion instance
+         */
+        HibernateCriteriaBuilder.metaClass.pgArrayIsNotEmpty = { String propertyName ->
+            if (!validateSimpleExpression()) {
+                throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsNotEmpty] with propertyName [" +
+                        propertyName + "] not allowed here."))
+            }
+
+            propertyName = calculatePropertyName(propertyName)
+
+            return addToCriteria(Restrictions.pgArrayIsNotEmpty(propertyName))
         }
     }
 
