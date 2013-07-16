@@ -120,6 +120,17 @@ def result = Like.withCriteria {
 }
 ```
 
+#### Is Empty
+
+With this criteria you can get all the rows that contains and empty array in the selected field. To use it just use the new criteria `pgArrayIsEmpty`:
+
+```groovy
+def result = Like.withCriteria {
+    pgArrayIsEmpty 'favoriteMovies'
+}
+```
+
+
 Authors
 -------
 
