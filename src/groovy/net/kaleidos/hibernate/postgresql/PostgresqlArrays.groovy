@@ -1,9 +1,9 @@
 package net.kaleidos.hibernate.postgresql
 
 import grails.orm.HibernateCriteriaBuilder
-import net.kaleidos.hibernate.criterion.arrays.PgContainsExpression
-import net.kaleidos.hibernate.criterion.arrays.PgIsContainedByExpression
-import net.kaleidos.hibernate.criterion.arrays.PgOverlapsExpression
+import net.kaleidos.hibernate.criterion.array.PgContainsExpression
+import net.kaleidos.hibernate.criterion.array.PgIsContainedByExpression
+import net.kaleidos.hibernate.criterion.array.PgOverlapsExpression
 
 import org.hibernate.criterion.Restrictions
 

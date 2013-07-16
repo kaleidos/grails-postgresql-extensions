@@ -1,4 +1,4 @@
-package net.kaleidos.hibernate.criterion.arrays;
+package net.kaleidos.hibernate.criterion.array;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
