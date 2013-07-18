@@ -10,3 +10,5 @@ grails-app/controllers
 grails-app/conf/UrlMappings.groovy
 web-app/*
 grails-postgresql-extensions-*.zip
+.idea/
+*.iml
