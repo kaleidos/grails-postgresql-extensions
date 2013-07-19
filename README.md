@@ -3,6 +3,15 @@ Grails Postgresql Extensions
 
 This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application. For this first version only support for arrays and some query methods has been implemented. More query methods and more types will be added in the future.
 
+Installation
+------------
+
+In `BuildConfig` and:
+
+```groovy
+compile ":postgresql-extensions:0.1"
+```
+
 Configuration
 -------------
 
