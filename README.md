@@ -3,6 +3,20 @@ Grails Postgresql Extensions
 
 This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application. For this first version only support for arrays and some query methods has been implemented. More query methods and more types will be added in the future.
 
+* [Installation](#installation)
+* [Configuration](#configuration)
+* [Native Types](#native-types)
+  * [Arrays](#arrays)
+    * [Criterias](#criterias)
+        * [Contains](#contains)
+        * [Is contained](#is-contained)
+        * [Overlaps](#overlaps)
+        * [Is Empty](#is-empty)
+        * [Is Not Empty](#is-not-empty)
+* [Authors](#authors)
+* [Release Notes](#release-notes)
+
+
 Installation
 ------------
 
@@ -76,12 +90,12 @@ And now, with `psql`:
   1 | {123,239,3498239,2344235} | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}
 ```
 
-### Criterias
+#### Criterias
 
 The plugin also include some hibernate criterias to use in your queries. Please check the [services](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/grails-app/services/test/criteria/array) and the [tests](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/test/integration/net/kaleidos/hibernate/array) created to see all usage examples.
 You can also check the official [Postgresql Array operators](http://www.postgresql.org/docs/9.2/static/functions-array.html#ARRAY-OPERATORS-TABLE).
 
-#### Contains
+##### Contains
 
 With this criteria you can get all the rows that contains all the values in the array field. To use it just use the new criteria `pgArrayContains`:
 
