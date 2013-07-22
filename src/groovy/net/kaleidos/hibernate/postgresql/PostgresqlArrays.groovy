@@ -1,10 +1,8 @@
 package net.kaleidos.hibernate.postgresql
 
 import grails.orm.HibernateCriteriaBuilder
-import net.kaleidos.hibernate.criterion.array.PgContainsExpression
-import net.kaleidos.hibernate.criterion.array.PgIsContainedByExpression
+import net.kaleidos.hibernate.criterion.array.PgArrayExpression
 import net.kaleidos.hibernate.criterion.array.PgEmptinessExpression
-import net.kaleidos.hibernate.criterion.array.PgOverlapsExpression
 
 import org.hibernate.criterion.Restrictions
 
@@ -20,16 +18,6 @@ class PostgresqlArrays {
 
     private void addContainsOperator() {
         /**
-         * Apply a "pgArrayContains" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayContains = { String propertyName, Object value ->
-            return new PgContainsExpression(propertyName, value)
-        }
-
-        /**
          * Creates a "contains in native array" Criterion based on the specified property name and value
          * @param propertyName The property name
          * @param propertyValue The property value
@@ -44,21 +32,11 @@ class PostgresqlArrays {
             propertyName = calculatePropertyName(propertyName)
             propertyValue = calculatePropertyValue(propertyValue)
 
-            return addToCriteria(Restrictions.pgArrayContains(propertyName, propertyValue))
+            return addToCriteria(new PgArrayExpression(propertyName, propertyValue, "@>"))
         }
     }
 
     private void addIsContainedByOperator() {
-        /**
-         * Apply a "pgArrayIsContainedBy" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayIsContainedBy = { String propertyName, Object value ->
-            return new PgIsContainedByExpression(propertyName, value)
-        }
-
         /**
          * Creates a "is contained by in native array" Criterion based on the specified property name and value
          * @param propertyName The property name
@@ -74,21 +52,11 @@ class PostgresqlArrays {
             propertyName = calculatePropertyName(propertyName)
             propertyValue = calculatePropertyValue(propertyValue)
 
-            return addToCriteria(Restrictions.pgArrayIsContainedBy(propertyName, propertyValue))
+            return addToCriteria(new PgArrayExpression(propertyName, propertyValue, "<@"))
         }
     }
 
     private void addOverlapsOperator() {
-        /**
-         * Apply a "pgArrayOverlaps" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayOverlaps = { String propertyName, Object value ->
-            return new PgOverlapsExpression(propertyName, value)
-        }
-
         /**
          * Creates a "overlap in native array" Criterion based on the specified property name and value
          * @param propertyName The property name
@@ -104,21 +72,11 @@ class PostgresqlArrays {
             propertyName = calculatePropertyName(propertyName)
             propertyValue = calculatePropertyValue(propertyValue)
 
-            return addToCriteria(Restrictions.pgArrayOverlaps(propertyName, propertyValue))
+            return addToCriteria(new PgArrayExpression(propertyName, propertyValue, "&&"))
         }
     }
 
     private void addIsEmptyOperator() {
-        /**
-         * Apply a "pgArrayIsEmpty" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayIsEmpty = { String propertyName ->
-            return new PgEmptinessExpression(propertyName, "=")
-        }
-
         /**
          * Creates an "is empty array" Criterion based on the specified property name
          * @param propertyName The property name
@@ -132,21 +90,11 @@ class PostgresqlArrays {
 
             propertyName = calculatePropertyName(propertyName)
 
-            return addToCriteria(Restrictions.pgArrayIsEmpty(propertyName))
+            return addToCriteria(new PgEmptinessExpression(propertyName, "="))
         }
     }
 
     private void addIsNotEmptyOperator() {
-        /**
-         * Apply a "pgArrayIsNotEmpty" constraint to the named property
-         * @param propertyName
-         * @param value value
-         * @return Criterion
-         */
-        org.hibernate.criterion.Restrictions.metaClass.'static'.pgArrayIsNotEmpty = { String propertyName ->
-            return new PgEmptinessExpression(propertyName, "<>")
-        }
-
         /**
          * Creates an "is empty array" Criterion based on the specified property name
          * @param propertyName The property name
@@ -160,7 +108,7 @@ class PostgresqlArrays {
 
             propertyName = calculatePropertyName(propertyName)
 
-            return addToCriteria(Restrictions.pgArrayIsNotEmpty(propertyName))
+            return addToCriteria(new PgEmptinessExpression(propertyName, "<>"))
         }
     }
 

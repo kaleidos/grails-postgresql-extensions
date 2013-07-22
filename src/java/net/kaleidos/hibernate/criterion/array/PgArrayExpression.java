@@ -6,14 +6,33 @@ import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.engine.TypedValue;
 import org.hibernate.type.Type;
+import org.hibernate.util.StringHelper;
 
-public abstract class PgAbstractArrayExpression implements Criterion {
+/**
+ * Constrains a property in an array
+ */
+public class PgArrayExpression implements Criterion {
 
-    private static final long serialVersionUID = 8243965673902347268L;
+    private static final long serialVersionUID = 2872183637309166619L;
 
-    protected final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
-    protected String propertyName;
-    protected Object value;
+    private final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
+
+    private final String propertyName;
+    private final Object value;
+    private final String op;
+
+    protected PgArrayExpression(String propertyName, Object value, String op) {
+        this.propertyName = propertyName;
+        this.value = value;
+        this.op = op;
+    }
+
+    public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
+        return StringHelper.join(
+            " and ",
+            StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " ARRAY[?]")
+        );
+    }
 
     @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
@@ -35,5 +54,4 @@ public abstract class PgAbstractArrayExpression implements Criterion {
             criteriaQuery.getTypedValue(criteria, propertyName, arrValue)
         };
     }
-
 }
