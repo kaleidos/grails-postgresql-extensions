@@ -179,5 +179,6 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.1.1 - 22/Jul/2013 - Some refactors of the code. No functionality added.
 * 0.1 - 16/Jul/2013 - Initial version of the plugin with support for integer, long and string array types and criterias pgArrayContains, pgArrayIsContainedBy, pgArrayOverlaps, pgArrayIsEmpty and pgArrayIsNotEmpty.
 
