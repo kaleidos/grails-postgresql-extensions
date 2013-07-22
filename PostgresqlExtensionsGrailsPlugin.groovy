@@ -47,7 +47,7 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
     // Online location of the plugin's browseable source code.
     def scm = [ url: "https://github.com/kaleidos/grails-postgresql-extensions" ]
 
-    def doWithSpring = {
+    def doWithDynamicMethods = { ctx ->
         new PostgresqlArrays()
     }
 }
