@@ -1,5 +1,6 @@
 package net.kaleidos.hibernate;
 
+import net.kaleidos.hibernate.usertype.HstoreType;
 import net.kaleidos.hibernate.usertype.IntegerArrayType;
 import net.kaleidos.hibernate.usertype.LongArrayType;
 import net.kaleidos.hibernate.usertype.StringArrayType;
@@ -17,7 +18,7 @@ import java.util.Properties;
 public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
 
     /**
-     * Register array types
+     * Register postgresql types
      */
     public PostgresqlExtensionsDialect() {
         super();
@@ -26,6 +27,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
         registerColumnType(IntegerArrayType.SQLTYPE, "int[]");
         registerColumnType(IdentityEnumArrayType.SQLTYPE, "int[]");
         registerColumnType(StringArrayType.SQLTYPE, "varchar[]");
+        registerColumnType(HstoreType.SQLTYPE, "hstore");
     }
 
     /**
