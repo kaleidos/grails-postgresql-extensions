@@ -44,8 +44,7 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testMap.hasErrors() == false
             testMap.doc2 == null
     }
-    
-    @IgnoreRest
+    @IgnoreRest 
     void 'save a domain class with a map 2'() {
         setup:
             // OK!!! v1
@@ -56,7 +55,8 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             //def testMap = new TestMap(hstore:new Hstore(map:data))
 
             // v2
-            def testMap = new TestMap(hstore:data)
+            def testMap = new TestMap(testAttributes: new Hstore(data))
+            println " > " + testMap.testAttributes
 
         when:
             testMap.save()
@@ -71,9 +71,9 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             // v2
             println testMap.errors
             testMap.hasErrors() == false
-            testMap.hstore != null
-            testMap.hstore.size() == 1
-            testMap.hstore.foo == "bar"
+            testMap.testAttributes != null
+            testMap.testAttributes.size() == 1
+            testMap.testAttributes.foo == "bar"
     
         where:
             data = [foo:"bar"]

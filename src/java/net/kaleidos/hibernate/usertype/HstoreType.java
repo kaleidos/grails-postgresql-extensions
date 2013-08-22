@@ -59,9 +59,13 @@ public class HstoreType implements UserType {
 
         if (value != null) {
             // v1
-            Map m = ((Hstore)value).getMap();
+            Map m = ((Hstore)value).getDataStore();
+            if (m == null) {
+                m = new HashMap();
+            }
             return new HashMap(m);
         } else {
+            System.out.println("fuuu");
             return null;
         }
     }

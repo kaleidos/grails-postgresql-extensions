@@ -1,21 +1,26 @@
 package net.kaleidos.hibernate.postgresql
 
-
 class Hstore {
-
-    // v1
-    //Map map = [:]
+    Map dataStore
     
-    // v2
-    @Delegate Map map
-
-    
-
-    public Hstore(Map map) {
-        this.map = map
-        println "A1"
+    public Hstore(Map data) {
+        this.dataStore = data
     }
-    // public Hstore() {
-    //     println "A2"
-    // }
+
+    def methodMissing(String name, args) {
+        def method = Map.metaClass.getMetaMethod(name, args)
+        return method.invoke(dataStore, args)
+    }
+    
+    def propertyMissing(String name) {
+        this.@dataStore[name]
+    }
+
+    def propertyMissing(String name, value) {
+        this.@dataStore[name] = value
+    }
+    
+    public String toString() {
+        this.dataStore.toString()
+    }
 }

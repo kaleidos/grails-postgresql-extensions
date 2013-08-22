@@ -9,12 +9,12 @@ class TestMap {
     //Hstore hstore
     
     // v2
-    Hstore hstore = new Hstore()
+    Hstore testAttributes
     
     static constrains = {
     }
 
     static mapping = {
-        hstore type:HstoreType
+        testAttributes type:HstoreType
     }
 }
