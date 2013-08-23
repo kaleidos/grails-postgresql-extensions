@@ -1,4 +1,5 @@
 import net.kaleidos.hibernate.postgresql.PostgresqlArrays
+import org.codehaus.groovy.grails.commons.*
 
 class PostgresqlExtensionsGrailsPlugin {
     // the plugin version
@@ -46,8 +47,34 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
 
     // Online location of the plugin's browseable source code.
     def scm = [ url: "https://github.com/kaleidos/grails-postgresql-extensions" ]
-
+    
+    // TODO: Extract to utils class or service
+    private decorateConstructor(metaclass) {
+        def hstoreProperties = []
+        metaclass.properties.each { prop->
+            if (prop.type == net.kaleidos.hibernate.postgresql.Hstore) {
+                hstoreProperties << prop.name
+            }
+        }
+        
+        if (hstoreProperties.size() > 0) {
+            def constructor = metaclass.retrieveConstructor(Map)
+            metaclass.constructor = { Map m ->
+                hstoreProperties.each { name->
+                    m[name] = new net.kaleidos.hibernate.postgresql.Hstore(m[name])
+                }
+                return constructor.newInstance(m)
+            }
+        }
+    }
+    
     def doWithDynamicMethods = { ctx ->
         new PostgresqlArrays()
+    }
+    
+    def doWithApplicationContext = { ctx ->
+        for (domainClass in application.domainClasses) {
+            decorateConstructor(domainClass.metaClass)
+        }
     }
 }

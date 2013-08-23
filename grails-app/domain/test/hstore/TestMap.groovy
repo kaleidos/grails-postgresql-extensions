@@ -10,6 +10,7 @@ class TestMap {
     
     // v2
     Hstore testAttributes
+    String kk
     
     static constrains = {
     }
