@@ -4,7 +4,6 @@ import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import org.hibernate.HibernateException;
 
@@ -87,7 +86,9 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
         if (value != null) {
             Object[] o = (Object[])value;
             for (int i = 0; i < o.length; i++) {
-                o[i] = ((Enum)o[i]).ordinal();
+                if (! (o[i] instanceof Integer)) {
+                    o[i] = ((Enum)o[i]).ordinal();
+                }
             }
             converted = o;
         }
