@@ -3,6 +3,7 @@ package net.kaleidos.hibernate;
 import net.kaleidos.hibernate.usertype.IntegerArrayType;
 import net.kaleidos.hibernate.usertype.LongArrayType;
 import net.kaleidos.hibernate.usertype.StringArrayType;
+import net.kaleidos.hibernate.usertype.IdentityEnumArrayType;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
@@ -23,6 +24,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
         registerColumnType(Types.ARRAY, "array");
         registerColumnType(LongArrayType.SQLTYPE, "int8[]");
         registerColumnType(IntegerArrayType.SQLTYPE, "int[]");
+        registerColumnType(IdentityEnumArrayType.SQLTYPE, "int[]");
         registerColumnType(StringArrayType.SQLTYPE, "varchar[]");
     }
 
