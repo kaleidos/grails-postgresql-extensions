@@ -72,6 +72,28 @@ class PgIsContainedByCriteriaTestService {
         }
 
         /**
+         * Search for "likes" which elements are equals to the parameter
+         */
+        public List<Like> searchIsContainedByEnum(Like.Juice juice) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteJuices', juice
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByEnum(List<Like.Juice> juices) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteJuices', juices
+            }
+
+            return result
+        }
+
+        /**
          * Search with a join
          */
         public List<User> searchIsContainedByWithJoin(List<String> movie) {

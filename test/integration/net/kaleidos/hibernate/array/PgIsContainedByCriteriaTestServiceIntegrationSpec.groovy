@@ -88,6 +88,38 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
                []                                                   |     0
     }
 
+    @Unroll
+    void 'search #juice in an array of enums'() {
+        setup:
+            new Like(favoriteJuices:[Like.Juice.ORANGE]).save()
+            new Like(favoriteJuices:[Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
+            new Like(favoriteJuices:[Like.Juice.APPLE]).save()
+            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.CARROT]).save()
+
+        when:
+            def result = pgIsContainedByCriteriaTestService.searchIsContainedByEnum(juice)
+
+        then:
+            result.size() == resultSize
+
+        where:
+            juice                                       | resultSize
+               Like.Juice.CRANBERRY                     |     0
+               Like.Juice.ORANGE                        |     1
+               Like.Juice.LEMON                         |     0
+               Like.Juice.APPLE                         |     1
+               Like.Juice.GRAPE                         |     0
+               Like.Juice.PINEAPPLE                     |     0
+               Like.Juice.TOMATO                        |     0
+               Like.Juice.CARROT                        |     0
+               Like.Juice.GRAPEFRUIT                    |     0
+               [Like.Juice.ORANGE, Like.Juice.GRAPE]    |     1
+               [Like.Juice.GRAPE, Like.Juice.PINEAPPLE,
+                  Like.Juice.ORANGE, Like.Juice.CARROT] |     2
+               [Like.Juice.APPLE]                       |     1
+               [Like.Juice.CARROT, Like.Juice.ORANGE]   |     2
+               []                                       |     0
+    }
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
@@ -163,6 +195,18 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
         where:
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
+    }
+
+    @Unroll
+    void 'search an invalid list #juice inside the array of enum'() {
+        when:
+            def result = pgIsContainedByCriteriaTestService.searchIsContainedByEnum(juice)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            juice << [["Test"], ["Test", Like.Juice.ORANGE], [1L], ["Test", 1L]]
     }
 
 }
