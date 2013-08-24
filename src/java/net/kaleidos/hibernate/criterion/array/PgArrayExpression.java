@@ -46,18 +46,15 @@ public class PgArrayExpression implements Criterion {
         if ("net.kaleidos.hibernate.usertype.IntegerArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Integer.class);
         } else if ("net.kaleidos.hibernate.usertype.IdentityEnumArrayType".equals(propertyTypeName)) {
-            if (value instanceof List) {
-                List valueAsList = (List)value;
-                arrValue = (Object[]) Array.newInstance(Integer.class, valueAsList.size());
-
-                for(int i=0; i < valueAsList.size(); i++) {
-                    arrValue[i] = ((Enum)(valueAsList.get(i))).ordinal();
+            arrValue = pgCriteriaUtils.getValueAsArrayOfType(
+                value,
+                Integer.class,
+                new PgCriteriaUtils.MapFunction() {
+                    public Object map(Object o) {
+                        return ((Enum)o).ordinal();
+                    }
                 }
-            } else {
-                Object converted = ((Enum)value).ordinal();
-                arrValue = pgCriteriaUtils.getValueAsArrayOfType(converted, Integer.class);
-            }
-
+            );
         } else if ("net.kaleidos.hibernate.usertype.LongArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Long.class);
         } else if ("net.kaleidos.hibernate.usertype.StringArrayType".equals(propertyTypeName)) {
