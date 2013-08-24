@@ -91,6 +91,38 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             []                                          |     0
     }
 
+    @Unroll
+    void 'search #juice in an array of enums'() {
+        setup:
+            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
+            new Like(favoriteJuices:[Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
+            new Like(favoriteJuices:[Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+
+        when:
+            def result = pgOverlapsCriteriaTestService.overlapsEnumArray(juice)
+
+        then:
+            result.size() == resultSize
+
+        where:
+            juice                                       | resultSize
+               Like.Juice.CRANBERRY                     |     1
+               Like.Juice.ORANGE                        |     2
+               Like.Juice.LEMON                         |     0
+               Like.Juice.APPLE                         |     1
+               Like.Juice.GRAPE                         |     2
+               Like.Juice.PINEAPPLE                     |     1
+               Like.Juice.TOMATO                        |     2
+               Like.Juice.CARROT                        |     3
+               Like.Juice.GRAPEFRUIT                    |     0
+               [Like.Juice.ORANGE, Like.Juice.GRAPE]    |     3
+               [Like.Juice.GRAPE, Like.Juice.PINEAPPLE] |     2
+               [Like.Juice.CARROT]                      |     3
+               [Like.Juice.CARROT, Like.Juice.TOMATO]   |     3
+               []                                       |     0
+    }
+
     void 'search in an array of strings with join with another domain class'() {
         setup:
             def user1 = new User(name:'John', like: new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
@@ -167,4 +199,15 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
     }
 
+    @Unroll
+    void 'search an invalid list inside the array of enum'() {
+        when:
+            def result = pgOverlapsCriteriaTestService.overlapsEnumArray(juice)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            juice << [["Test"], [Like.Juice.ORANGE, "Test"], [1L], [Like.Juice.APPLE, 1L]]
+    }
 }
