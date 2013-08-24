@@ -51,6 +51,19 @@ class PgIsEmptyCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == 2
     }
 
+    void 'search for empty enum arrays'() {
+        setup:
+            new Like(favoriteJuices:[Like.Juice.APPLE, Like.Juice.TOMATO]).save()
+            new Like(favoriteJuices:[]).save()
+            new Like(favoriteJuices:[]).save()
+
+        when:
+            def result = pgIsEmptyCriteriaTestService.searchEmptyEnumArray()
+
+        then:
+            result.size() == 2
+    }
+
     void 'search in an array of strings with join with another domain class'() {
         setup:
             def user1 = new User(name:'John', like: new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
