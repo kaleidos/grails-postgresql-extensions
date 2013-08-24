@@ -85,12 +85,13 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
 
         if (value != null) {
             Object[] o = (Object[])value;
+            Integer[] result = new Integer[o.length];
             for (int i = 0; i < o.length; i++) {
                 if (! (o[i] instanceof Integer)) {
-                    o[i] = ((Enum)o[i]).ordinal();
+                    result[i] = ((Enum)o[i]).ordinal();
                 }
             }
-            converted = o;
+            converted = result;
         }
 
         super.nullSafeSet(st, converted, index);
