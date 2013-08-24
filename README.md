@@ -74,14 +74,6 @@ class Like {
 
         private final int value
         Juice(int value)  { this.value = value }
-        public int value() { return this.value }
-        public int getId() { return this.value }
-
-        public String getName() { this.toString() }
-
-        // Enum Constructors are not publicly visible
-        // so we have to loop through the values and find the desired one
-        public static withId(int value) { Juice.values().find { it.value() == value } }
     }
 
     static mapping = {
