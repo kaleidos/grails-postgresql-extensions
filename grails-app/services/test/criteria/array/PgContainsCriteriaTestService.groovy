@@ -37,6 +37,18 @@ class PgContainsCriteriaTestService {
     }
 
     /**
+     * Search "likes" with enum in array
+     */
+    public List<Like> searchWithCriteriaEnumArray(Like.Juice juice) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteJuices', juice
+        }
+
+        return result
+    }
+
+
+    /**
      * Search "likes" with n integers in array
      */
     public List<Like> searchWithCriteriaIntegerArray(List<Integer> number) {
@@ -64,6 +76,17 @@ class PgContainsCriteriaTestService {
     public List<Like> searchWithCriteriaStringArray(List<String> movie) {
         def result = Like.withCriteria {
             pgArrayContains 'favoriteMovies', movie
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with n enums in array
+     */
+    public List<Like> searchWithCriteriaEnumArray(List<Like.Juice> juice) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteJuices', juice
         }
 
         return result
