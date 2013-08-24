@@ -51,7 +51,11 @@ public class PgArrayExpression implements Criterion {
                 Integer.class,
                 new PgCriteriaUtils.MapFunction() {
                     public Object map(Object o) {
-                        return ((Enum)o).ordinal();
+                        try {
+                            return ((Enum)o).ordinal();
+                        } catch (ClassCastException e) {
+                            throw new HibernateException("Unable to cast object " + o + " to Enum.");
+                        }
                     }
                 }
             );
