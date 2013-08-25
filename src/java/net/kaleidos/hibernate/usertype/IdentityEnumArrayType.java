@@ -36,6 +36,7 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
     private static final Log LOG = LogFactory.getLog(IdentityEnumArrayType.class);
 
     private Class<? extends Enum<?>> enumClass;
+    private BidiEnumMap bidiMap;
     public static final String ENUM_ID_ACCESSOR = "getId";
     public static final String PARAM_ENUM_CLASS = "enumClass";
 
@@ -53,7 +54,10 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
 
     public Object idToEnum(Object id) throws HibernateException, SQLException {
         try {
-            BidiEnumMap bidiMap = new BidiEnumMap(enumClass);
+            if (bidiMap == null) {
+                bidiMap = new BidiEnumMap(enumClass);
+            }
+
             return bidiMap.getEnumValue(id);
         } catch (Exception e) {
             throw new HibernateException("Uh oh. Unable to create bidirectional enum map for " + enumClass + " with nested exception: " + e.toString());
