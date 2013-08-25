@@ -37,6 +37,17 @@ class PgIsNotEmptyCriteriaTestService {
     }
 
     /**
+     * Search "non empty" enum arrays
+     */
+    public List<Like> searchNonEmptyEnumArray() {
+        def result = Like.withCriteria {
+            pgArrayIsNotEmpty 'favoriteJuices'
+        }
+
+        return result
+    }
+
+    /**
      * Search "non empty" arrays with a join
      */
     public List<User> searchNonEmptyStringArrayWithJoin() {

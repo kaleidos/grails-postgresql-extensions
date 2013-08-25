@@ -8,6 +8,9 @@ import org.hibernate.engine.TypedValue;
 import org.hibernate.type.Type;
 import org.hibernate.util.StringHelper;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 /**
  * Constrains a property in an array
  */
@@ -42,6 +45,20 @@ public class PgArrayExpression implements Criterion {
         Object[] arrValue;
         if ("net.kaleidos.hibernate.usertype.IntegerArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Integer.class);
+        } else if ("net.kaleidos.hibernate.usertype.IdentityEnumArrayType".equals(propertyTypeName)) {
+            arrValue = pgCriteriaUtils.getValueAsArrayOfType(
+                value,
+                Integer.class,
+                new PgCriteriaUtils.MapFunction() {
+                    public Object map(Object o) {
+                        try {
+                            return ((Enum)o).ordinal();
+                        } catch (ClassCastException e) {
+                            throw new HibernateException("Unable to cast object " + o + " to Enum.");
+                        }
+                    }
+                }
+            );
         } else if ("net.kaleidos.hibernate.usertype.LongArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Long.class);
         } else if ("net.kaleidos.hibernate.usertype.StringArrayType".equals(propertyTypeName)) {

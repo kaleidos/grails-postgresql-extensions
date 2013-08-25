@@ -3,6 +3,7 @@ package net.kaleidos.hibernate.array
 import grails.plugin.spock.*
 import spock.lang.*
 
+import test.array.TestEnum
 import test.array.TestInteger
 import test.array.TestLong
 import test.array.TestString
@@ -55,6 +56,22 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
 
         where:
             strings << [ [], ["string 1"], ["string 1", "string 2"], ["string 1", "string 2", "string 3"] ]
+    }
+
+    @Unroll
+    void 'save a domain class with an enum array value'() {
+        setup:
+            def testEnum = new TestEnum(days: days)
+
+        when:
+            testEnum.save()
+
+        then:
+            testEnum.hasErrors() == false
+            testEnum.days.length == days.size()
+
+        where:
+            days << [ [], [TestEnum.Day.MONDAY], [TestEnum.Day.SUNDAY, TestEnum.Day.SATURDAY], [TestEnum.Day.WEDNESDAY, TestEnum.Day.THURSDAY, TestEnum.Day.TUESDAY] ]
     }
 
 }

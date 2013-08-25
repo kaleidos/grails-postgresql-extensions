@@ -70,6 +70,28 @@ class PgOverlapsCriteriaTestService {
     }
 
     /**
+     * Search overlaps "likes" with enum in array
+     */
+    public List<Like> overlapsEnumArray(Like.Juice juice) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteJuices', juice
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with n enums in array
+     */
+    public List<Like> overlapsEnumArray(List<Like.Juice> juices) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteJuices', juices
+        }
+
+        return result
+    }
+
+    /**
      * Search overlaps with a join
      */
     public List<User> overlapsStringWithJoin(List<String> movies) {

@@ -51,22 +51,36 @@ If you just only add the dialect, hibernate will create a new sequence for every
 
 ### Arrays
 
-The plugin supports the definition of `Integer`, `Long` and `String` arrays in your domain classes.
+The plugin supports the definition of `Integer`, `Long`, `String`, and `Enum` arrays in your domain classes.
+
+The EnumArrayType behaves almost identical to IntegerArrayType in that it stores and retrieves an array of ints. The difference, however, is that this is used with an Array of Enums, rather than Ints. The Enums are serialized to their ordinal value before persisted to the database. On retrieval, they are then converted back into their original Enum type.
 
 ```groovy
 import net.kaleidos.hibernate.usertype.IntegerArrayType
 import net.kaleidos.hibernate.usertype.LongArrayType
 import net.kaleidos.hibernate.usertype.StringArrayType
+import net.kaleidos.hibernate.usertype.IdentityEnumArrayType
 
 class Like {
     Integer[] favoriteNumbers = []
     Long[] favoriteLongNumbers = []
     String[] favoriteMovies = []
+    Juice[] favoriteJuices = []
+
+    static enum Juice {
+        ORANGE(0),
+        APPLE(1),
+        GRAPE(2)
+
+        private final int value
+        Juice(int value)  { this.value = value }
+    }
 
     static mapping = {
         favoriteNumbers type:IntegerArrayType
         favoriteLongNumbers type:LongArrayType
         favoriteMovies type:StringArrayType
+        favoriteJuices type:IdentityEnumArrayType, params:[enumClass: Juice]
     }
 }
 ```
@@ -76,7 +90,8 @@ Now you can create domain objects using lists of integers, longs and strings and
 ```groovy
 def like1 = new Like(favoriteNumbers:[5, 17, 9, 6],
                      favoriteLongNumbers:[123, 239, 3498239, 2344235],
-                     favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])
+                     favoriteMovies:["Spiderman", "Blade Runner", "Starwars"],
+                     favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE])
 like1.save()
 ```
 
@@ -85,9 +100,9 @@ And now, with `psql`:
 ```
 =# select * from like;
 
- id |  favorite_long_numbers    |        favorite_movies                 | favorite_numbers
-----+-------------------------- +----------------------------------------+------------------
-  1 | {123,239,3498239,2344235} | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}
+ id |  favorite_long_numbers    |        favorite_movies                 | favorite_numbers | favorite_juices
+----+-------------------------- +----------------------------------------+------------------+----------------
+  1 | {123,239,3498239,2344235} | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}       | {0,2}
 ```
 
 #### Criterias
@@ -111,6 +126,13 @@ def numbers = [5, 17]
 def result = Like.withCriteria {
     pgArrayContains 'favoriteNumbers', numbers
 }
+
+// If using enums, pass the enum right through
+def juices = Like.Juice.ORANGE
+def result = Like.withCriteria {
+    pgArrayContains 'favoriteJuices', juices
+}
+
 ```
 
 #### Is contained
@@ -172,6 +194,7 @@ You can send any questions to:
 
 - Iván López: lopez.ivan@gmail.com
 - Alonso Torres: alonso.javier.torres@gmail.com
+- Matt Feury: mattfeury@gmail.com
 
 Collaborations are appreciated :-)
 
