@@ -23,7 +23,7 @@ Installation
 In `BuildConfig` and:
 
 ```groovy
-compile ":postgresql-extensions:0.1"
+compile ":postgresql-extensions:<version>"
 ```
 
 Configuration
@@ -192,9 +192,9 @@ Authors
 
 You can send any questions to:
 
-- Iván López: lopez.ivan@gmail.com
-- Alonso Torres: alonso.javier.torres@gmail.com
-- Matt Feury: mattfeury@gmail.com
+- Iván López: lopez.ivan@gmail.com ([@ilopmar](https://twitter.com/ilopmar))
+- Alonso Torres: alonso.javier.torres@gmail.com ([@alotor](https://twitter.com/alotor))
+- Matt Feury: mattfeury@gmail.com ([@soundandfeury](https://twitter.com/soundandfeury))
 
 Collaborations are appreciated :-)
 
@@ -202,6 +202,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.2 - 25/Aug/2013 - Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!
 * 0.1.1 - 22/Jul/2013 - Some refactors of the code. No functionality added.
 * 0.1 - 16/Jul/2013 - Initial version of the plugin with support for integer, long and string array types and criterias pgArrayContains, pgArrayIsContainedBy, pgArrayOverlaps, pgArrayIsEmpty and pgArrayIsNotEmpty.
 
