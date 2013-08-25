@@ -8,9 +8,6 @@ import org.hibernate.engine.TypedValue;
 import org.hibernate.type.Type;
 import org.hibernate.util.StringHelper;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 /**
  * Constrains a property in an array
  */
@@ -50,6 +47,7 @@ public class PgArrayExpression implements Criterion {
                 value,
                 Integer.class,
                 new PgCriteriaUtils.MapFunction() {
+                    @SuppressWarnings("rawtypes")
                     public Object map(Object o) {
                         try {
                             return ((Enum)o).ordinal();

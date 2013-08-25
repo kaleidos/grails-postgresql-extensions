@@ -1,7 +1,5 @@
 package test.criteria.array
 
-import java.util.List;
-
 class PgIsContainedByCriteriaTestService {
     static transactional = false
 

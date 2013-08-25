@@ -1,22 +1,22 @@
 package net.kaleidos.hibernate.usertype;
 
-import java.sql.Array;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import org.hibernate.HibernateException;
-
-import grails.util.GrailsWebUtil;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hibernate.MappingException;
-import org.hibernate.usertype.ParameterizedType;
-
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hibernate.HibernateException;
+import org.hibernate.MappingException;
+import org.hibernate.usertype.ParameterizedType;
 
 /**
 * This class behaves almost identical to IntegerArrayType in that it
@@ -65,7 +65,6 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
         Object result = super.nullSafeGet(rs, names, owner);
 
@@ -84,6 +83,7 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
         Object converted = value;
 
@@ -103,6 +103,7 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
         super.nullSafeSet(st, converted, index);
     }
 
+    @SuppressWarnings("unchecked")
     public void setParameterValues(Properties properties) {
         try {
             enumClass = (Class<? extends Enum<?>>)properties.get(PARAM_ENUM_CLASS);
@@ -112,7 +113,7 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
     }
 
     // This code was lifted from IdentityEnumType.java (see class comments for more info)
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({"rawtypes", "unchecked", "unused"})
     public static class BidiEnumMap implements Serializable {
 
         private static final long serialVersionUID = 3325751131102095834L;
@@ -125,9 +126,7 @@ public class IdentityEnumArrayType extends IntegerArrayType implements Parameter
                 LOG.debug(String.format("Building Bidirectional Enum Map..."));
             }
 
-            @SuppressWarnings("hiding")
             EnumMap enumToKey = new EnumMap(enumClass);
-            @SuppressWarnings("hiding")
             HashMap keytoEnum = new HashMap();
 
             Method idAccessor = enumClass.getMethod(ENUM_ID_ACCESSOR);
