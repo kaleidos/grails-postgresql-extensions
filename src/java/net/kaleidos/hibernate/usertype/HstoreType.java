@@ -8,7 +8,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.kaleidos.hibernate.postgresql.Hstore;
+import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
 
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
@@ -52,14 +52,8 @@ public class HstoreType implements UserType {
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Object deepCopy(Object value) throws HibernateException {
-        // It's not a true deep copy, but we store only String instances, and they
-        // are immutable, so it should be OK
-        // Map m = (Map)value;
-        // return new HashMap(m);
-
         if (value != null) {
-            // v1
-            Map m = ((Hstore)value).getDataStore();
+            Map m = ((HstoreDomainType)value).getDataStore();
             if (m == null) {
                 m = new HashMap();
             }

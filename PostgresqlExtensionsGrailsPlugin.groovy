@@ -1,5 +1,4 @@
 import net.kaleidos.hibernate.postgresql.PostgresqlArrays
-import org.codehaus.groovy.grails.commons.*
 
 class PostgresqlExtensionsGrailsPlugin {
     // the plugin version
@@ -52,7 +51,8 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
     private decorateConstructor(metaclass) {
         def hstoreProperties = []
         metaclass.properties.each { prop->
-            if (prop.type == net.kaleidos.hibernate.postgresql.Hstore) {
+            if (prop.type == net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType) {
+                println "[PostgresqlExtensions] Adding property ${prop.name} as a hstore property"
                 hstoreProperties << prop.name
             }
         }
@@ -61,7 +61,7 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
             def constructor = metaclass.retrieveConstructor(Map)
             metaclass.constructor = { Map m ->
                 hstoreProperties.each { name->
-                    m[name] = new net.kaleidos.hibernate.postgresql.Hstore(m[name])
+                    m[name] = new net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType(m[name])
                 }
                 return constructor.newInstance(m)
             }

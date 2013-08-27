@@ -1,9 +1,9 @@
-package net.kaleidos.hibernate.postgresql
+package net.kaleidos.hibernate.postgresql.hstore
 
-class Hstore {
+class HstoreDomainType {
     Map dataStore
     
-    public Hstore(Map data) {
+    public HstoreDomainType(Map data) {
         this.dataStore = data
     }
 
