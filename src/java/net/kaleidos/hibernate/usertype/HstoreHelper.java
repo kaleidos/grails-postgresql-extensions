@@ -18,7 +18,7 @@ public class HstoreHelper {
         StringBuilder sb = new StringBuilder();
         int n = m.size();
         for (String key : m.keySet()) {
-            sb.append(key + K_V_SEPARATOR + m.get(key));
+            sb.append(key + K_V_SEPARATOR + "\"" + String.valueOf(m.get(key)) + "\"");
             if (n > 1) {
                 sb.append(", ");
                 n--;
