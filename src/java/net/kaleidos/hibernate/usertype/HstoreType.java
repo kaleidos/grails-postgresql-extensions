@@ -40,7 +40,7 @@ public class HstoreType implements UserType {
     @SuppressWarnings("rawtypes")
     public boolean equals(Object x, Object y) throws HibernateException {
         Map m1 = (Map) x;
-        Map m2 = (Map) y;
+        Map m2 = ((HstoreDomainType)y).getDataStore();
         return m1.equals(m2);
     }
 
