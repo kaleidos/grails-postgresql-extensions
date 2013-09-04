@@ -71,7 +71,7 @@ public class HstoreHelperSpec extends Specification {
 
     void 'test to map'() {
         when:
-            def m = HstoreHelper.toMap('"foo" => "bar"')
+            def m = HstoreHelper.toMap('"foo"=>"bar"')
 
         then:
             m.size() == 1
@@ -80,18 +80,18 @@ public class HstoreHelperSpec extends Specification {
 
     void 'test to map with two values'() {
         when:
-            def m = HstoreHelper.toMap('"foo" => "bar", "xxx" => "Groovy Rocks!"')
+            def m = HstoreHelper.toMap('"foo"=>"bar", "xxx"=>"Groovy Rocks!"')
 
         then:
             m.size() == 2
             m.foo == "bar"
             m.xxx == "Groovy Rocks!"
     }
-    
+
     @Unroll
     void 'test to map with different non-string values'() {
         when:
-            def m = HstoreHelper.toMap("'prop' => \"${value}\"")
+            def m = HstoreHelper.toMap("'prop'=>\"${value}\"")
 
         then:
             m.size() == 1

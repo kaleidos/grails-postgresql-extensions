@@ -3,6 +3,8 @@ package net.kaleidos.hibernate.usertype;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
+
 /**
  * Helper class to convert Maps to String according to hstore syntax
  * and vice versa
@@ -27,20 +29,20 @@ public class HstoreHelper {
         return sb.toString();
     }
 
-    public static Map<String, String> toMap(String s) {
+    public static HstoreDomainType toMap(String s) {
         Map<String, String> m = new HashMap<String, String>();
         if (s == null || s.equals("")) {
-            return m;
+            return new HstoreDomainType(m);
         }
         String[] tokens = s.split(", ");
         for (String token : tokens) {
             String[] kv = token.split(K_V_SEPARATOR);
             String k = kv[0];
-            k = k.trim().substring(1, k.length() - 2);
+            k = k.trim().substring(1, k.length() - 1);
             String v = kv[1];
-            v = v.trim().substring(1, v.length() - 2);
+            v = v.trim().substring(1, v.length() - 1);
             m.put(k, v);
         }
-        return m;
+        return new HstoreDomainType(m);
     }
 }
