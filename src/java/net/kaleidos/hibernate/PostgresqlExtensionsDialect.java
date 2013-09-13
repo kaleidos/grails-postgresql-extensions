@@ -52,6 +52,10 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
         public void configure(final Type type, final Properties params, final Dialect dialect) {
             if (params.getProperty(SEQUENCE) == null || params.getProperty(SEQUENCE).length() == 0) {
                 String tableName = params.getProperty(PersistentIdentifierGenerator.TABLE);
+                String schemaName = params.getProperty("schemaName");
+                if (schemaName != null) {
+                    params.setProperty(PersistentIdentifierGenerator.SCHEMA, schemaName);
+                }
                 if (tableName != null) {
                     params.setProperty(SEQUENCE, "seq_" + tableName);
                 }
