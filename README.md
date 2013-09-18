@@ -204,6 +204,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.3 - 18/Sep/2013 - Add support to define the schema name for the sequences
 * 0.2 - 25/Aug/2013 - Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!
 * 0.1.1 - 22/Jul/2013 - Some refactors of the code. No functionality added.
 * 0.1 - 16/Jul/2013 - Initial version of the plugin with support for integer, long and string array types and criterias pgArrayContains, pgArrayIsContainedBy, pgArrayOverlaps, pgArrayIsEmpty and pgArrayIsNotEmpty.
