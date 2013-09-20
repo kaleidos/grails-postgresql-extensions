@@ -25,7 +25,9 @@ Installation
 In `BuildConfig` and:
 
 ```groovy
-compile ":postgresql-extensions:<version>"
+compile (":postgresql-extensions:<version>") {
+    excludes "hibernate"
+}
 ```
 
 Configuration
