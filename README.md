@@ -3,7 +3,9 @@ Grails Postgresql Extensions
 
 [![Build Status](https://drone.io/github.com/kaleidos/grails-postgresql-extensions/status.png)](https://drone.io/github.com/kaleidos/grails-postgresql-extensions/latest)
 
-This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application. For this first version only support for arrays and some query methods has been implemented. More query methods and more types will be added in the future.
+This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application.
+
+Currently the plugin supports arrays and hstore and some query methods has been implemented. More native types and query methods will be added in the future.
 
 * [Installation](#installation)
 * [Configuration](#configuration)
@@ -15,6 +17,7 @@ This is a grails plugin to use postgresql native elements such as arrays, hstore
         * [Overlaps](#overlaps)
         * [Is Empty](#is-empty)
         * [Is Not Empty](#is-not-empty)
+  * [Hstore](#hstore)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -189,6 +192,71 @@ def result = Like.withCriteria {
 }
 ```
 
+### Hstore
+
+The first thing you need to do is install hstore support in Postgresql. In Debian/Ubuntu you have to install the `postgresql-contrib` package:
+
+```
+sudo apt-get install postgresql-contrib-9.2
+```
+
+Once the package is installed in the system you have to create the extension in the database you want to use hstore into:
+
+```
+CREATE EXTENSION hstore;
+```
+
+You can test that the hstore extension is correctly installed running:
+
+```
+=# SELECT 'foo=>bar, xxx=>yyy'::hstore;
+           hstore
+----------------------------
+ "foo"=>"bar", "xxx"=>"yyy"
+(1 row)
+```
+
+Now you can create a domain class
+
+```groovy
+import net.kaleidos.hibernate.postgresql.hstore.Hstore
+import net.kaleidos.hibernate.usertype.HstoreType
+
+class TestHstore {
+
+    @Hstore
+    Map testAttributes
+
+    String anotherProperty
+
+    static constrains = {
+        anotherProperty nullable: false
+    }
+
+    static mapping = {
+        testAttributes type:HstoreType
+    }
+}
+```
+
+Note that you only have to define the property as `Map`, annotate with `@Hstore` and define the Hibernate user type `HstoreType`. Now you can create and instance of the domain class. Due to a limitation of the Hstore Postgresql type you can only store Strings as key and value.
+
+```groovy
+def instance = new TestHstore(testAttributes:[foo:"bar"], anotherProperty:"Groovy Rocks!")
+instance.save()
+
+def instance2 = new TestHstore(testAttributes:[xxx:1, zzz:123], anotherProperty:"")
+instance2.save()
+```
+
+
+```
+=# select * from test_hstore;
+ id | version | another_property | test_attributes
+----+---------+------------------+-----------------
+  1 |       0 | Groovy Rocks!    | "foo"=>"bar"
+  2 |       0 |                  | "xxx"=>"1", "zzz"=>"123"
+```
 
 
 Authors
@@ -206,6 +274,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.4 - 28/Oct/2013 - Add support to Hstore. It's only possible to save and get, but no queries has been implemented.
 * 0.3 - 18/Sep/2013 - Add support to define the schema name for the sequences
 * 0.2 - 25/Aug/2013 - Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!
 * 0.1.1 - 22/Jul/2013 - Some refactors of the code. No functionality added.
