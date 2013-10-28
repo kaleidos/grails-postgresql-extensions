@@ -10,7 +10,7 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
 
     void 'save a domain class with a map'() {
         setup:
-            def testHstore = new TestHstore(testAttributes: data, anotherProperty: someValue)
+            def testHstore = new TestHstore(testAttributes: data)
 
         when:
             testHstore.save()
@@ -20,10 +20,42 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testHstore.testAttributes != null
             testHstore.testAttributes.size() == data.size()
             testHstore.testAttributes.foo == "bar"
-            testHstore.anotherProperty == someValue
 
         where:
             data = [foo:"bar"]
-            someValue = "some value"
+    }
+
+    void 'recover a domain class with a map'() {
+        setup:
+            new TestHstore(testAttributes: data).save()
+
+        when:
+            def testHstore = TestHstore.findAll().first()
+
+        then:
+            testHstore.hasErrors() == false
+            testHstore.testAttributes != null
+            testHstore.testAttributes.size() == data.size()
+            testHstore.testAttributes.foo == "bar"
+
+        where:
+            data = [foo:"bar"]
+    }
+
+    void 'remove a key in a map'() {
+        setup:
+            def testHstore = new TestHstore(testAttributes: data)
+            testHstore.save()
+
+        when:
+            testHstore.testAttributes.remove('xxx')
+
+        then:
+            testHstore.hasErrors() == false
+            testHstore.testAttributes != null
+            testHstore.testAttributes.size() == 1
+
+        where:
+            data = [foo:"bar", xxx:"abc"]
     }
 }

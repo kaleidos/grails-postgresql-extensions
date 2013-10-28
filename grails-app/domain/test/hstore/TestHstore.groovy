@@ -8,12 +8,9 @@ class TestHstore {
     @Hstore
     Map testAttributes
 
-    String anotherProperty
-
-    static constrains = {
-    }
-
     static mapping = {
         testAttributes type:HstoreType
     }
 }
+
+

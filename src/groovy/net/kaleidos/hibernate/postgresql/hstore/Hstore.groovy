@@ -7,10 +7,8 @@ import java.lang.annotation.Retention
 import java.lang.annotation.RetentionPolicy
 import java.lang.annotation.Target
 
-
 @Retention(RetentionPolicy.SOURCE)
 @Target([ElementType.FIELD])
 @GroovyASTTransformationClass(["net.kaleidos.hibernate.postgresql.hstore.HstoreASTTransformation"])
 public @interface Hstore {
 }
-

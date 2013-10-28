@@ -59,7 +59,6 @@ public class HstoreType implements UserType {
             }
             return new HashMap(m);
         } else {
-            System.out.println("fuuu");
             return null;
         }
     }
@@ -85,7 +84,8 @@ public class HstoreType implements UserType {
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
-        String s = HstoreHelper.toString((Map)value);
+        Map m = ((HstoreDomainType)value).getDataStore();
+        String s = HstoreHelper.toString(m);
         st.setObject(index, s, Types.OTHER);
     }
 
