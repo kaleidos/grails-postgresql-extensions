@@ -37,9 +37,10 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testHstore.testAttributes != null
             testHstore.testAttributes.size() == data.size()
             testHstore.testAttributes.foo == "bar"
+            testHstore.testAttributes.xxx == "abc"
 
         where:
-            data = [foo:"bar"]
+            data = [foo:"bar", xxx:"abc"]
     }
 
     void 'remove a key in a map'() {
