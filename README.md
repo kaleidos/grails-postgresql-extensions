@@ -1,8 +1,6 @@
 Grails Postgresql Extensions
 ============================
 
-[![Build Status](https://drone.io/github.com/kaleidos/grails-postgresql-extensions/status.png)](https://drone.io/github.com/kaleidos/grails-postgresql-extensions/latest)
-
 This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application.
 
 Currently the plugin supports arrays and hstore and some query methods has been implemented. More native types and query methods will be added in the future.
