@@ -27,6 +27,7 @@ public class PgArrayExpression implements Criterion {
         this.op = op;
     }
 
+    @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
             " and ",

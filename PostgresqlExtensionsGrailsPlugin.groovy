@@ -1,4 +1,5 @@
 import net.kaleidos.hibernate.postgresql.PostgresqlArrays
+import net.kaleidos.hibernate.postgresql.criteria.HstoreCriterias
 
 class PostgresqlExtensionsGrailsPlugin {
     // the plugin version
@@ -70,6 +71,7 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
 
     def doWithDynamicMethods = { ctx ->
         new PostgresqlArrays()
+        new HstoreCriterias()
     }
 
     def doWithApplicationContext = { ctx ->
