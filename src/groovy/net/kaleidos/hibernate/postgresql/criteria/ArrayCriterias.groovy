@@ -1,4 +1,4 @@
-package net.kaleidos.hibernate.postgresql
+package net.kaleidos.hibernate.postgresql.criteria
 
 import grails.orm.HibernateCriteriaBuilder
 import net.kaleidos.hibernate.criterion.array.PgArrayExpression
@@ -6,9 +6,9 @@ import net.kaleidos.hibernate.criterion.array.PgEmptinessExpression
 
 import org.hibernate.criterion.Restrictions
 
-class PostgresqlArrays {
+class ArrayCriterias {
 
-    public PostgresqlArrays() {
+    public ArrayCriterias() {
         addContainsOperator()
         addIsContainedByOperator()
         addOverlapsOperator()
