@@ -11,9 +11,9 @@ class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
     void 'Test find hstore that contains key'() {
         setup:
             new TestHstore(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
-            new TestHstore(name: "test2", testAttributes: ["b": "2"]).save(flush: true) 
-            new TestHstore(name: "test3", testAttributes: ["a": "test"]).save(flush: true) 
-            new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true) 
+            new TestHstore(name: "test2", testAttributes: ["b": "2"]).save(flush: true)
+            new TestHstore(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
+            new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true)
 
         when:
             def result = pgHstoreContainsKeyService.searchElementsWithKey("b")
@@ -24,5 +24,19 @@ class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
             result.find { it.name=="test2" } != null
             result.find { it.name=="test3" } == null
             result.find { it.name=="test4" } != null
+    }
+
+    void 'Test find hstore that contains key'() {
+        setup:
+            new TestHstore(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
+            new TestHstore(name: "test2", testAttributes: ["b": "2"]).save(flush: true)
+            new TestHstore(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
+            new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true)
+
+        when:
+            def result = pgHstoreContainsKeyService.searchElementsWithKey("X")
+
+        then:
+            result.size() == 0
     }
 }

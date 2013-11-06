@@ -101,4 +101,30 @@ public class HstoreHelperSpec extends Specification {
         where:
             value << [123, true, null, 999L, new Date(), 87987.8976]
     }
+
+    @Unroll
+    void 'Test asStatement'() {
+        when:
+            def result = HstoreHelper.asStatement(map)
+
+        then:
+            result == expected
+
+        where:
+            map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"]]
+            expected << ["", "", '?=>"?"', '?=>"?", ?=>"?"', '?=>"?", ?=>"?", ?=>"?"']
+    }
+
+    @Unroll
+    void 'Test asListKeyValue'() {
+        when:
+            def result = HstoreHelper.asListKeyValue(map)
+
+        then:
+            result == expected
+
+        where:
+            map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"]]
+            expected << [[], [], ["a","b"], ["a","b","c","d"],["a","b","c","d","e","f"]]
+    }
 }

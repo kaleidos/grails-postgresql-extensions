@@ -2,12 +2,12 @@ package test.criteria.hstore
 
 import test.hstore.TestHstore
 
-class PgHstoreContainsKeyService {
+class PgHstoreContainsService {
     static transactional = false
 
-    public List<TestHstore> searchElementsWithKey(String key) {
+    public List<TestHstore> searchElementsWithValues(Map map) {
         def result = TestHstore.withCriteria {
-            pgHstoreContainsKey 'testAttributes', key
+            pgHstoreContains 'testAttributes', map
         }
         return result
     }
