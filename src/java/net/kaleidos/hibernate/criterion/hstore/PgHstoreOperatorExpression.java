@@ -36,7 +36,6 @@ public class PgHstoreOperatorExpression implements Criterion {
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         String[] columns = StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), "");
         for (int i=0; i<columns.length; i++) {
-            // columns[i] = columns[i] + " " + operator + " '" + HstoreHelper.asStatement(value) + "'";
             columns[i] = columns[i] + " " + operator + " '" + HstoreHelper.toString(value) + "'";
         }
         return StringHelper.join( " and ", columns);
@@ -44,14 +43,6 @@ public class PgHstoreOperatorExpression implements Criterion {
 
     @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
-        /*
-        List<String> listKeyValue = HstoreHelper.asListKeyValue(this.value);
-        TypedValue[] result = new TypedValue[listKeyValue.size()];
-        for (int i=0; i<listKeyValue.size(); i++) {
-            result[i] = new TypedValue(new StringType(), listKeyValue.get(i), null);
-        }
-        return result;
-        */
         return NO_VALUES;
     }
 }

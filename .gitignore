@@ -12,3 +12,4 @@ web-app/*
 grails-postgresql-extensions-*.zip
 .idea/
 *.iml
+*.swp
