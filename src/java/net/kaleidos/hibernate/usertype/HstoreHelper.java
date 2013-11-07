@@ -2,6 +2,8 @@ package net.kaleidos.hibernate.usertype;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.LinkedList;
 
 import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
 
@@ -13,6 +15,10 @@ public class HstoreHelper {
 
     private static final String K_V_SEPARATOR = "=>";
 
+    private static String escapeQuotes(String text) {
+        return text.replaceAll("\"", "'");
+    }
+
     public static String toString(Map<String, String> m) {
         if (m == null || m.isEmpty()) {
             return "";
@@ -20,13 +26,44 @@ public class HstoreHelper {
         StringBuilder sb = new StringBuilder();
         int n = m.size();
         for (String key : m.keySet()) {
-            sb.append(key + K_V_SEPARATOR + "\"" + String.valueOf(m.get(key)) + "\"");
+            sb.append('"').append(escapeQuotes(key)).append('"');
+            sb.append(K_V_SEPARATOR);
+            sb.append('"').append(escapeQuotes(String.valueOf(m.get(key)))).append('"');
+
             if (n > 1) {
                 sb.append(", ");
                 n--;
             }
         }
         return sb.toString();
+    }
+
+    public static String asStatement(Map<String, String> m) {
+        if (m == null || m.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        int n = m.size();
+        for (String key : m.keySet()) {
+            sb.append("\"?\"" + K_V_SEPARATOR + "\"" + "?" + "\"");
+            if (n > 1) {
+                sb.append(", ");
+                n--;
+            }
+        }
+        return sb.toString();
+    }
+
+
+    public static List<String> asListKeyValue(Map<String, String> m) {
+        List<String> result = new LinkedList<String>();
+        if (m != null && !m.isEmpty()) {
+            for (String key : m.keySet()) {
+                result.add(key);
+                result.add(String.valueOf(m.get(key)));
+            }
+        }
+        return result;
     }
 
     public static HstoreDomainType toMap(String s) {

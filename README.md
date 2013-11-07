@@ -16,6 +16,10 @@ Currently the plugin supports arrays and hstore and some query methods has been 
         * [Is Empty](#is-empty)
         * [Is Not Empty](#is-not-empty)
   * [Hstore](#hstore)
+    * [Criterias](#hstore-criterias)
+        * [Contains Key](#contains-key)
+        * [Contains](#contains-1)
+        * [Is Contained](#is-contained-1)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -257,6 +261,53 @@ instance2.save()
 ```
 
 
+#### HSTORE Criterias
+
+We have added the following criteria operations to query rows using the Hstore custom type. You can
+check the [services](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/grails-app/services/test/criteria/hstore)
+and the [tests](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/test/integration/net/kaleidos/hibernate/hstore)
+to help you to developp your own criterias.
+
+You can also check the official [Postgresql Hstore operators](http://www.postgresql.org/docs/9.0/static/hstore.html).
+
+##### Contains Key
+
+With this operation you can search for rows that contains an Hstore with the key passd as parameter.
+
+```groovy
+def wantedKey = "my-custom-key"
+def result = MyDomain.withCriteria {
+    pgHstoreContainsKey "attributes", wantedKey
+}
+```
+
+##### Contains
+
+You can search for data that contains certain pairs of (key,value)
+```groovy
+def result = Users.withCriteria {
+    pgHstoreContains 'configuration', ["language": "es"]
+}
+```
+
+##### Is Contained
+
+The operation is contained can be used when looking for rows that has all the elements in the map
+passed as parameter.
+
+```groovy
+def result = TestHstore.withCriteria {
+    pgHstoreIsContained 'testAttributes', ["1" : "a", "2" : "b"]
+}
+```
+The example above returns the rows that contains elements like:
+```
+testAttributes = ["1" : "a"]
+testAttributes = ["2" : "b"]
+testAttributes = ["1" : "a", "2" : "b"]
+```
+This criteria can also be used to look for exact matches
+
 Authors
 -------
 
@@ -272,6 +323,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.5 - 08/Nov/2013 - Added criteria operation for Hstore types
 * 0.4 - 28/Oct/2013 - Add support to Hstore. It's only possible to save and get, but no queries has been implemented.
 * 0.3 - 18/Sep/2013 - Add support to define the schema name for the sequences
 * 0.2 - 25/Aug/2013 - Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!

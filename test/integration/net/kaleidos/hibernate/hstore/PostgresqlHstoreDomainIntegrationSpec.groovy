@@ -14,6 +14,7 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
 
         when:
             testHstore.save()
+            println testHstore.errors
 
         then:
             testHstore.hasErrors() == false

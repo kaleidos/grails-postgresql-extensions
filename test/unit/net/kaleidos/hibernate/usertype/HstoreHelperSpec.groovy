@@ -27,7 +27,16 @@ public class HstoreHelperSpec extends Specification {
             m.foo = "bar"
 
         expect:
-            HstoreHelper.toString(m) == 'foo=>"bar"'
+            HstoreHelper.toString(m) == '"foo"=>"bar"'
+    }
+
+    void 'transform map with doulbe quotes'() {
+        setup:
+            def m = [:]
+            m['Test "cosa"'] = "bar"
+
+        expect:
+            HstoreHelper.toString(m) == '"Test \'cosa\'"=>"bar"'
     }
 
     void 'map with two values to string'() {
@@ -37,7 +46,7 @@ public class HstoreHelperSpec extends Specification {
             m.xxx = "Groovy Rocks!"
 
         expect:
-            HstoreHelper.toString(m) == 'foo=>"bar", xxx=>"Groovy Rocks!"'
+            HstoreHelper.toString(m) == '"foo"=>"bar", "xxx"=>"Groovy Rocks!"'
     }
 
     @Unroll
@@ -47,7 +56,7 @@ public class HstoreHelperSpec extends Specification {
             m.prop = value
 
         expect:
-            HstoreHelper.toString(m) == "prop=>\"${value}\""
+            HstoreHelper.toString(m) == "\"prop\"=>\"${value}\""
 
         where:
             value << [123, true, null, 999L, new Date(), 87987.8976]
@@ -100,5 +109,31 @@ public class HstoreHelperSpec extends Specification {
 
         where:
             value << [123, true, null, 999L, new Date(), 87987.8976]
+    }
+
+    @Unroll
+    void 'Test asStatement'() {
+        when:
+            def result = HstoreHelper.asStatement(map)
+
+        then:
+            result == expected
+
+        where:
+            map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"]]
+            expected << ["", "", '"?"=>"?"', '"?"=>"?", "?"=>"?"', '"?"=>"?", "?"=>"?", "?"=>"?"']
+    }
+
+    @Unroll
+    void 'Test asListKeyValue'() {
+        when:
+            def result = HstoreHelper.asListKeyValue(map)
+
+        then:
+            result == expected
+
+        where:
+            map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"]]
+            expected << [[], [], ["a","b"], ["a","b","c","d"],["a","b","c","d","e","f"]]
     }
 }
