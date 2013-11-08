@@ -33,10 +33,10 @@ public class HstoreHelperSpec extends Specification {
     void 'transform map with doulbe quotes'() {
         setup:
             def m = [:]
-            m['Test "cosa"'] = "bar"
+            m['Test "thing"'] = "bar"
 
         expect:
-            HstoreHelper.toString(m) == '"Test \'cosa\'"=>"bar"'
+            HstoreHelper.toString(m) == '"Test \'thing\'"=>"bar"'
     }
 
     void 'map with two values to string'() {

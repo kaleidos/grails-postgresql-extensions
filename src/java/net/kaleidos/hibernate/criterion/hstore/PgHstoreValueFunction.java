@@ -15,8 +15,6 @@ import org.hibernate.util.StringHelper;
 public class PgHstoreValueFunction implements Criterion {
     private static final long serialVersionUID = 2872183637309166619L;
 
-    // private final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
-
     private final String propertyName;
     private final Object value;
     private final String function;
