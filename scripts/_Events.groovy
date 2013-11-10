@@ -1,5 +1,5 @@
 eventCompileStart = { target ->
-    compileAST(basedir, classesDirPath)
+    compileAST(pluginBaseDir, classesDirPath)
 }
 
 def compileAST(def srcBaseDir, def destDir) {
