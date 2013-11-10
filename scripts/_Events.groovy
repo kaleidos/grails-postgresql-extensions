@@ -1,5 +1,5 @@
 eventCompileStart = { target ->
-    compileAST(pluginBaseDir, classesDirPath)
+    compileAST(postgresqlExtensionsPluginDir, classesDirPath)
 }
 
 def compileAST(def srcBaseDir, def destDir) {
