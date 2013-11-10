@@ -71,6 +71,15 @@ public class HstoreHelperSpec extends Specification {
             HstoreHelper.toString(m) == '"foo,bar"=>"baz,qux"'
     }
 
+    void 'map with key and value that contains a comma and space'() {
+        setup:
+        def m = [:]
+        m["foo, bar"] = "baz, qux"
+
+        expect:
+        HstoreHelper.toString(m) == '"foo, bar"=>"baz, qux"'
+    }
+
     void 'empty string to map'() {
         when:
             def m = HstoreHelper.toMap("")
@@ -127,6 +136,14 @@ public class HstoreHelperSpec extends Specification {
         then:
             m.size() == 1
             m['foo,bar'] == "baz,qux"
+    }
+    void 'test to map with key and value that contains comma and space'() {
+        when:
+        def m = HstoreHelper.toMap('"foo, bar"=>"baz, qux"')
+
+        then:
+        m.size() == 1
+        m['foo, bar'] == "baz, qux"
     }
 
     @Unroll
