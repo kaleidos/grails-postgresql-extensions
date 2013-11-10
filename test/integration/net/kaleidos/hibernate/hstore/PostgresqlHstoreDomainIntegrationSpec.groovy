@@ -8,25 +8,28 @@ import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
 
 class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
 
-    void 'save a domain class with a map'() {
+    @Unroll
+    void 'save a domain class with a map. key: #data'() {
         setup:
             def testHstore = new TestHstore(testAttributes: data)
 
         when:
             testHstore.save()
-            println testHstore.errors
 
         then:
             testHstore.hasErrors() == false
             testHstore.testAttributes != null
             testHstore.testAttributes.size() == data.size()
-            testHstore.testAttributes.foo == "bar"
+            testHstore.testAttributes[attribute] == value
 
         where:
-            data = [foo:"bar"]
+            data                  | attribute | value
+            [foo:"bar"]           | "foo"     | "bar"
+            ["foo,bar":"baz,qux"] | "foo,bar" | "baz,qux"
     }
 
-    void 'recover a domain class with a map'() {
+    @Unroll
+    void 'recover a domain class with a map. key: #data'() {
         setup:
             new TestHstore(testAttributes: data).save()
 
@@ -37,27 +40,32 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testHstore.hasErrors() == false
             testHstore.testAttributes != null
             testHstore.testAttributes.size() == data.size()
-            testHstore.testAttributes.foo == "bar"
-            testHstore.testAttributes.xxx == "abc"
+            testHstore.testAttributes[key] == value
 
         where:
-            data = [foo:"bar", xxx:"abc"]
+            data                   | key       | value
+            [foo:"bar", xxx:"abc"] | "foo"     | "bar"
+            ["foo,bar":"baz,qux"]  | "foo,bar" | "baz,qux"
     }
 
-    void 'remove a key in a map'() {
+    @Unroll
+    void 'remove a key in a map. key: #data, valueToRemove: #valueToRemove'() {
         setup:
             def testHstore = new TestHstore(testAttributes: data)
             testHstore.save()
 
         when:
-            testHstore.testAttributes.remove('xxx')
+            testHstore.testAttributes.remove(valueToRemove)
 
         then:
             testHstore.hasErrors() == false
             testHstore.testAttributes != null
-            testHstore.testAttributes.size() == 1
+            testHstore.testAttributes.size() == size
 
         where:
-            data = [foo:"bar", xxx:"abc"]
+            data                   | valueToRemove     | size
+            [foo:"bar", xxx:"abc"] | 'xxx'             | 1
+            ["foo,bar":"baz,qux"]  | 'foo,bar'         | 0
+            [foo:"bar"]            | 'xxx'             | 1
     }
 }
