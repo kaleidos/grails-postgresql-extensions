@@ -323,6 +323,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.5.1 - 10/Nov/2013 - Change base directory to compile AST before the plugin classes. Thanks to Moritz Kobel!
 * 0.5 - 08/Nov/2013 - Add criteria operation for Hstore types.
 * 0.4.1 - Unreleased - Compile AST before the project itself.
 * 0.4 - 28/Oct/2013 - Add support to Hstore. It's only possible to save and get, but no queries has been implemented.
