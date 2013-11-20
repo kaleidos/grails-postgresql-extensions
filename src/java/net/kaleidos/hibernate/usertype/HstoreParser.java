@@ -8,10 +8,9 @@ import java.util.NoSuchElementException;
 
 import org.postgresql.util.PGobject;
 
-/*
+/**
  * This class is an extended version of HStore.java from https://code.google.com/p/pg-spring-type-mapper/
  */
-
 public class HstoreParser extends PGobject implements Iterable<Map.Entry<String, String>> {
 
     private static final long serialVersionUID = -2491617655490561600L;
@@ -30,7 +29,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
     }
 
     public void setValue(String rawValue) {
-        if ( ! "hstore".equals(this.type) ) throw new IllegalStateException("HStore database type name should be 'hstore'");
+        if (!"hstore".equals(this.type)) {
+            throw new IllegalStateException("HStore database type name should be 'hstore'");
+        }
         this.value = rawValue;
         this.length = rawValue == null ? 0 : rawValue.length();
     }
@@ -73,7 +74,6 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             this.value = value;
             return oldValue;
         }
-
     }
 
     private static enum ParseState {
@@ -88,12 +88,10 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
     private static final String NULL = "NULL";
 
     private class HStoreIterator implements Iterator<Map.Entry<String, String>> {
-
         private int position;
         char currentQuoteChar = '\0';
         private HStoreEntry lastReturned;
         private HStoreEntry nextEntry;
-
 
         public HStoreIterator() throws HstoreParseException {
             this.position = -1;
@@ -106,8 +104,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         }
 
         private HStoreEntry rawNext() throws NoSuchElementException, HstoreParseException {
-            if (nextEntry == null)
+            if (nextEntry == null) {
                 throw new NoSuchElementException();
+            }
             lastReturned = nextEntry;
             advance();
             return lastReturned;
@@ -132,20 +131,18 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             String elementValue = null;
             ParseState state = ParseState.WaitingForKey;
             loop:
-            while( position < length - 1 ) {
-                final char ch = value.charAt(++position);
-                switch (state) {
+                while (position < length - 1) {
+                    final char ch = value.charAt(++position);
+                    switch (state) {
                     case WaitingForKey:
-                        if ( Character.isWhitespace(ch) ) continue;
-                        for ( char q : QUOTE )
-                        {
-                            if ( ch == q ) {
+                        if (Character.isWhitespace(ch)) continue;
+                        for (char q : QUOTE) {
+                            if (ch == q) {
                                 currentQuoteChar = q;
                                 elementKey = advanceQuoted();
                             }
-
                         }
-                        if ( currentQuoteChar == NO_QUOTE_CHAR ) {
+                        if (currentQuoteChar == NO_QUOTE_CHAR) {
                             // we have non-quote char, so start loading the key
                             elementKey = advanceWord(EQUALS);
                             // hstore does not support NULL keys, so NULLs are loaded as usual strings
@@ -154,35 +151,33 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                         state = ParseState.WaitingForEquals;
                         continue;
                     case WaitingForEquals:
-                        if ( Character.isWhitespace(ch) ) continue;
-                        if ( ch == EQUALS ) {
+                        if (Character.isWhitespace(ch)) continue;
+                        if (ch == EQUALS) {
                             state = ParseState.WaitingForGreater;
                             continue;
                         } else {
                             throw new HstoreParseException("Expected '=>' key-value separator", position);
                         }
                     case WaitingForGreater:
-                        if ( ch == GREATER ) {
+                        if (ch == GREATER) {
                             state = ParseState.WaitingForValue;
                             continue;
                         } else {
                             throw new HstoreParseException("Expected '=>' key-value separator", position);
                         }
                     case WaitingForValue:
-                        if ( Character.isWhitespace(ch) ) continue;
-                        for ( char q : QUOTE )
-                        {
-                            if ( ch == q ) {
+                        if (Character.isWhitespace(ch)) continue;
+                        for (char q : QUOTE) {
+                            if (ch == q) {
                                 currentQuoteChar = q;
                                 elementValue = advanceQuoted();
                             }
-
                         }
-                        if ( currentQuoteChar == NO_QUOTE_CHAR ) {
+                        if (currentQuoteChar == NO_QUOTE_CHAR) {
                             // we have non-quote char, so start loading the key
                             elementValue = advanceWord(COMMA);
                             // hstore supports NULL values, so if unquoted NULL is there, it is rewritten to null
-                            if ( NULL.equalsIgnoreCase(elementValue) ) {
+                            if (NULL.equalsIgnoreCase(elementValue)) {
                                 elementValue = null;
                             }
                         }
@@ -190,8 +185,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                         state = ParseState.WaitingForComma;
                         continue;
                     case WaitingForComma:
-                        if ( Character.isWhitespace(ch) ) continue;
-                        if ( ch == COMMA ) {
+                        if (Character.isWhitespace(ch)) continue;
+                        if (ch == COMMA) {
                             // we are done
                             break loop;
                         } else {
@@ -199,18 +194,18 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                         }
                     default:
                         throw new IllegalStateException("Unknown HstoreParser state");
-                }
-            } // loop
+                    }
+                } // loop
             // here we either consumed whole string or we found a comma
-            if ( state == ParseState.WaitingForKey ) {
+            if (state == ParseState.WaitingForKey) {
                 // string was consumed when waiting for key, so we are done with processing
                 nextEntry = null;
                 return;
             }
-            if ( state != ParseState.WaitingForComma ) {
+            if (state != ParseState.WaitingForComma) {
                 throw new HstoreParseException("Unexpected end of string", position);
             }
-            if ( elementKey == null ) {
+            if (elementKey == null) {
                 throw new HstoreParseException("Internal parsing error", position);
             }
             // init nextValue
@@ -221,16 +216,16 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             final int firstQuotePosition = position;
             StringBuilder sb = null;
             boolean insideQuote = true;
-            while( position < length - 1 ) {
+            while (position < length - 1) {
                 char ch = value.charAt(++position);
-                if ( ch == currentQuoteChar ) {
+                if (ch == currentQuoteChar) {
                     // we saw a quote, it is either a closing quote, or it is a quoted quote
                     final int nextPosition = position + 1;
-                    if ( nextPosition < length ) {
+                    if (nextPosition < length) {
                         final char nextCh = value.charAt(nextPosition);
-                        if ( nextCh == currentQuoteChar ) {
+                        if (nextCh == currentQuoteChar) {
                             // it was a double quote, so we have to push a quote into the result
-                            if ( sb == null ) {
+                            if (sb == null) {
                                 sb = new StringBuilder(value.substring(firstQuotePosition + 1, nextPosition));
                             } else {
                                 sb.append(currentQuoteChar);
@@ -244,15 +239,17 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                     insideQuote = false;
                     break;
                 } else {
-                    if ( sb != null ) {
+                    if (sb != null) {
                         sb.append(ch);
                     }
                 }
             }
-            if ( insideQuote ) throw new HstoreParseException("Quote at string position " + firstQuotePosition + " is not closed", position);
-            if ( sb == null ) {
+            if (insideQuote) {
+                throw new HstoreParseException("Quote at string position " + firstQuotePosition + " is not closed", position);
+            }
+            if (sb == null) {
                 // we consumed the last quote
-                String r = value.substring(firstQuotePosition + 1, position );
+                String r = value.substring(firstQuotePosition + 1, position);
                 return r;
             } else {
                 return sb.toString();
@@ -261,11 +258,11 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
         private String advanceWord(final char stopAtChar) throws HstoreParseException {
             final int firstWordPosition = position;
-            while( position < length ) {
+            while(position < length) {
                 final char ch = value.charAt(position);
-                if ( ch == currentQuoteChar ) {
+                if (ch == currentQuoteChar) {
                     throw new HstoreParseException("Unexpected quote in word", position);
-                } else if ( Character.isWhitespace(ch) || ch == stopAtChar ) {
+                } else if (Character.isWhitespace(ch) || ch == stopAtChar) {
                     break;
                 }
                 position++;
@@ -291,5 +288,4 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             throw new IllegalStateException(e);
         }
     }
-
 }

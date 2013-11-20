@@ -1,6 +1,9 @@
 package net.kaleidos.hibernate.usertype;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
 
@@ -11,9 +14,6 @@ import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
 public class HstoreHelper {
 
     private static final String K_V_SEPARATOR = "=>";
-
-
-
 
     private static String escapeQuotes(String text) {
         return text.replaceAll("\"", "'");
@@ -54,7 +54,6 @@ public class HstoreHelper {
         return sb.toString();
     }
 
-
     public static List<String> asListKeyValue(Map<String, String> m) {
         List<String> result = new LinkedList<String>();
         if (m != null && !m.isEmpty()) {
@@ -76,5 +75,4 @@ public class HstoreHelper {
 
         return new HstoreDomainType(m);
     }
-
 }
