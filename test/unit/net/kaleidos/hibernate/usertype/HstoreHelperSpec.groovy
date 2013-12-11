@@ -5,20 +5,16 @@ import spock.lang.*
 
 public class HstoreHelperSpec extends Specification {
 
-    void 'empty map to string'() {
+    @Unroll
+    void 'empty and null map to string'() {
         setup:
-            def m = [:]
+            def m = value
 
         expect:
             HstoreHelper.toString(m) == ""
-    }
 
-    void 'null map to string'() {
-        setup:
-            def m = null
-
-        expect:
-            HstoreHelper.toString(m) == ""
+        where:
+            value << [[:], null]
     }
 
     void 'non empty map to string'() {
