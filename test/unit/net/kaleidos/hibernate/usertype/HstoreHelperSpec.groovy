@@ -26,7 +26,7 @@ public class HstoreHelperSpec extends Specification {
             HstoreHelper.toString(m) == '"foo"=>"bar"'
     }
 
-    void 'transform map with doulbe quotes'() {
+    void 'transform map with double quotes'() {
         setup:
             def m = [:]
             m['Test "thing"'] = "bar"
