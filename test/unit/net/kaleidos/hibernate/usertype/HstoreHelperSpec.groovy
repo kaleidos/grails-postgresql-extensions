@@ -76,20 +76,16 @@ public class HstoreHelperSpec extends Specification {
         HstoreHelper.toString(m) == '"foo, bar"=>"baz, qux"'
     }
 
-    void 'empty string to map'() {
+    @Unroll
+    void 'empty and null string to map'() {
         when:
-            def m = HstoreHelper.toMap("")
+            def m = HstoreHelper.toMap(value)
 
         then:
             m.isEmpty()
-    }
 
-    void 'null string to map'() {
-        when:
-            def m = HstoreHelper.toMap(null)
-
-        then:
-            m.isEmpty()
+        where:
+            value << ["", null]
     }
 
     void 'test to map'() {
