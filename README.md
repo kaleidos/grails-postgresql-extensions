@@ -325,6 +325,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.6.2 - Unreleased - Refactor some tests
 * 0.6.1 - 28/Nov/2013 - Update postgresql jdbc driver to version 9.2 and do not export hibernate plugin.
 * 0.6 - 21/Nov/2013 - Use a more complete Hstore parser. Thanks to Moritz Kobel!
 * 0.5.1 - 10/Nov/2013 - Change base directory to compile AST before the plugin classes. Thanks to Moritz Kobel!
