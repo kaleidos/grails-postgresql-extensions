@@ -49,11 +49,11 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
     def scm = [ url: "https://github.com/kaleidos/grails-postgresql-extensions" ]
 
     // TODO: Extract to utils class or service
-    private decorateConstructor(metaclass) {
+    private decorateConstructor(className, metaclass) {
         def hstoreProperties = []
         metaclass.properties.each { prop->
             if (prop.type == net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType) {
-                println "[PostgresqlExtensions] Adding property ${prop.name} as a hstore property"
+                println "[PostgresqlExtensions] Adding property ${className}.${prop.name} as a hstore property"
                 hstoreProperties << prop.name
             }
         }
@@ -76,7 +76,7 @@ This plugin provides support for Postgresql Native Types like Arrays, HStores, J
 
     def doWithApplicationContext = { ctx ->
         for (domainClass in application.domainClasses) {
-            decorateConstructor(domainClass.metaClass)
+            decorateConstructor(domainClass.clazz.name, domainClass.metaClass)
         }
     }
 }
