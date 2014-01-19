@@ -1,6 +1,4 @@
-grails.project.class.dir = "target/classes"
-grails.project.test.class.dir = "target/test-classes"
-grails.project.test.reports.dir = "target/test-reports"
+grails.project.work.dir = "target/work"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
