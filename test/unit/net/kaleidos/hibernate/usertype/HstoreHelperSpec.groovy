@@ -163,4 +163,18 @@ public class HstoreHelperSpec extends Specification {
             map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"], ["foo,bar":"baz,qux"]]
             expected << [[], [], ["a","b"], ["a","b","c","d"], ["a","b","c","d","e","f"], ["foo,bar","baz,qux"]]
     }
+
+    @Issue("https://github.com/kaleidos/grails-postgresql-extensions/issues/25")
+    @Unroll
+    void 'map with key of type different to String. key: #key'() {
+        setup:
+            def m = [:]
+            m[key] = "value"
+
+        expect:
+            HstoreHelper.toString(m) == "\"${key}\"=>\"value\""
+
+        where:
+            key << [123, true, 999L, new Date(), 87987.8976]
+    }
 }

@@ -25,8 +25,10 @@ public class HstoreHelper {
         }
         StringBuilder sb = new StringBuilder();
         int n = m.size();
-        for (String key : m.keySet()) {
-            sb.append('"').append(escapeQuotes(key)).append('"');
+        for (Object key : m.keySet()) {
+            String stringKey = String.valueOf(key);
+
+            sb.append('"').append(escapeQuotes(stringKey)).append('"');
             sb.append(K_V_SEPARATOR);
             sb.append('"').append(escapeQuotes(String.valueOf(m.get(key)))).append('"');
 
