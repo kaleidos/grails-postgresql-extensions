@@ -326,6 +326,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.6.4 - 30/Jan/2014 - Convert automatically the keys of Hstore to string.
 * 0.6.3 - 19/Jan/2014 - Display the class name during startup when detecting a hstore property.
 * 0.6.2 - Unreleased - Refactor some tests.
 * 0.6.1 - 28/Nov/2013 - Update postgresql jdbc driver to version 9.2 and do not export hibernate plugin.
