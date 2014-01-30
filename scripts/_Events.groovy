@@ -4,8 +4,8 @@ eventCompileStart = { target ->
 
 def compileAST(def srcBaseDir, def destDir) {
     ant.sequential {
-        println "Precompiling AST Transformations ..."
-        println "src ${srcBaseDir} ${destDir}"
+        eventListener.triggerEvent("StatusUpdate", "Precompiling AST Transformations...")
+        eventListener.triggerEvent("StatusUpdate", "src ${srcBaseDir} ${destDir}")
         path id: "grails.compile.classpath", compileClasspath
         def classpathId = "grails.compile.classpath"
         mkdir dir: destDir
@@ -15,6 +15,6 @@ def compileAST(def srcBaseDir, def destDir) {
             verbose: grailsSettings.verboseCompile,
             stacktrace: "yes",
             encoding: "UTF-8")
-        println "Done precompiling AST Transformations!"
+        eventListener.triggerEvent("Done precompiling AST Transformations!")
     }
 }
