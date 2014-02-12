@@ -68,4 +68,22 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             ["foo,bar":"baz,qux"]  | 'foo,bar'         | 0
             [foo:"bar"]            | 'xxx'             | 1
     }
+    
+    @Unroll
+    void 'save and delete a domain class with a map. key: #data'() {
+        setup:
+            def testHstore = new TestHstore(testAttributes: data)
+        when: 'I save an instance'
+            testHstore.save(flush: true)
+        and: 'I try to delete it'
+            testHstore.delete(flush: true)
+        
+        then: 'It shouldn\'t be present in database anymore'
+            TestHstore.count() == 0
+
+        where:
+            data                  | attribute | value
+            [foo:"bar"]           | "foo"     | "bar"
+            ["foo,bar":"baz,qux"] | "foo,bar" | "baz,qux"
+    }
 }
