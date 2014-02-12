@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 
 import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
@@ -39,8 +40,20 @@ public class HstoreType implements UserType {
     @Override
     @SuppressWarnings("rawtypes")
     public boolean equals(Object x, Object y) throws HibernateException {
-        Map m1 = (Map) x;
-        Map m2 = ((HstoreDomainType)y).getDataStore();
+        Map m1;
+        Map m2;
+        if (x instanceof HstoreDomainType){
+            m1 = ((HstoreDomainType)x).getDataStore();
+        } else {
+            m1 = (Map) x;
+        }
+
+        if (y instanceof HstoreDomainType){
+            m2 = ((HstoreDomainType)y).getDataStore();
+        } else {
+            m2 = (Map) y;
+        }
+        
         return m1.equals(m2);
     }
 
@@ -53,7 +66,12 @@ public class HstoreType implements UserType {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Object deepCopy(Object value) throws HibernateException {
         if (value != null) {
-            Map m = ((HstoreDomainType)value).getDataStore();
+            Map m;
+            if (value instanceof HstoreDomainType)
+                m = ((HstoreDomainType)value).getDataStore();
+            else
+                m = (Map)value;
+
             if (m == null) {
                 m = new HashMap();
             }

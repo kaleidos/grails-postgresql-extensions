@@ -19,7 +19,7 @@ public class HstoreHelper {
         return text.replaceAll("\"", "'");
     }
 
-    public static String toString(Map<String, String> m) {
+    public static String toString(Map<Object, String> m) {
         if (m == null || m.isEmpty()) {
             return "";
         }
