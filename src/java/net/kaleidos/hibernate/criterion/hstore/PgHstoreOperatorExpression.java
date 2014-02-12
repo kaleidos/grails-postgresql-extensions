@@ -21,12 +21,12 @@ public class PgHstoreOperatorExpression implements Criterion {
     private static final long serialVersionUID = 2872183637309166619L;
 
     private final String propertyName;
-    private final Map<String,String> value;
+    private final Map<Object,String> value;
     private final String operator;
 
     private static final TypedValue[] NO_VALUES = new TypedValue[0];
 
-    protected PgHstoreOperatorExpression(String propertyName, Map<String,String> value, String operator) {
+    protected PgHstoreOperatorExpression(String propertyName, Map<Object,String> value, String operator) {
         this.propertyName = propertyName;
         this.value = value;
         this.operator = operator;
