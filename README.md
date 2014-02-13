@@ -326,6 +326,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.6.5 - 13/Feb/2014 - Fix bug deleting instances with Hstore type. Thanks to Manuel Unno Vio!
 * 0.6.4 - 30/Jan/2014 - Convert automatically the keys of Hstore to string.
 * 0.6.3 - 19/Jan/2014 - Display the class name during startup when detecting a hstore property.
 * 0.6.2 - Unreleased - Refactor some tests.
