@@ -19,6 +19,7 @@ Currently the plugin supports arrays and hstore and some query methods has been 
         * [Overlaps](#overlaps)
         * [Is Empty](#is-empty)
         * [Is Not Empty](#is-not-empty)
+        * [Is Empty or Contains](#is-empty-or-contains)
   * [Hstore](#hstore)
     * [Criterias](#hstore-criterias)
         * [Contains Key](#contains-key)
@@ -198,6 +199,31 @@ def result = Like.withCriteria {
 }
 ```
 
+#### Is Empty or Contains
+
+This criteria is a mix of the `pgContains` and `pgIsEmpty`. Sometimes you have to execute 'pgContains' criteria if the this has elements or a 'pgIsEmpty' if the list is empty. It could be something like this:
+
+```groovy
+def numbers = ... // A list with zero or more elements
+def result = Like.withCriteria {
+    if (numbers) {
+        pgArrayContains 'favoriteNumbers', numbers
+    } else {
+        pgArrayIsEmpty 'favoriteMovies'
+    }
+}
+```
+
+With `pgIsEmptyOrContains` you can write the previous code as follows:
+
+```groovy
+def numbers = ... // A list with zero or more elements
+def result = Like.withCriteria {
+    pgArrayIsEmptyOrContains 'favoriteNumbers', numbers
+}
+```
+
+
 ### Hstore
 
 The first thing you need to do is install hstore support in Postgresql. In Debian/Ubuntu you have to install the `postgresql-contrib` package:
@@ -327,6 +353,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.6.6 - 14/Feb/2014 - New criteria pgArrayIsEmptyOrContains.
 * 0.6.5 - 13/Feb/2014 - Fix bug deleting instances with Hstore type. Thanks to Manuel Unno Vio!
 * 0.6.4 - 30/Jan/2014 - Convert automatically the keys of Hstore to string.
 * 0.6.3 - 19/Jan/2014 - Display the class name during startup when detecting a hstore property.
