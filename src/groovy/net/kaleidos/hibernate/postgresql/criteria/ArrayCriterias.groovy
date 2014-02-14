@@ -14,6 +14,7 @@ class ArrayCriterias {
         addOverlapsOperator()
         addIsEmptyOperator()
         addIsNotEmptyOperator()
+        addIsEmptyOrContainsOperator()
     }
 
     private void addContainsOperator() {
@@ -112,5 +113,30 @@ class ArrayCriterias {
         }
     }
 
+    private void addIsEmptyOrContainsOperator() {
+        /**
+         * Creates a "contains in native array" or "is empty native array" Criterion based on the specified property name and value
+         * If the propertyValue is empty, the 'contains' operator is used and if the propertyValue is not empty, the 'isEmpty'
+         * operator is used.
+         *
+         * @param propertyName The property name
+         * @param propertyValue The property value
+         * @return A Criterion instance
+         */
+        HibernateCriteriaBuilder.metaClass.pgArrayIsEmptyOrContains = { String propertyName, Object propertyValue ->
+            if (!validateSimpleExpression()) {
+                throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsEmptyOrContains] with propertyName [" +
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+            }
 
+            propertyName = calculatePropertyName(propertyName)
+            propertyValue = calculatePropertyValue(propertyValue)
+
+            if (propertyValue) {
+                return addToCriteria(new PgArrayExpression(propertyName, propertyValue, "@>"))
+            } else {
+                return addToCriteria(new PgEmptinessExpression(propertyName, "="))
+            }
+        }
+    }
 }
