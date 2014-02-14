@@ -28,13 +28,16 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
             result.size() == resultSize
 
         where:
-            number                      | resultSize
-               1                        |     0
-               2                        |     1
-               [1,20]                   |     1
-               [4,5,6,7]                |     2
-               [1,2,3,4,5,6,7,8,9,10]   |     4
-               []                       |     0
+            number                 | resultSize
+            1                      | 0
+            2                      | 1
+            [1,20]                 | 1
+            [4,5,6,7]              | 2
+            [1,2,3,4,5,6,7,8,9,10] | 4
+            []                     | 0
+            [1,20] as Integer[]    | 1
+            [4,5,6,7] as Integer[] | 2
+            [] as Integer[]        | 0
     }
 
 
@@ -54,13 +57,16 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
             result.size() == resultSize
 
         where:
-            number                                          | resultSize
-               1L                                           |     0
-               2L                                           |     1
-               [1L,20L]                                     |     1
-               [4L,5L,6L,7L]                                |     2
-               [1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L]    |     4
-               []                                           |     0
+            number                                    | resultSize
+            1L                                        | 0
+            2L                                        | 1
+            [1L,20L]                                  | 1
+            [4L,5L,6L,7L]                             | 2
+            [1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L] | 4
+            []                                        | 0
+            [1L,20L] as Long[]                        | 1
+            [4L,5L,6L,7L] as Long[]                   | 2
+            [] as Long[]                              | 0
     }
 
 
@@ -79,13 +85,16 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
             result.size() == resultSize
 
         where:
-            movie                                                   | resultSize
-               "A"                                                  |     0
-               "B"                                                  |     1
-               ["A", "Z"]                                           |     1
-               ["B", "D", "E", "F", "G"]                            |     2
-               ["A", "B", "C", "D", "E", "F", "G", "H", "I", "Z"]   |     4
-               []                                                   |     0
+            movie                                                 | resultSize
+               "A"                                                | 0
+               "B"                                                | 1
+               ["A", "Z"]                                         | 1
+               ["B", "D", "E", "F", "G"]                          | 2
+               ["A", "B", "C", "D", "E", "F", "G", "H", "I", "Z"] | 4
+               []                                                 | 0
+               ["A", "Z"] as String[]                             | 1
+               ["B", "D", "E", "F", "G"] as String[]              | 2
+               [] as String[]                                     | 0
     }
 
     @Unroll
@@ -103,30 +112,30 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
             result.size() == resultSize
 
         where:
-            juice                                       | resultSize
-               Like.Juice.CRANBERRY                     |     0
-               Like.Juice.ORANGE                        |     1
-               Like.Juice.LEMON                         |     0
-               Like.Juice.APPLE                         |     1
-               Like.Juice.GRAPE                         |     0
-               Like.Juice.PINEAPPLE                     |     0
-               Like.Juice.TOMATO                        |     0
-               Like.Juice.CARROT                        |     0
-               Like.Juice.GRAPEFRUIT                    |     0
-               [Like.Juice.ORANGE, Like.Juice.GRAPE]    |     1
-               [Like.Juice.GRAPE, Like.Juice.PINEAPPLE,
-                  Like.Juice.ORANGE, Like.Juice.CARROT] |     2
-               [Like.Juice.APPLE]                       |     1
-               [Like.Juice.CARROT, Like.Juice.ORANGE]   |     2
-               []                                       |     0
+            juice                                    | resultSize
+            Like.Juice.CRANBERRY                     | 0
+            Like.Juice.ORANGE                        | 1
+            Like.Juice.LEMON                         | 0
+            Like.Juice.APPLE                         | 1
+            Like.Juice.GRAPE                         | 0
+            Like.Juice.PINEAPPLE                     | 0
+            Like.Juice.TOMATO                        | 0
+            Like.Juice.CARROT                        | 0
+            Like.Juice.GRAPEFRUIT                    | 0
+            [Like.Juice.ORANGE, Like.Juice.GRAPE]    | 1
+            [Like.Juice.GRAPE, Like.Juice.PINEAPPLE,
+             Like.Juice.ORANGE, Like.Juice.CARROT]   | 2
+            [Like.Juice.APPLE]                       | 1
+            [Like.Juice.CARROT, Like.Juice.ORANGE]   | 2
+            []                                       | 0
     }
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def user1 = new User(name:'Abe',        like:new Like(favoriteMovies:["A", "B", "D"])).save()
-            def user2 = new User(name:'Bernard',    like:new Like(favoriteMovies:["A", "C"])).save()
-            def user3 = new User(name:'Carl',       like:new Like(favoriteMovies:["A"])).save()
-            def user4 = new User(name:'Dave',       like:new Like(favoriteMovies:["A", "C", "D"])).save()
+            def user1 = new User(name:'Abe', like:new Like(favoriteMovies:["A", "B", "D"])).save()
+            def user2 = new User(name:'Bernard', like:new Like(favoriteMovies:["A", "C"])).save()
+            def user3 = new User(name:'Carl', like:new Like(favoriteMovies:["A"])).save()
+            def user4 = new User(name:'Dave', like:new Like(favoriteMovies:["A", "C", "D"])).save()
 
         when:
             def result = pgIsContainedByCriteriaTestService.searchIsContainedByWithJoin(movies)
@@ -142,10 +151,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search in an array of strings with join with another domain class and or statement'() {
         setup:
-            def user1 = new User(name:'Abe',        like:new Like(favoriteNumbers: [1,3], favoriteMovies:["A", "B", "D"])).save()
-            def user2 = new User(name:'Bernard',    like:new Like(favoriteNumbers: [1], favoriteMovies:["A", "C"])).save()
-            def user3 = new User(name:'Carl',       like:new Like(favoriteNumbers: [2], favoriteMovies:["A"])).save()
-            def user4 = new User(name:'Dave',       like:new Like(favoriteNumbers: [1,2], favoriteMovies:["A", "B", "D"])).save()
+            def user1 = new User(name:'Abe', like:new Like(favoriteNumbers: [1,3], favoriteMovies:["A", "B", "D"])).save()
+            def user2 = new User(name:'Bernard', like:new Like(favoriteNumbers: [1], favoriteMovies:["A", "C"])).save()
+            def user3 = new User(name:'Carl', like:new Like(favoriteNumbers: [2], favoriteMovies:["A"])).save()
+            def user4 = new User(name:'Dave', like:new Like(favoriteNumbers: [1,2], favoriteMovies:["A", "B", "D"])).save()
 
         when:
             def result = pgIsContainedByCriteriaTestService.searchIsContainedByStringOrInteger(movies, numbers)

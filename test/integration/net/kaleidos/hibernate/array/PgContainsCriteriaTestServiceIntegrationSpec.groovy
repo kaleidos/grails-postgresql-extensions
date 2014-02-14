@@ -27,18 +27,21 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-            number      | resultSize
-               3        |     2
-               17       |     1
-               9        |     2
-               4        |     2
-               1        |     0
-               20       |     4
-               [3,4]    |     1
-               [3,4,7]  |     0
-               [4]      |     2
-               [3,20]   |     2
-               []       |     4
+            number                | resultSize
+            3                     | 2
+            17                    | 1
+            9                     | 2
+            4                     | 2
+            1                     | 0
+            20                    | 4
+            [3,4]                 | 1
+            [3,4,7]               | 0
+            [4]                   | 2
+            [3,20]                | 2
+            []                    | 4
+            3 as Integer[]        | 2
+            [] as Integer[]       | 4
+            [3,4] as Integer[]    | 1
     }
 
     @Unroll
@@ -55,14 +58,17 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-              number            | resultSize
-              12383L            |     3
-              98978L            |     2
-            -983893849L         |     1
-              48574L            |     0
-              [12383L, 98978L]  |     1
-              [12383L]          |     3
-              []                |     4
+              number                     | resultSize
+              12383L                     | 3
+              98978L                     | 2
+              -983893849L                | 1
+              48574L                     | 0
+              [12383L, 98978L]           | 1
+              [12383L]                   | 3
+              []                         | 4
+              [12383L, 98978L] as Long[] | 1
+              [12383L] as Long[]         | 3
+              [] as Long[]               | 4
     }
 
     @Unroll
@@ -80,15 +86,18 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-            movie                                       | resultSize
-            "The Matrix"                                |     1
-            "The Lord of the Rings"                     |     2
-            "Blade Runner"                              |     2
-            "Starwars"                                  |     2
-            "The Usual Suspects"                        |     0
-            ["Starwars", "Romeo & Juliet"]              |     1
-            ["The Lord of the Rings"]                   |     2
-            []                                          |     4
+            movie                                      | resultSize
+            "The Matrix"                               | 1
+            "The Lord of the Rings"                    | 2
+            "Blade Runner"                             | 2
+            "Starwars"                                 | 2
+            "The Usual Suspects"                       | 0
+            ["Starwars", "Romeo & Juliet"]             | 1
+            ["The Lord of the Rings"]                  | 2
+            []                                         | 4
+            ["Starwars", "Romeo & Juliet"] as String[] | 1
+            ["The Lord of the Rings"] as String[]      | 2
+            [] as String[]                             | 4
     }
 
     @Unroll
@@ -106,21 +115,21 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-            juice                                       | resultSize
-               Like.Juice.CRANBERRY                     |     1
-               Like.Juice.ORANGE                        |     2
-               Like.Juice.LEMON                         |     0
-               Like.Juice.APPLE                         |     1
-               Like.Juice.GRAPE                         |     2
-               Like.Juice.PINEAPPLE                     |     1
-               Like.Juice.TOMATO                        |     2
-               Like.Juice.CARROT                        |     3
-               Like.Juice.GRAPEFRUIT                    |     0
-               [Like.Juice.ORANGE, Like.Juice.GRAPE]    |     1
-               [Like.Juice.GRAPE, Like.Juice.PINEAPPLE] |     1
-               [Like.Juice.CARROT]                      |     3
-               [Like.Juice.CARROT, Like.Juice.TOMATO]   |     2
-               []                                       |     4
+            juice                                    | resultSize
+            Like.Juice.CRANBERRY                     | 1
+            Like.Juice.ORANGE                        | 2
+            Like.Juice.LEMON                         | 0
+            Like.Juice.APPLE                         | 1
+            Like.Juice.GRAPE                         | 2
+            Like.Juice.PINEAPPLE                     | 1
+            Like.Juice.TOMATO                        | 2
+            Like.Juice.CARROT                        | 3
+            Like.Juice.GRAPEFRUIT                    | 0
+            [Like.Juice.ORANGE, Like.Juice.GRAPE]    | 1
+            [Like.Juice.GRAPE, Like.Juice.PINEAPPLE] | 1
+            [Like.Juice.CARROT]                      | 3
+            [Like.Juice.CARROT, Like.Juice.TOMATO]   | 2
+            []                                       | 4
     }
 
     void 'search in an array of strings with join with another domain class'() {

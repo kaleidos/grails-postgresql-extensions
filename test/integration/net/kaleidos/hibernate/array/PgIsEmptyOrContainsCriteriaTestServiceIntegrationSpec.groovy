@@ -26,11 +26,14 @@ class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends IntegrationS
             result.size() == resultSize
 
         where:
-            number | resultSize
-            []     | 1
-            [3]    | 2
-            [4]    | 1
-            [3, 4] | 1
+            number              | resultSize
+            []                  | 1
+            [3]                 | 2
+            [4]                 | 1
+            [3, 4]              | 1
+            [] as Integer[]     | 1
+            [3] as Integer[]    | 2
+            [3, 4] as Integer[] | 1
     }
 
     @Unroll
@@ -47,10 +50,13 @@ class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends IntegrationS
             result.size() == resultSize
 
         where:
-              number           | resultSize
-              [12383L, 98978L] |     1
-              [12383L]         |     3
-              []               |     1
+              number                     | resultSize
+              [12383L, 98978L]           | 1
+              [12383L]                   | 3
+              []                         | 1
+              [12383L, 98978L] as Long[] | 1
+              [12383L] as Long[]         | 3
+              [] as Long[]               | 1
     }
 
     @Unroll
@@ -68,11 +74,14 @@ class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends IntegrationS
             result.size() == resultSize
 
         where:
-            movie                          | resultSize
-            ["The Matrix"]                 |     1
-            ["Starwars", "Romeo & Juliet"] |     1
-            ["The Lord of the Rings"]      |     2
-            []                             |     1
+            movie                                      | resultSize
+            ["The Matrix"]                             | 1
+            ["Starwars", "Romeo & Juliet"]             | 1
+            ["The Lord of the Rings"]                  | 2
+            []                                         | 1
+            ["Starwars", "Romeo & Juliet"] as String[] | 1
+            ["The Lord of the Rings"] as String[]      | 2
+            [] as String[]                             | 1
     }
 
     @Unroll

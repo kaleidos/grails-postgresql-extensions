@@ -20,12 +20,13 @@ class PgCriteriaUtils {
     @SuppressWarnings("unchecked")
     public Object[] getValueAsArrayOfType(Object targetValue, Class<?> expectedType, MapFunction mapFunction) {
         Object[] arrValue;
+
         if (targetValue instanceof List) {
             List<Object> valueAsList = (List<Object>)targetValue;
             arrValue = (Object[]) Array.newInstance(expectedType, valueAsList.size());
 
             // We will iterate the collection and if the value it's not a valid value we throw the exception
-            for(int i=0; i<valueAsList.size(); i++) {
+            for (int i = 0; i < valueAsList.size(); i++) {
                 if (expectedType.isInstance(valueAsList.get(i))) {
                     arrValue[i] = expectedType.cast(valueAsList.get(i));
                 } else if (mapFunction != null) {
@@ -43,6 +44,8 @@ class PgCriteriaUtils {
             } else {
                 arrValue[0] = expectedType.cast(targetValue);
             }
+        } else if (targetValue instanceof Object[]) {
+            arrValue = (Object[])targetValue;
         } else {
             throw new HibernateException("criteria doesn't support values of type: " +
                         targetValue.getClass().getName() + ". Try: " + expectedType + " or List<" + expectedType + "> instead");

@@ -26,6 +26,17 @@ class PgOverlapsCriteriaTestService {
     }
 
     /**
+     * Search overlaps "likes" with n integers in array
+     */
+    public List<Like> overlapsIntegerArray(Integer[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
      * Search overlaps "likes" with long in array
      */
     public List<Like> overlapsLongArray(Long number) {
@@ -48,6 +59,17 @@ class PgOverlapsCriteriaTestService {
     }
 
     /**
+     * Search overlaps "likes" with n longs in array
+     */
+    public List<Like> overlapsLongArray(Long[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteLongNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
      * Search overlaps "likes" with string in array
      */
     public List<Like> overlapsStringArray(String movie) {
@@ -62,6 +84,17 @@ class PgOverlapsCriteriaTestService {
      * Search overlaps "likes" with n strings in array
      */
     public List<Like> overlapsStringArray(List<String> movie) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteMovies', movie
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with n strings in array
+     */
+    public List<Like> overlapsStringArray(String[] movie) {
         def result = Like.withCriteria {
             pgArrayOverlaps 'favoriteMovies', movie
         }

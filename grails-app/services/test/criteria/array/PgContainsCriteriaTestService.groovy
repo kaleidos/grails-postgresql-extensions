@@ -93,6 +93,39 @@ class PgContainsCriteriaTestService {
     }
 
     /**
+     * Search "likes" with array of integer in array
+     */
+    public List<Like> searchWithCriteriaIntegerArray(Integer[] number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteNumbers', number
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with array of long in array
+     */
+    public List<Like> searchWithCriteriaLongArray(Long[] number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteLongNumbers', number
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with array of string in array
+     */
+    public List<Like> searchWithCriteriaStringArray(String[] movie) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteMovies', movie
+        }
+
+        return result
+    }
+
+    /**
      * Search with a join
      */
     public List<User> searchStringWithJoin(String movie) {

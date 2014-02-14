@@ -17,9 +17,20 @@ class PgIsContainedByCriteriaTestService {
         /**
          * Search for "likes" contained by the parameter
          */
-        public List<Like> searchIsContainedByInteger(List<Integer> numberList) {
+        public List<Like> searchIsContainedByInteger(List<Integer> numbers) {
             def result = Like.withCriteria {
-                pgArrayIsContainedBy 'favoriteNumbers', numberList
+                pgArrayIsContainedBy 'favoriteNumbers', numbers
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByInteger(Integer[] numbers) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteNumbers', numbers
             }
 
             return result
@@ -39,9 +50,20 @@ class PgIsContainedByCriteriaTestService {
         /**
          * Search for "likes" contained by the parameter
          */
-        public List<Like> searchIsContainedByLong(List<Long> numberList) {
+        public List<Like> searchIsContainedByLong(List<Long> numbers) {
             def result = Like.withCriteria {
-                pgArrayIsContainedBy 'favoriteLongNumbers', numberList
+                pgArrayIsContainedBy 'favoriteLongNumbers', numbers
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByLong(Long[] numbers) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteLongNumbers', numbers
             }
 
             return result
@@ -61,9 +83,20 @@ class PgIsContainedByCriteriaTestService {
         /**
          * Search for "likes" contained by the parameter
          */
-        public List<Like> searchIsContainedByString(List<String> movieList) {
+        public List<Like> searchIsContainedByString(List<String> movies) {
             def result = Like.withCriteria {
-                pgArrayIsContainedBy 'favoriteMovies', movieList
+                pgArrayIsContainedBy 'favoriteMovies', movies
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByString(String[] movies) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteMovies', movies
             }
 
             return result

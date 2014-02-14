@@ -6,9 +6,20 @@ class PgIsEmptyOrContainsCriteriaTestService {
     /**
      * Search "likes" with n integers in array
      */
-    public List<Like> searchWithCriteriaIntegerArray(List<Integer> number) {
+    public List<Like> searchWithCriteriaIntegerArray(List<Integer> numbers) {
         def result = Like.withCriteria {
-            pgArrayIsEmptyOrContains 'favoriteNumbers', number
+            pgArrayIsEmptyOrContains 'favoriteNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with n integers in array
+     */
+    public List<Like> searchWithCriteriaIntegerArray(Integer[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteNumbers', numbers
         }
 
         return result
@@ -17,9 +28,20 @@ class PgIsEmptyOrContainsCriteriaTestService {
     /**
      * Search "likes" with n longs in array
      */
-    public List<Like> searchWithCriteriaLongArray(List<Long> number) {
+    public List<Like> searchWithCriteriaLongArray(List<Long> numbers) {
         def result = Like.withCriteria {
-            pgArrayIsEmptyOrContains 'favoriteLongNumbers', number
+            pgArrayIsEmptyOrContains 'favoriteLongNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with n longs in array
+     */
+    public List<Like> searchWithCriteriaLongArray(Long[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteLongNumbers', numbers
         }
 
         return result
@@ -28,9 +50,17 @@ class PgIsEmptyOrContainsCriteriaTestService {
     /**
      * Search "likes" with n strings in array
      */
-    public List<Like> searchWithCriteriaStringArray(List<String> movie) {
+    public List<Like> searchWithCriteriaStringArray(List<String> movies) {
         def result = Like.withCriteria {
-            pgArrayIsEmptyOrContains 'favoriteMovies', movie
+            pgArrayIsEmptyOrContains 'favoriteMovies', movies
+        }
+
+        return result
+    }
+
+    public List<Like> searchWithCriteriaStringArray(String[] movies) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteMovies', movies
         }
 
         return result
