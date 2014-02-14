@@ -99,7 +99,7 @@ class Like {
 }
 ```
 
-Now you can create domain objects using lists of integers, longs and strings and when you save the object it will be stored as an postgresql array:
+Now you can create domain objects using lists (or arrays) of integers, longs and strings and when you save the object it will be stored as an postgresql array:
 
 ```groovy
 def like1 = new Like(favoriteNumbers:[5, 17, 9, 6],
@@ -353,6 +353,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.6.7 - 14/Feb/2014 - Support Java Arrays in criterias.
 * 0.6.6 - 14/Feb/2014 - New criteria pgArrayIsEmptyOrContains.
 * 0.6.5 - 13/Feb/2014 - Fix bug deleting instances with Hstore type. Thanks to Manuel Unno Vio!
 * 0.6.4 - 30/Jan/2014 - Convert automatically the keys of Hstore to string.
