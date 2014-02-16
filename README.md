@@ -201,7 +201,7 @@ def result = Like.withCriteria {
 
 #### Is Empty or Contains
 
-This criteria is a mix of the `pgContains` and `pgIsEmpty`. Sometimes you have to execute 'pgContains' criteria if the this has elements or a 'pgIsEmpty' if the list is empty. It could be something like this:
+This criteria is a mix of the `pgContains` and `pgIsEmpty`. Sometimes you have to execute 'pgContains' criteria if the list has elements or a 'pgIsEmpty' if the list is empty. It could be something like this:
 
 ```groovy
 def numbers = ... // A list with zero or more elements
