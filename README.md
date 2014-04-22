@@ -353,6 +353,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.6.8 - 22/Apr/2014 - Fix NPE in HstoreType.
 * 0.6.7 - 14/Feb/2014 - Support Java Arrays in criterias.
 * 0.6.6 - 14/Feb/2014 - New criteria pgArrayIsEmptyOrContains.
 * 0.6.5 - 13/Feb/2014 - Fix bug deleting instances with Hstore type. Thanks to Manuel Unno Vio!
