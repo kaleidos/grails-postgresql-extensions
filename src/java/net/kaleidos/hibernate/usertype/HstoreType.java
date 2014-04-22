@@ -41,6 +41,11 @@ public class HstoreType implements UserType {
     public boolean equals(Object x, Object y) throws HibernateException {
         Map m1;
         Map m2;
+
+        if (x == null || y == null) {
+            return false;
+        }
+
         if (x instanceof HstoreDomainType) {
             m1 = ((HstoreDomainType)x).getDataStore();
         } else {
