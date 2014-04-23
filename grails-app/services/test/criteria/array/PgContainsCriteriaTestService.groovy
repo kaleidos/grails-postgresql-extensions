@@ -26,6 +26,27 @@ class PgContainsCriteriaTestService {
     }
 
     /**
+     * Search "likes" with float in array
+     */
+    public List<Like> searchWithCriteriaFloatArray(Float number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteFloatNumbers', number
+        }
+        return result
+    }
+
+    /**
+     * Search "likes" with double in array
+     */
+    public List<Like> searchWithCriteriaDoubleArray(Double number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteDoubleNumbers', number
+        }
+        return result
+    }
+
+
+    /**
      * Search "likes" with string in array
      */
     public List<Like> searchWithCriteriaStringArray(String movie) {
@@ -67,6 +88,26 @@ class PgContainsCriteriaTestService {
             pgArrayContains 'favoriteLongNumbers', number
         }
 
+        return result
+    }
+
+    /**
+     * Search "likes" with n floats in array
+     */
+    public List<Like> searchWithCriteriaFloatArray(List<Float> number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteFloatNumbers', number
+        }
+        return result
+    }
+
+    /**
+     * Search "likes" with n longs in array
+     */
+    public List<Like> searchWithCriteriaDoubleArray(List<Double> number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteDoubleNumbers', number
+        }
         return result
     }
 
@@ -113,6 +154,29 @@ class PgContainsCriteriaTestService {
 
         return result
     }
+
+    /**
+     * Search "likes" with array of float in array
+     */
+    public List<Like> searchWithCriteriaFloatArray(Float[] number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteFloatNumbers', number
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with array of long in array
+     */
+    public List<Like> searchWithCriteriaDoubleArray(Double[] number) {
+        def result = Like.withCriteria {
+            pgArrayContains 'favoriteDoubleNumbers', number
+        }
+
+        return result
+    }
+
 
     /**
      * Search "likes" with array of string in array

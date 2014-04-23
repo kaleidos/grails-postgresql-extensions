@@ -41,11 +41,15 @@ public class PgArrayExpression implements Criterion {
     @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         Type propertyType = criteriaQuery.getType(criteria, propertyName);
-        String propertyTypeName = propertyType.getName();
+
+        if (!(propertyType instanceof CustomType) || !(((CustomType)propertyType).getUserType() instanceof ArrayType)) {
+            throw new HibernateException("Property is not an instance of the postgres type ArrayType. Type is: " + propertyType.getClass());
+        }
+
+        ArrayType arrayType = (ArrayType)((CustomType)propertyType).getUserType();
 
         Object[] arrValue;
-
-        if ("net.kaleidos.hibernate.usertype.IdentityEnumArrayType".equals(propertyTypeName)) {
+        if (arrayType.getTypeClass().isEnum()) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(
                 value,
                 Integer.class,
@@ -60,11 +64,8 @@ public class PgArrayExpression implements Criterion {
                     }
                 }
             );
-        } else if (propertyType instanceof CustomType && ((CustomType)propertyType).getUserType() instanceof ArrayType) {
-            ArrayType arrayType = (ArrayType)((CustomType)propertyType).getUserType();
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, arrayType.getTypeClass());
         } else {
-            throw new HibernateException("Property is not an instance of the postgres type ArrayType");
+            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, arrayType.getTypeClass());
         }
 
         return new TypedValue[] {

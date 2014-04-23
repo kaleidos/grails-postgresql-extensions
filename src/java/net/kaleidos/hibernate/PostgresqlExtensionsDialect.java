@@ -25,8 +25,8 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
         registerColumnType(ArrayType.INTEGER_ARRAY, "int[]");
         registerColumnType(ArrayType.ENUM_INTEGER_ARRAY, "int[]");
         registerColumnType(ArrayType.STRING_ARRAY, "varchar[]");
-        registerColumnType(ArrayType.DOUBLE_ARRAY, "double precision[]");
-        registerColumnType(ArrayType.FLOAT_ARRAY, "real[]");
+        registerColumnType(ArrayType.DOUBLE_ARRAY, "float8[]");
+        registerColumnType(ArrayType.FLOAT_ARRAY, "float[]");
         registerColumnType(HstoreType.SQLTYPE, "hstore");
     }
 
