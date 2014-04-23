@@ -17,6 +17,8 @@ grails.project.dependency.resolution = {
         runtime ("org.postgresql:postgresql:9.2-1004-jdbc4") {
             export = false
         }
+
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
@@ -26,9 +28,12 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        test (":spock:0.7",
-              ":code-coverage:1.2.6") {
+        test (":code-coverage:1.2.6") {
             export = false
+        }
+
+        test(":spock:0.7") {
+            exclude "spock-grails-support"
         }
 
         compile (":guard:1.0.7") {
