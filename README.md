@@ -21,6 +21,9 @@ Currently the plugin supports arrays and hstore and some query methods has been 
         * [Is Not Empty](#is-not-empty)
         * [Is Empty or Contains](#is-empty-or-contains)
   * [Hstore](#hstore)
+    * [Grails 2.2.5 and 2.3.1+](#grails-225-and-231)
+    * [Old Grails versions](#old-grails-versions)
+    * [Using Hstore](#using-hstore)
     * [Criterias](#hstore-criterias)
         * [Contains Key](#contains-key)
         * [Contains](#contains-1)
@@ -248,14 +251,46 @@ You can test that the hstore extension is correctly installed running:
 (1 row)
 ```
 
-Now you can create a domain class
+#### Grails 2.2.5 and 2.3.1+
+
+Depending on the version of Grails you're using, you have two different options to configure the mapping. For new versions of Grails you only have to define the domain class with a `Map` attribute and use the Hibernate user type `HstoreMapType`.
+
+```groovy
+import net.kaleidos.hibernate.usertype.HstoreMapType
+
+class TestHstore {
+
+    Map testAttributes
+
+    static mapping = {
+        testAttributes type: HstoreMapType
+    }
+}
+```
+
+#### Old Grails versions
+
+Until [GRAILS-10335](http://jira.grails.org/browse/GRAILS-10335) has been fixed it hasn't been possible to override neither a Map, List, Set nor a Bag in a Domain class using a custom Hibernate user type.
+
+If you define the previous domain class and execute `grails schema-export` you will get the following database schema:
+
+```sql
+create table test_hstore (id int8 not null, version int8 not null, primary key (id));
+create table test_hstore_test_attributes (test_attributes int8, test_attributes_idx varchar(255), test_attributes_elt hstore not null);
+```
+
+As you can see, Grails creates another table with the key and the value. This is not what we can get because Postgresql provides the hstore type just for this.
+
+So what can we do? We create the class [HstoreDomainType](https://github.com/kaleidos/grails-postgresql-extensions/blob/master/src/groovy/net/kaleidos/hibernate/postgresql/hstore/HstoreDomainType.groovy) to use it in domain classes instead of Map. This class, using Groovy Metaprogramming handles the `Map` type.
+Now, with this AST Transformation `net.kaleidos.hibernate.postgresql.hstore.Hstore` (implemented [here](https://github.com/kaleidos/grails-postgresql-extensions/blob/master/src/groovy/net/kaleidos/hibernate/postgresql/hstore/HstoreASTTransformation.groovy)) we convert the properties with type `Map` to properties with type `HstoreDomainType`. And this is how the magic works :-)
+
+Now if you annotate the property and execute again `grails schema-export` you'll get the right ddl (note the `hstore` type for the property `test_attribute`):
 
 ```groovy
 import net.kaleidos.hibernate.postgresql.hstore.Hstore
 import net.kaleidos.hibernate.usertype.HstoreType
 
 class TestHstore {
-
     @Hstore
     Map testAttributes
 
@@ -266,12 +301,20 @@ class TestHstore {
     }
 
     static mapping = {
-        testAttributes type:HstoreType
+        testAttributes type: HstoreType
     }
 }
 ```
 
-Note that you only have to define the property as `Map`, annotate with `@Hstore` and define the Hibernate user type `HstoreType`. Now you can create and instance of the domain class. Due to a limitation of the Hstore Postgresql type you can only store Strings as key and value.
+```sql
+create table test_hstore (id int8 not null, version int8 not null, test_attributes hstore not null, primary key (id));
+```
+
+Note that you only have to define the property as `Map`, annotate with `@Hstore` and define the Hibernate user type `HstoreType`.
+
+#### Using Hstore
+
+Now you can create and instance of the domain class. Due to a limitation of the Hstore Postgresql type you can only store Strings as key and value.
 
 ```groovy
 def instance = new TestHstore(testAttributes:[foo:"bar"], anotherProperty:"Groovy Rocks!")
@@ -353,6 +396,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.7 - Unreleased - New HstoreMapType and update plugin to Grails 2.2.5.
 * 0.6.8 - 22/Apr/2014 - Fix NPE in HstoreType.
 * 0.6.7 - 14/Feb/2014 - Support Java Arrays in criterias.
 * 0.6.6 - 14/Feb/2014 - New criteria pgArrayIsEmptyOrContains.
