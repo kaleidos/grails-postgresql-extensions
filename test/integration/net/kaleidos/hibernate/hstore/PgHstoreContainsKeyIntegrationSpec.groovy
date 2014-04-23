@@ -26,7 +26,7 @@ class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
             result.find { it.name=="test4" } != null
     }
 
-    void 'Test find hstore that contains key'() {
+    void 'Test find hstore that contains other key'() {
         setup:
             new TestHstore(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
             new TestHstore(name: "test2", testAttributes: ["b": "2"]).save(flush: true)
