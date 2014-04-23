@@ -2,7 +2,6 @@ package net.kaleidos.hibernate;
 
 import net.kaleidos.hibernate.usertype.HstoreType;
 import net.kaleidos.hibernate.usertype.ArrayType;
-import net.kaleidos.hibernate.usertype.IdentityEnumArrayType;
 
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;

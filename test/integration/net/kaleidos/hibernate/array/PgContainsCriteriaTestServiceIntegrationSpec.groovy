@@ -252,6 +252,29 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             number << [["Test"], [1L, "Test"], [1], [1L, 1]]
     }
 
+    @Unroll
+    void 'search a invalid list inside the array of float'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaFloatArray(number)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            number << [["Test"], [1f, "Test"], [1], [1f, 1]]
+    }
+
+    @Unroll
+    void 'search a invalid list inside the array of double'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaDoubleArray(number)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            number << [["Test"], [1d, "Test"], [1], [1d, 1]]
+    }
 
     @Unroll
     void 'search a invalid list inside the array of string'() {

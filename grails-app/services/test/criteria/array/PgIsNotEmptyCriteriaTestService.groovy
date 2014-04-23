@@ -26,6 +26,28 @@ class PgIsNotEmptyCriteriaTestService {
     }
 
     /**
+     * Search "non empty" Float arrays
+     */
+    public List<Like> searchNonEmptyFloatArray() {
+        def result = Like.withCriteria {
+            pgArrayIsNotEmpty 'favoriteFloatNumbers'
+        }
+
+        return result
+    }
+
+    /**
+     * Search "non empty" Double arrays
+     */
+    public List<Like> searchNonEmptyDoubleArray() {
+        def result = Like.withCriteria {
+            pgArrayIsNotEmpty 'favoriteDoubleNumbers'
+        }
+
+        return result
+    }
+
+    /**
      * Search "non empty" string arrays
      */
     public List<Like> searchNonEmptyStringArray() {

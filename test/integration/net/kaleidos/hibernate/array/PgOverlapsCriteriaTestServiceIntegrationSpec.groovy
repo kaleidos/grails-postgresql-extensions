@@ -72,6 +72,60 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     }
 
     @Unroll
+    void 'overlaps #number in an array of floats'() {
+        setup:
+            new Like(favoriteFloatNumbers:[1f, 23f, 34f]).save()
+            new Like(favoriteFloatNumbers:[1f, 7f]).save()
+            new Like(favoriteFloatNumbers:[-9f, 16f, 7f]).save()
+            new Like(favoriteFloatNumbers:[1f]).save()
+        when:
+            def result = pgOverlapsCriteriaTestService.overlapsFloatArray(number)
+
+        then:
+            result.size() == resultSize
+
+        where:
+            number             | resultSize
+            1f                 | 3
+            7f                 | 2
+            -9f                | 1
+            100f               | 0
+            [1f, 7f]           | 4
+            [1f]               | 3
+            []                 | 0
+            [1f, 7f] as Float[] | 4
+            [1f] as Float[]     | 3
+            [] as Float[]       | 0
+    }
+
+    @Unroll
+    void 'overlaps #number in an array of double'() {
+        setup:
+            new Like(favoriteDoubleNumbers:[1d, 23d, 34d]).save()
+            new Like(favoriteDoubleNumbers:[1d, 7d]).save()
+            new Like(favoriteDoubleNumbers:[-9d, 16d, 7d]).save()
+            new Like(favoriteDoubleNumbers:[1d]).save()
+        when:
+            def result = pgOverlapsCriteriaTestService.overlapsDoubleArray(number)
+
+        then:
+            result.size() == resultSize
+
+        where:
+            number             | resultSize
+            1d                 | 3
+            7d                 | 2
+            -9d                | 1
+            100d               | 0
+            [1d, 7d]           | 4
+            [1d]               | 3
+            []                 | 0
+            [1d, 7d] as Double[] | 4
+            [1d] as Double[]     | 3
+            [] as Double[]       | 0
+    }
+
+    @Unroll
     void 'search #movie in an array of strings'() {
         setup:
             new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()

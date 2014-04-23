@@ -26,6 +26,29 @@ class PgIsEmptyCriteriaTestService {
     }
 
     /**
+     * Search "empty" float arrays
+     */
+    public List<Like> searchEmptyFloatArray() {
+        def result = Like.withCriteria {
+            pgArrayIsEmpty 'favoriteFloatNumbers'
+        }
+
+        return result
+    }
+
+    /**
+     * Search "empty" double arrays
+     */
+    public List<Like> searchEmptyDoubleArray() {
+        def result = Like.withCriteria {
+            pgArrayIsEmpty 'favoriteDoubleNumbers'
+        }
+
+        return result
+    }
+
+
+    /**
      * Search "empty" string arrays
      */
     public List<Like> searchEmptyStringArray() {

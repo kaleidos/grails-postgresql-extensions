@@ -70,6 +70,72 @@ class PgOverlapsCriteriaTestService {
     }
 
     /**
+     * Search overlaps "likes" with float in array
+     */
+    public List<Like> overlapsFloatArray(Float number) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteFloatNumbers', number
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with n float in array
+     */
+    public List<Like> overlapsFloatArray(List<Float> numbers) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteFloatNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with n Floats in array
+     */
+    public List<Like> overlapsFloatArray(Float[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteFloatNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with Double in array
+     */
+    public List<Like> overlapsDoubleArray(Double number) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteDoubleNumbers', number
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with n Doubles in array
+     */
+    public List<Like> overlapsDoubleArray(List<Double> numbers) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteDoubleNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search overlaps "likes" with n Doubles in array
+     */
+    public List<Like> overlapsDoubleArray(Double[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayOverlaps 'favoriteDoubleNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
      * Search overlaps "likes" with string in array
      */
     public List<Like> overlapsStringArray(String movie) {
