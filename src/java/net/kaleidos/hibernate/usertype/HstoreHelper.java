@@ -67,14 +67,20 @@ public class HstoreHelper {
         return result;
     }
 
-    public static HstoreDomainType toMap(String s) {
+    public static HstoreDomainType toHstoreDomainType(String s) {
+        Map m = HstoreHelper.toMap(s);
+
+        return new HstoreDomainType(m);
+    }
+
+    public static Map toMap(String s) {
         Map<String, String> m = new HashMap<String, String>();
         if (s == null || s.equals("")) {
-            return new HstoreDomainType(m);
+            return m;
         }
         HstoreParser parser = new HstoreParser(s);
         m = parser.asMap();
 
-        return new HstoreDomainType(m);
+        return m;
     }
 }
