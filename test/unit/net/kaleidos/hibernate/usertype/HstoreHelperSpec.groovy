@@ -77,30 +77,46 @@ public class HstoreHelperSpec extends Specification {
     }
 
     @Unroll
-    void 'empty and null string to map'() {
+    void 'empty and null string to map and hstore domain type'() {
         when:
-            def m = HstoreHelper.toMap(value)
-
+            def dt = HstoreHelper.toHstoreDomainType(value)
         then:
-            m.isEmpty()
+            dt.isEmpty()
+
+        when:
+            def m2 = HstoreHelper.toMap(value)
+        then:
+            m2.isEmpty()
 
         where:
             value << ["", null]
     }
 
-    void 'test to map'() {
+    void 'test to map and hstore domain type'() {
+        when:
+            def dt = HstoreHelper.toHstoreDomainType('"foo"=>"bar"')
+        then:
+            dt.size() == 1
+            dt.foo == "bar"
+
         when:
             def m = HstoreHelper.toMap('"foo"=>"bar"')
-
         then:
             m.size() == 1
             m.foo == "bar"
     }
 
-    void 'test to map with two values'() {
+    void 'test to map and to hstore domain type with two values'() {
+        when:
+            def dt = HstoreHelper.toHstoreDomainType('"foo"=>"bar", "xxx"=>"Groovy Rocks!"')
+
+        then:
+            dt.size() == 2
+            dt.foo == "bar"
+            dt.xxx == "Groovy Rocks!"
+
         when:
             def m = HstoreHelper.toMap('"foo"=>"bar", "xxx"=>"Groovy Rocks!"')
-
         then:
             m.size() == 2
             m.foo == "bar"
@@ -108,10 +124,16 @@ public class HstoreHelperSpec extends Specification {
     }
 
     @Unroll
-    void 'test to map with different non-string values. value: #value'() {
+    void 'test to map and to hstore domain type with different non-string values. value: #value'() {
+        when:
+            def dt = HstoreHelper.toHstoreDomainType("'prop'=>\"${value}\"")
+        then:
+            dt.size() == 1
+            dt.prop == "${value}"
+            dt.prop.class == java.lang.String
+
         when:
             def m = HstoreHelper.toMap("'prop'=>\"${value}\"")
-
         then:
             m.size() == 1
             m.prop == "${value}"
@@ -121,21 +143,32 @@ public class HstoreHelperSpec extends Specification {
             value << [123, true, null, 999L, new Date(), 87987.8976]
     }
 
-    void 'test to map with key and value that contains comma'() {
+    void 'test to map and to hstore domain type with key and value that contains comma'() {
+        when:
+            def dt = HstoreHelper.toHstoreDomainType('"foo,bar"=>"baz,qux"')
+        then:
+            dt.size() == 1
+            dt['foo,bar'] == "baz,qux"
+
         when:
             def m = HstoreHelper.toMap('"foo,bar"=>"baz,qux"')
-
         then:
             m.size() == 1
             m['foo,bar'] == "baz,qux"
     }
-    void 'test to map with key and value that contains comma and space'() {
-        when:
-        def m = HstoreHelper.toMap('"foo, bar"=>"baz, qux"')
 
+    void 'test to map and to hstore domain type with key and value that contains comma and space'() {
+        when:
+            def dt = HstoreHelper.toHstoreDomainType('"foo, bar"=>"baz, qux"')
         then:
-        m.size() == 1
-        m['foo, bar'] == "baz, qux"
+            dt.size() == 1
+            dt['foo, bar'] == "baz, qux"
+
+        when:
+            def m = HstoreHelper.toMap('"foo, bar"=>"baz, qux"')
+        then:
+            m.size() == 1
+            m['foo, bar'] == "baz, qux"
     }
 
     @Unroll
