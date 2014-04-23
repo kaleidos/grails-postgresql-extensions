@@ -1,12 +1,12 @@
 package test.array
 
-import net.kaleidos.hibernate.usertype.StringArrayType
+import net.kaleidos.hibernate.usertype.ArrayType
 
 class TestString {
 
     String[] stringArray
 
     static mapping = {
-        stringArray type:StringArrayType
+        stringArray type:ArrayType, params: [type: String]
     }
 }

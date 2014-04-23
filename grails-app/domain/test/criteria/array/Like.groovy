@@ -1,9 +1,7 @@
 package test.criteria.array
 
 import net.kaleidos.hibernate.usertype.IdentityEnumArrayType
-import net.kaleidos.hibernate.usertype.IntegerArrayType
-import net.kaleidos.hibernate.usertype.LongArrayType
-import net.kaleidos.hibernate.usertype.StringArrayType
+import net.kaleidos.hibernate.usertype.ArrayType
 
 class Like {
 
@@ -32,9 +30,9 @@ class Like {
     static mapping = {
         table "pg_extensions_like"
 
-        favoriteNumbers type:IntegerArrayType
-        favoriteMovies type:StringArrayType
-        favoriteLongNumbers type:LongArrayType
+        favoriteNumbers type:ArrayType, params: [type: Integer]
+        favoriteMovies type:ArrayType, params: [type: String]
+        favoriteLongNumbers type:ArrayType, params: [type: Long]
         favoriteJuices type:IdentityEnumArrayType, params: [enumClass: Juice]
     }
 }

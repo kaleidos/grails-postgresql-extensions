@@ -1,11 +1,14 @@
 package net.kaleidos.hibernate.criterion.array;
 
+import net.kaleidos.hibernate.usertype.ArrayType;
+
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.engine.TypedValue;
 import org.hibernate.type.Type;
+import org.hibernate.type.CustomType;
 import org.hibernate.util.StringHelper;
 
 /**
@@ -41,9 +44,8 @@ public class PgArrayExpression implements Criterion {
         String propertyTypeName = propertyType.getName();
 
         Object[] arrValue;
-        if ("net.kaleidos.hibernate.usertype.IntegerArrayType".equals(propertyTypeName)) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Integer.class);
-        } else if ("net.kaleidos.hibernate.usertype.IdentityEnumArrayType".equals(propertyTypeName)) {
+
+        if ("net.kaleidos.hibernate.usertype.IdentityEnumArrayType".equals(propertyTypeName)) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(
                 value,
                 Integer.class,
@@ -58,12 +60,11 @@ public class PgArrayExpression implements Criterion {
                     }
                 }
             );
-        } else if ("net.kaleidos.hibernate.usertype.LongArrayType".equals(propertyTypeName)) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Long.class);
-        } else if ("net.kaleidos.hibernate.usertype.StringArrayType".equals(propertyTypeName)) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, String.class);
+        } else if (propertyType instanceof CustomType && ((CustomType)propertyType).getUserType() instanceof ArrayType) {
+            ArrayType arrayType = (ArrayType)((CustomType)propertyType).getUserType();
+            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, arrayType.getTypeClass());
         } else {
-            throw new HibernateException("Native array for this type is not supported");
+            throw new HibernateException("Property is not an instance of the postgres type ArrayType");
         }
 
         return new TypedValue[] {

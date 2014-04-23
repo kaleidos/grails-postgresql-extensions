@@ -1,11 +1,13 @@
 package net.kaleidos.hibernate.usertype;
 
 import java.io.Serializable;
+import java.util.Properties;
 
 import org.hibernate.HibernateException;
 import org.hibernate.usertype.UserType;
+import org.hibernate.usertype.ParameterizedType;
 
-public abstract class AbstractArrayType implements UserType {
+public abstract class AbstractArrayType implements UserType, ParameterizedType {
     protected static final int INTEGER_ARRAY = 90001;
     protected static final int LONG_ARRAY = 90002;
     protected static final int STRING_ARRAY = 90003;
@@ -44,5 +46,9 @@ public abstract class AbstractArrayType implements UserType {
     @Override
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
+    }
+
+    @Override
+    public void setParameterValues(Properties parameters) {
     }
 }
