@@ -6,6 +6,8 @@ import spock.lang.*
 import test.array.TestEnum
 import test.array.TestInteger
 import test.array.TestLong
+import test.array.TestFloat
+import test.array.TestDouble
 import test.array.TestString
 
 class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
@@ -41,6 +43,39 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
         where:
             numbers << [ [], [5L], [3L, -1L], [-9L, 4L, -123L, 0L] ]
     }
+
+    @Unroll
+    void 'save a domain class with a Float array value'() {
+        setup:
+            def testFloat = new TestFloat(floatNumbers:numbers)
+
+        when:
+            testFloat.save()
+
+        then:
+            testFloat.hasErrors() == false
+            testFloat.floatNumbers.length == numbers.size()
+
+        where:
+            numbers << [ [], [5f], [3f, -1f], [-9f, 4f, -123f, 0f] ]
+    }
+
+    @Unroll
+    void 'save a domain class with a Double array value'() {
+        setup:
+            def testDouble = new TestDouble(doubleNumbers:numbers)
+
+        when:
+            testDouble.save()
+
+        then:
+            testDouble.hasErrors() == false
+            testDouble.doubleNumbers.length == numbers.size()
+
+        where:
+            numbers << [ [], [5d], [3d, -1d], [-9d, 4d, -123d, 0d] ]
+    }
+
 
     @Unroll
     void 'save a domain class with an string array value'() {

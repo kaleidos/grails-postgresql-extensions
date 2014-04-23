@@ -68,19 +68,18 @@ If you just only add the dialect, hibernate will create a new sequence for every
 
 ### Arrays
 
-The plugin supports the definition of `Integer`, `Long`, `String`, and `Enum` arrays in your domain classes.
+The plugin supports the definition of `Integer`, `Long`, `Float`, `Double`, `String`, and `Enum` arrays in your domain classes.
 
 The EnumArrayType behaves almost identical to IntegerArrayType in that it stores and retrieves an array of ints. The difference, however, is that this is used with an Array of Enums, rather than Ints. The Enums are serialized to their ordinal value before persisted to the database. On retrieval, they are then converted back into their original Enum type.
 
 ```groovy
-import net.kaleidos.hibernate.usertype.IntegerArrayType
-import net.kaleidos.hibernate.usertype.LongArrayType
-import net.kaleidos.hibernate.usertype.StringArrayType
-import net.kaleidos.hibernate.usertype.IdentityEnumArrayType
+import net.kaleidos.hibernate.usertype.ArrayType
 
 class Like {
     Integer[] favoriteNumbers = []
     Long[] favoriteLongNumbers = []
+    Float[] favoriteFloatNumbers = []
+    Double[] favoriteDoubleNumbers = []
     String[] favoriteMovies = []
     Juice[] favoriteJuices = []
 
@@ -94,10 +93,12 @@ class Like {
     }
 
     static mapping = {
-        favoriteNumbers type:IntegerArrayType
-        favoriteLongNumbers type:LongArrayType
-        favoriteMovies type:StringArrayType
-        favoriteJuices type:IdentityEnumArrayType, params:[enumClass: Juice]
+        favoriteNumbers type:ArrayType, params: [type: Integer]
+        favoriteLongNumbers type:ArrayType, params: [type: Long]
+        favoriteFloatNumbers type:ArrayType, params: [type: Float]
+        favoriteDoubleNumbers type:ArrayType, params: [type: Double]
+        favoriteMovies type:ArrayType, params: [type: String]
+        favoriteJuices type:ArrayType, params: [type: Juice]
     }
 }
 ```
@@ -107,6 +108,8 @@ Now you can create domain objects using lists (or arrays) of integers, longs and
 ```groovy
 def like1 = new Like(favoriteNumbers:[5, 17, 9, 6],
                      favoriteLongNumbers:[123, 239, 3498239, 2344235],
+                     favoriteFloatNumbers:[0.3f, 0.1f],
+                     favoriteDoubleNumbers:[100.33d, 44.11d],
                      favoriteMovies:["Spiderman", "Blade Runner", "Starwars"],
                      favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE])
 like1.save()
@@ -117,9 +120,9 @@ And now, with `psql`:
 ```
 =# select * from like;
 
- id |  favorite_long_numbers    |        favorite_movies                 | favorite_numbers | favorite_juices
-----+-------------------------- +----------------------------------------+------------------+----------------
-  1 | {123,239,3498239,2344235} | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}       | {0,2}
+ id |  favorite_long_numbers    |  favorite_float_numbers   |  favorite_double_numbers  |        favorite_movies                 | favorite_numbers | favorite_juices
+----+---------------------------+---------------------------+---------------------------+----------------------------------------+------------------+----------------
+  1 | {123,239,3498239,2344235} | {0.3,0.1}                 | {100.33,44.11}            | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}       | {0,2}
 ```
 
 #### Criterias
@@ -397,6 +400,8 @@ Release Notes
 -------------
 
 * 0.7 - Unreleased - New HstoreMapType and update plugin to Grails 2.2.5.
+                   - Added support for Double and Float arrays
+                   - Refactored the ArrayType to be used as a parametrized type
 * 0.6.8 - 22/Apr/2014 - Fix NPE in HstoreType.
 * 0.6.7 - 14/Feb/2014 - Support Java Arrays in criterias.
 * 0.6.6 - 14/Feb/2014 - New criteria pgArrayIsEmptyOrContains.

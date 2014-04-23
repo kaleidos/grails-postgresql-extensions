@@ -72,6 +72,62 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     }
 
     @Unroll
+    void 'search #number in an array of floats'() {
+        setup:
+            new Like(favoriteFloatNumbers:[12383f, 2392348f, 3498239f]).save()
+            new Like(favoriteFloatNumbers:[12383f, 98978f]).save()
+            new Like(favoriteFloatNumbers:[-983893849f, 398432423f, 98978f]).save()
+            new Like(favoriteFloatNumbers:[12383f]).save()
+
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaFloatArray(number)
+
+        then:
+            result.size() == resultSize
+
+        where:
+              number                      | resultSize
+              12383f                      | 3
+              98978f                      | 2
+              -983893849f                 | 1
+              48574f                      | 0
+              [12383f, 98978f]            | 1
+              [12383f]                    | 3
+              []                          | 4
+              [12383f, 98978f] as Float[] | 1
+              [12383f] as Float[]         | 3
+              [] as Float[]               | 4
+    }
+
+    @Unroll
+    void 'search #number in an array of double'() {
+        setup:
+            new Like(favoriteDoubleNumbers:[12383d, 2392348d, 3498239d]).save()
+            new Like(favoriteDoubleNumbers:[12383d, 98978d]).save()
+            new Like(favoriteDoubleNumbers:[-983893849d, 398432423d, 98978d]).save()
+            new Like(favoriteDoubleNumbers:[12383d]).save()
+
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaDoubleArray(number)
+
+        then:
+            result.size() == resultSize
+
+        where:
+              number                       | resultSize
+              12383d                       | 3
+              98978d                       | 2
+              -983893849d                  | 1
+              48574d                       | 0
+              [12383d, 98978d]             | 1
+              [12383d]                     | 3
+              []                           | 4
+              [12383d, 98978d] as Double[] | 1
+              [12383d] as Double[]         | 3
+              [] as Double[]               | 4
+    }
+
+    @Unroll
     void 'search #movie in an array of strings'() {
         setup:
             new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()
@@ -194,6 +250,30 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
         where:
             number << [["Test"], [1L, "Test"], [1], [1L, 1]]
+    }
+
+    @Unroll
+    void 'search a invalid list inside the array of float'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaFloatArray(number)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            number << [["Test"], [1f, "Test"], [1], [1f, 1]]
+    }
+
+    @Unroll
+    void 'search a invalid list inside the array of double'() {
+        when:
+            def result = pgContainsCriteriaTestService.searchWithCriteriaDoubleArray(number)
+
+        then:
+            thrown(HibernateException)
+
+        where:
+            number << [["Test"], [1d, "Test"], [1], [1d, 1]]
     }
 
     @Unroll

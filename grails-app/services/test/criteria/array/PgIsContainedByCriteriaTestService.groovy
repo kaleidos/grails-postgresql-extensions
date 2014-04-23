@@ -72,6 +72,73 @@ class PgIsContainedByCriteriaTestService {
         /**
          * Search for "likes" which elements are equals to the parameter
          */
+        public List<Like> searchIsContainedByFloat(Float number) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteFloatNumbers', number
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByFloat(List<Float> numbers) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteFloatNumbers', numbers
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByFloat(Float[] numbers) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteFloatNumbers', numbers
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" which elements are equals to the parameter
+         */
+        public List<Like> searchIsContainedByDouble(Double number) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteDoubleNumbers', number
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByDouble(List<Double> numbers) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteDoubleNumbers', numbers
+            }
+
+            return result
+        }
+
+        /**
+         * Search for "likes" contained by the parameter
+         */
+        public List<Like> searchIsContainedByDouble(Double[] numbers) {
+            def result = Like.withCriteria {
+                pgArrayIsContainedBy 'favoriteDoubleNumbers', numbers
+            }
+
+            return result
+        }
+
+
+        /**
+         * Search for "likes" which elements are equals to the parameter
+         */
         public List<Like> searchIsContainedByString(String movie) {
             def result = Like.withCriteria {
                 pgArrayIsContainedBy 'favoriteMovies', movie

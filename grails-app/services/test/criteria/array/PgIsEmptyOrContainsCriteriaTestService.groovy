@@ -48,6 +48,50 @@ class PgIsEmptyOrContainsCriteriaTestService {
     }
 
     /**
+     * Search "likes" with n floats in array
+     */
+    public List<Like> searchWithCriteriaFloatArray(List<Float> numbers) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteFloatNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with n floats in array
+     */
+    public List<Like> searchWithCriteriaFloatArray(Float[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteFloatNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with n doubles in array
+     */
+    public List<Like> searchWithCriteriaDoubleArray(List<Double> numbers) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteDoubleNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
+     * Search "likes" with n longs in array
+     */
+    public List<Like> searchWithCriteriaDoubleArray(Double[] numbers) {
+        def result = Like.withCriteria {
+            pgArrayIsEmptyOrContains 'favoriteDoubleNumbers', numbers
+        }
+
+        return result
+    }
+
+    /**
      * Search "likes" with n strings in array
      */
     public List<Like> searchWithCriteriaStringArray(List<String> movies) {

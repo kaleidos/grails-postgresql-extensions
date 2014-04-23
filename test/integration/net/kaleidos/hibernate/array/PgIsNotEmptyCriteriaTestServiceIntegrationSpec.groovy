@@ -38,6 +38,32 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == 1
     }
 
+    void 'search for empty float arrays'() {
+        setup:
+            new Like(favoriteFloatNumbers:[3f, 7f, 20f]).save()
+            new Like(favoriteFloatNumbers:[]).save()
+            new Like(favoriteFloatNumbers:[]).save()
+
+        when:
+            def result = pgIsNotEmptyCriteriaTestService.searchNonEmptyFloatArray()
+
+        then:
+            result.size() == 1
+    }
+
+    void 'search for empty double arrays'() {
+        setup:
+            new Like(favoriteDoubleNumbers:[3d, 7d, 20d]).save()
+            new Like(favoriteDoubleNumbers:[]).save()
+            new Like(favoriteDoubleNumbers:[]).save()
+
+        when:
+            def result = pgIsNotEmptyCriteriaTestService.searchNonEmptyDoubleArray()
+
+        then:
+            result.size() == 1
+    }
+
     void 'search for empty string arrays'() {
         setup:
             new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()

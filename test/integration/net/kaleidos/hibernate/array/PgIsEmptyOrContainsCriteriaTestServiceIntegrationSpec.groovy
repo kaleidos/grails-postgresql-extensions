@@ -60,6 +60,52 @@ class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends IntegrationS
     }
 
     @Unroll
+    void 'search #number in an array of floats'() {
+        setup:
+            new Like(favoriteFloatNumbers:[12383f, 2392348f, 3498239f]).save()
+            new Like(favoriteFloatNumbers:[12383f, 98978f]).save()
+            new Like(favoriteFloatNumbers:[]).save()
+            new Like(favoriteFloatNumbers:[12383f]).save()
+        when:
+            def result = pgIsEmptyOrContainsCriteriaTestService.searchWithCriteriaFloatArray(number)
+
+        then:
+            result.size() == resultSize
+
+        where:
+              number                      | resultSize
+              [12383f, 98978f]            | 1
+              [12383f]                    | 3
+              []                          | 1
+              [12383f, 98978f] as Float[] | 1
+              [12383f] as Float[]         | 3
+              [] as Float[]               | 1
+    }
+
+    @Unroll
+    void 'search #number in an array of doubles'() {
+        setup:
+            new Like(favoriteDoubleNumbers:[12383d, 2392348d, 3498239d]).save()
+            new Like(favoriteDoubleNumbers:[12383d, 98978d]).save()
+            new Like(favoriteDoubleNumbers:[]).save()
+            new Like(favoriteDoubleNumbers:[12383d]).save()
+        when:
+            def result = pgIsEmptyOrContainsCriteriaTestService.searchWithCriteriaDoubleArray(number)
+
+        then:
+            result.size() == resultSize
+
+        where:
+              number                       | resultSize
+              [12383d, 98978d]             | 1
+              [12383d]                     | 3
+              []                           | 1
+              [12383d, 98978d] as Double[] | 1
+              [12383d] as Double[]         | 3
+              [] as Double[]               | 1
+    }
+
+    @Unroll
     void 'search #movie in an array of strings'() {
         setup:
             new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()

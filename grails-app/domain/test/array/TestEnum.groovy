@@ -1,6 +1,6 @@
 package test.array
 
-import net.kaleidos.hibernate.usertype.IdentityEnumArrayType
+import net.kaleidos.hibernate.usertype.ArrayType
 
 class TestEnum {
 
@@ -20,6 +20,6 @@ class TestEnum {
     Day[] days
 
     static mapping = {
-        days type: IdentityEnumArrayType, params: [enumClass: Day]
+        days type: ArrayType, params: [type: Day]
     }
 }

@@ -1,11 +1,14 @@
 package net.kaleidos.hibernate.criterion.array;
 
+import net.kaleidos.hibernate.usertype.ArrayType;
+
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.engine.TypedValue;
 import org.hibernate.type.Type;
+import org.hibernate.type.CustomType;
 import org.hibernate.util.StringHelper;
 
 /**
@@ -38,12 +41,15 @@ public class PgArrayExpression implements Criterion {
     @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         Type propertyType = criteriaQuery.getType(criteria, propertyName);
-        String propertyTypeName = propertyType.getName();
+
+        if (!(propertyType instanceof CustomType) || !(((CustomType)propertyType).getUserType() instanceof ArrayType)) {
+            throw new HibernateException("Property is not an instance of the postgres type ArrayType. Type is: " + propertyType.getClass());
+        }
+
+        ArrayType arrayType = (ArrayType)((CustomType)propertyType).getUserType();
 
         Object[] arrValue;
-        if ("net.kaleidos.hibernate.usertype.IntegerArrayType".equals(propertyTypeName)) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Integer.class);
-        } else if ("net.kaleidos.hibernate.usertype.IdentityEnumArrayType".equals(propertyTypeName)) {
+        if (arrayType.getTypeClass().isEnum()) {
             arrValue = pgCriteriaUtils.getValueAsArrayOfType(
                 value,
                 Integer.class,
@@ -58,12 +64,8 @@ public class PgArrayExpression implements Criterion {
                     }
                 }
             );
-        } else if ("net.kaleidos.hibernate.usertype.LongArrayType".equals(propertyTypeName)) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, Long.class);
-        } else if ("net.kaleidos.hibernate.usertype.StringArrayType".equals(propertyTypeName)) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, String.class);
         } else {
-            throw new HibernateException("Native array for this type is not supported");
+            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, arrayType.getTypeClass());
         }
 
         return new TypedValue[] {

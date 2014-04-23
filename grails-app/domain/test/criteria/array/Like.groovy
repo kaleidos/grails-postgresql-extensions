@@ -1,9 +1,6 @@
 package test.criteria.array
 
-import net.kaleidos.hibernate.usertype.IdentityEnumArrayType
-import net.kaleidos.hibernate.usertype.IntegerArrayType
-import net.kaleidos.hibernate.usertype.LongArrayType
-import net.kaleidos.hibernate.usertype.StringArrayType
+import net.kaleidos.hibernate.usertype.ArrayType
 
 class Like {
 
@@ -13,6 +10,8 @@ class Like {
     Long[] favoriteLongNumbers = []
     String[] favoriteMovies = []
     Juice[] favoriteJuices = []
+    Double[] favoriteDoubleNumbers = []
+    Float[] favoriteFloatNumbers = []
 
     static enum Juice {
         ORANGE(0),
@@ -32,9 +31,11 @@ class Like {
     static mapping = {
         table "pg_extensions_like"
 
-        favoriteNumbers type:IntegerArrayType
-        favoriteMovies type:StringArrayType
-        favoriteLongNumbers type:LongArrayType
-        favoriteJuices type:IdentityEnumArrayType, params: [enumClass: Juice]
+        favoriteNumbers type:ArrayType, params: [type: Integer]
+        favoriteMovies type:ArrayType, params: [type: String]
+        favoriteLongNumbers type:ArrayType, params: [type: Long]
+        favoriteJuices type:ArrayType, params: [type: Juice]
+        favoriteFloatNumbers type:ArrayType, params: [type: Float]
+        favoriteDoubleNumbers type:ArrayType, params: [type: Double]
     }
 }

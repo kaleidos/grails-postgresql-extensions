@@ -2,11 +2,11 @@ package test.array
 
 import net.kaleidos.hibernate.usertype.ArrayType
 
-class TestString {
+class TestFloat {
 
-    String[] stringArray
+    Float[] floatNumbers
 
     static mapping = {
-        stringArray type:ArrayType, params: [type: String]
+        floatNumbers type:ArrayType, params: [type: Float]
     }
 }

@@ -1,12 +1,12 @@
 package test.array
 
-import net.kaleidos.hibernate.usertype.LongArrayType
+import net.kaleidos.hibernate.usertype.ArrayType
 
 class TestLong {
 
     Long[] longNumbers
 
     static mapping = {
-        longNumbers type:LongArrayType
+        longNumbers type:ArrayType, params: [type: Long]
     }
 }
