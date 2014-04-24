@@ -399,6 +399,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 0.8.1 - 24/Apr/2014 - Fix NPE when array is null.
 * 0.8 - 24/Apr/2014 - Added support for Double and Float arrays. Refactored the ArrayType to be used as a parametrized type.
 * 0.7 - Unreleased - New HstoreMapType and update plugin to Grails 2.2.5.
 * 0.6.8 - 22/Apr/2014 - Fix NPE in HstoreType.
