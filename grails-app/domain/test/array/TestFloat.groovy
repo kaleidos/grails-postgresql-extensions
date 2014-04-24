@@ -9,4 +9,8 @@ class TestFloat {
     static mapping = {
         floatNumbers type:ArrayType, params: [type: Float]
     }
+
+    static constraints = {
+        floatNumbers nullable:true
+    }
 }

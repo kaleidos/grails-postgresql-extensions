@@ -22,4 +22,8 @@ class TestEnum {
     static mapping = {
         days type: ArrayType, params: [type: Day]
     }
+
+    static constraints = {
+        days nullable:true
+    }
 }

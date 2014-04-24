@@ -9,4 +9,8 @@ class TestDouble {
     static mapping = {
         doubleNumbers type:ArrayType, params: [type: Double]
     }
+
+    static constraints = {
+        doubleNumbers nullable:true
+    }
 }

@@ -9,4 +9,8 @@ class TestLong {
     static mapping = {
         longNumbers type:ArrayType, params: [type: Long]
     }
+
+    static constraints = {
+        longNumbers nullable: true
+    }
 }

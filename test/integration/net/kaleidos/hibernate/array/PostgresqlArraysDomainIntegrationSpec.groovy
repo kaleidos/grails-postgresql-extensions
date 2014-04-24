@@ -13,19 +13,19 @@ import test.array.TestString
 class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
 
     @Unroll
-    void 'save a domain class with an integer array value'() {
+    void 'save a domain class with an integer array value #numbers'() {
         setup:
             def testInt = new TestInteger(integerNumbers:numbers)
 
         when:
-            testInt.save()
+            testInt.save(flush:true)
 
         then:
             testInt.hasErrors() == false
-            testInt.integerNumbers.length == numbers.size()
+            testInt.integerNumbers?.length == numbers?.size()
 
         where:
-            numbers << [ [], [5], [3, -1], [-9, 4, -123, 0] ]
+            numbers << [null, [], [5], [3, -1], [-9, 4, -123, 0] ]
     }
 
     @Unroll
@@ -34,14 +34,14 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
             def testLong = new TestLong(longNumbers:numbers)
 
         when:
-            testLong.save()
+            testLong.save(flush:true)
 
         then:
             testLong.hasErrors() == false
-            testLong.longNumbers.length == numbers.size()
+            testLong.longNumbers?.length == numbers?.size()
 
         where:
-            numbers << [ [], [5L], [3L, -1L], [-9L, 4L, -123L, 0L] ]
+            numbers << [null, [], [5L], [3L, -1L], [-9L, 4L, -123L, 0L] ]
     }
 
     @Unroll
@@ -50,14 +50,14 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
             def testFloat = new TestFloat(floatNumbers:numbers)
 
         when:
-            testFloat.save()
+            testFloat.save(flush:true)
 
         then:
             testFloat.hasErrors() == false
-            testFloat.floatNumbers.length == numbers.size()
+            testFloat.floatNumbers?.length == numbers?.size()
 
         where:
-            numbers << [ [], [5f], [3f, -1f], [-9f, 4f, -123f, 0f] ]
+            numbers << [null, [], [5f], [3f, -1f], [-9f, 4f, -123f, 0f] ]
     }
 
     @Unroll
@@ -66,14 +66,14 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
             def testDouble = new TestDouble(doubleNumbers:numbers)
 
         when:
-            testDouble.save()
+            testDouble.save(flush:true)
 
         then:
             testDouble.hasErrors() == false
-            testDouble.doubleNumbers.length == numbers.size()
+            testDouble.doubleNumbers?.length == numbers?.size()
 
         where:
-            numbers << [ [], [5d], [3d, -1d], [-9d, 4d, -123d, 0d] ]
+            numbers << [null, [], [5d], [3d, -1d], [-9d, 4d, -123d, 0d] ]
     }
 
 
@@ -83,14 +83,14 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
             def testString = new TestString(stringArray:strings)
 
         when:
-            testString.save()
+            testString.save(flush:true)
 
         then:
             testString.hasErrors() == false
-            testString.stringArray.length == strings.size()
+            testString.stringArray?.length == strings?.size()
 
         where:
-            strings << [ [], ["string 1"], ["string 1", "string 2"], ["string 1", "string 2", "string 3"] ]
+            strings << [null, [], ["string 1"], ["string 1", "string 2"], ["string 1", "string 2", "string 3"] ]
     }
 
     @Unroll
@@ -99,14 +99,14 @@ class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
             def testEnum = new TestEnum(days: days)
 
         when:
-            testEnum.save()
+            testEnum.save(flush:true)
 
         then:
             testEnum.hasErrors() == false
-            testEnum.days.length == days.size()
+            testEnum.days?.length == days?.size()
 
         where:
-            days << [ [], [TestEnum.Day.MONDAY], [TestEnum.Day.SUNDAY, TestEnum.Day.SATURDAY], [TestEnum.Day.WEDNESDAY, TestEnum.Day.THURSDAY, TestEnum.Day.TUESDAY] ]
+            days << [null, [], [TestEnum.Day.MONDAY], [TestEnum.Day.SUNDAY, TestEnum.Day.SATURDAY], [TestEnum.Day.WEDNESDAY, TestEnum.Day.THURSDAY, TestEnum.Day.TUESDAY] ]
     }
 
 }

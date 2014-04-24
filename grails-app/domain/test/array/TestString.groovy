@@ -9,4 +9,8 @@ class TestString {
     static mapping = {
         stringArray type:ArrayType, params: [type: String]
     }
+
+    static constraints = {
+        stringArray nullable:true
+    }
 }
