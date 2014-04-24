@@ -128,6 +128,7 @@ public class ArrayType implements UserType, ParameterizedType {
     public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.ARRAY);
+            return;
         }
 
         Object[] valueToSet = (Object[])value;
