@@ -1,11 +1,11 @@
 package net.kaleidos.hibernate.usertype;
 
+import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
 
 /**
  * Helper class to convert Maps to String according to hstore syntax

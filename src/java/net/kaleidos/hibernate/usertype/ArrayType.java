@@ -2,6 +2,7 @@ package net.kaleidos.hibernate.usertype;
 
 import net.kaleidos.hibernate.utils.PgArrayUtils;
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -12,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Properties;
-
 
 public class ArrayType implements UserType, ParameterizedType {
     public static final int INTEGER_ARRAY = 90001;
@@ -103,10 +103,10 @@ public class ArrayType implements UserType, ParameterizedType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         Object[] result = null;
         Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
-        Array array = (Array) rs.getArray(names[0]);
+        Array array = rs.getArray(names[0]);
         if (!rs.wasNull()) {
             if (typeClass.isEnum()) {
                 int length = java.lang.reflect.Array.getLength(array);
@@ -122,7 +122,7 @@ public class ArrayType implements UserType, ParameterizedType {
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.ARRAY);
             return;

@@ -2,6 +2,7 @@ package net.kaleidos.hibernate.usertype;
 
 import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
 import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
@@ -30,7 +31,6 @@ public abstract class AbstractHstoreType implements UserType {
         return Map.class;
     }
 
-    @SuppressWarnings("rawtypes")
     public boolean equals(Object x, Object y) throws HibernateException {
         Map m1;
         Map m2;
@@ -85,8 +85,7 @@ public abstract class AbstractHstoreType implements UserType {
         return original;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         Map m = new HashMap();
         if (value instanceof HstoreDomainType) {
             m = ((HstoreDomainType)value).getDataStore();
