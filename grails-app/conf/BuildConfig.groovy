@@ -1,5 +1,20 @@
 grails.project.work.dir = "target/work"
 
+grails.project.fork = [
+        // configure settings for compilation JVM, note that if you alter the Groovy version forked compilation is required
+        //  compile: [maxMemory: 256, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
+
+        // configure settings for the test-app JVM, uses the daemon by default
+        test   : [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, daemon: true],
+        // configure settings for the run-app JVM
+        run    : [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve: false],
+        // configure settings for the run-war JVM
+        war    : [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256, forkReserve: false],
+        // configure settings for the Console UI JVM
+        console: [maxMemory: 768, minMemory: 64, debug: false, maxPerm: 256]
+]
+
+grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -14,21 +29,18 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        runtime("org.postgresql:postgresql:9.2-1004-jdbc4") {
+        runtime 'org.postgresql:postgresql:9.2-1004-jdbc4', {
             export = false
         }
 
-        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
-
-        // Coveralls plugin
-        build 'org.apache.httpcomponents:httpcore:4.3.2'
-        build 'org.apache.httpcomponents:httpclient:4.3.2'
-        build 'org.apache.httpcomponents:httpmime:4.3.3'
+        test "org.springframework:spring-orm:$springVersion"
+        test "org.springframework:spring-expression:$springVersion"
+        test "org.springframework:spring-aop:$springVersion"
     }
 
     plugins {
-        build ":tomcat:$grailsVersion",
-                ":release:2.2.0",
+        build ":tomcat:7.0.53",
+                ":release:3.0.1",
                 ":rest-client-builder:1.0.3",
                 ":coveralls:0.1.3", {
             export = false
@@ -38,15 +50,11 @@ grails.project.dependency.resolution = {
             export = false
         }
 
-        test ":spock:0.7", {
-            exclude "spock-grails-support"
-        }
-
-        compile ":guard:1.0.7", {
+        compile ":guard:2.0.0", {
             export = false
         }
 
-        runtime ":hibernate:$grailsVersion", {
+        runtime ":hibernate4:4.3.5.3", {
             export = false
         }
     }
