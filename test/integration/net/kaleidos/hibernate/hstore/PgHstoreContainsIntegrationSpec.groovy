@@ -1,9 +1,12 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.IntegrationSpec
+import grails.plugin.spock.*
+import spock.lang.*
+
+import spock.lang.Specification
 import test.hstore.TestHstore
 
-class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
+class PgHstoreContainsIntegrationSpec extends Specification {
 
     def pgHstoreTestSearchService
 

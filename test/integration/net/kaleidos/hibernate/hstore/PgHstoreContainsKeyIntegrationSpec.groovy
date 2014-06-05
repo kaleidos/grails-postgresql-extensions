@@ -1,9 +1,12 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.IntegrationSpec
+import grails.plugin.spock.*
+import spock.lang.*
+
+import spock.lang.Specification
 import test.hstore.TestHstore
 
-class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
+class PgHstoreContainsKeyIntegrationSpec extends Specification {
     def pgHstoreTestSearchService
 
     void 'Test find hstore that contains key'() {

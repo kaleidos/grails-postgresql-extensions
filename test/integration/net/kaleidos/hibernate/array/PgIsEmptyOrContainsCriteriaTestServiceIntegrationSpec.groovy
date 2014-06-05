@@ -1,11 +1,11 @@
 package net.kaleidos.hibernate.array
 
-import grails.plugin.spock.IntegrationSpec
+import spock.lang.Specification
 import spock.lang.Unroll
 import test.criteria.array.Like
 import test.criteria.array.User
 
-class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
+class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends Specification {
 
     def pgArrayTestSearchService
 

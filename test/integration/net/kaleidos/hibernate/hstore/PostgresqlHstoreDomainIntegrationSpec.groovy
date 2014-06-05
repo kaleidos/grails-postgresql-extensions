@@ -1,10 +1,13 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.IntegrationSpec
+import grails.plugin.spock.*
+import spock.lang.*
+
+import spock.lang.Specification
 import spock.lang.Unroll
 import test.hstore.TestHstore
 
-class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
+class PostgresqlHstoreDomainIntegrationSpec extends Specification {
 
     @Unroll
     void 'save a domain class with a map. key: #data'() {

@@ -1,9 +1,12 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.IntegrationSpec
+import grails.plugin.spock.*
+import spock.lang.*
+
+import spock.lang.Specification
 import test.hstore.TestHstore
 
-class PgHstoreIsContainedIntegrationSpec extends IntegrationSpec {
+class PgHstoreIsContainedIntegrationSpec extends Specification {
     def pgHstoreTestSearchService
 
     void 'No element matches with the empty set'() {
