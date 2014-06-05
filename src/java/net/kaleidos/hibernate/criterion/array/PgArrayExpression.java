@@ -4,12 +4,12 @@ import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.utils.PgArrayUtils;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.annotations.common.util.StringHelper;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.engine.TypedValue;
+import org.hibernate.engine.spi.TypedValue;
 import org.hibernate.type.CustomType;
 import org.hibernate.type.Type;
-import org.hibernate.util.StringHelper;
 
 /**
  * Constrains a property in an array
@@ -28,7 +28,6 @@ public class PgArrayExpression implements Criterion {
         this.op = op;
     }
 
-    @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
 
@@ -40,7 +39,6 @@ public class PgArrayExpression implements Criterion {
         );
     }
 
-    @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
 

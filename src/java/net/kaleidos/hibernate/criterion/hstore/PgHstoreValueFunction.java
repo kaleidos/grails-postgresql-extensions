@@ -2,12 +2,11 @@ package net.kaleidos.hibernate.criterion.hstore;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.annotations.common.util.StringHelper;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.engine.TypedValue;
-import org.hibernate.type.Type;
+import org.hibernate.engine.spi.TypedValue;
 import org.hibernate.type.StringType;
-import org.hibernate.util.StringHelper;
 
 /**
  * Constrains a property in an hstore
@@ -25,7 +24,6 @@ public class PgHstoreValueFunction implements Criterion {
         this.function = function;
     }
 
-    @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         String[] columns = StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), "");
         for (int i=0; i<columns.length; i++) {
@@ -34,10 +32,9 @@ public class PgHstoreValueFunction implements Criterion {
         return StringHelper.join( " and ", columns);
     }
 
-    @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return new TypedValue[]{
-            new TypedValue(new StringType(), value, null),
+            new TypedValue(new StringType(), value)
         };
     }
 }

@@ -16,7 +16,7 @@ public class PgArrayUtils {
      * @param targetValue  The value we want to wrap as an array
      * @param expectedType The expected type of the returned array
      * @param mapFunction  If non-null, it will transform each object in the array to a given object.
-     * @return
+     * @return an array wrapping the parameter value
      */
     @SuppressWarnings("unchecked")
     public static Object[] getValueAsArrayOfType(Object targetValue, Class<?> expectedType, MapFunction mapFunction) {
