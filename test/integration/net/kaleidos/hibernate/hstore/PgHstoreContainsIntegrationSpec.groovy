@@ -1,12 +1,11 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.*
-import spock.lang.*
-
+import grails.plugin.spock.IntegrationSpec
 import test.hstore.TestHstore
 
 class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
-    def pgHstoreContainsService
+
+    def pgHstoreTestSearchService
 
     void 'Test only one value result 2 different elements'() {
         setup:
@@ -16,14 +15,14 @@ class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContains', map)
 
         then:
             result.size() == 2
-            result.find { it.name=="test1" } != null
-            result.find { it.name=="test2" } == null
-            result.find { it.name=="test3" } == null
-            result.find { it.name=="test4" } != null
+            result.find { it.name == "test1" } != null
+            result.find { it.name == "test2" } == null
+            result.find { it.name == "test3" } == null
+            result.find { it.name == "test4" } != null
 
         where:
             map = ["b": "1"]
@@ -37,14 +36,14 @@ class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContains', map)
 
         then:
             result.size() == 1
-            result.find { it.name=="test1" } == null
-            result.find { it.name=="test2" } == null
-            result.find { it.name=="test3" } == null
-            result.find { it.name=="test4" } != null
+            result.find { it.name == "test1" } == null
+            result.find { it.name == "test2" } == null
+            result.find { it.name == "test3" } == null
+            result.find { it.name == "test4" } != null
 
         where:
             map = ["b": "1", "c": "test"]
@@ -58,7 +57,7 @@ class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContains', map)
 
         then:
             result.size() == 0
@@ -75,7 +74,7 @@ class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContains', map)
 
         then:
             result.size() == 0
@@ -92,7 +91,7 @@ class PgHstoreContainsIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContains', map)
 
         then:
             result.size() == 4

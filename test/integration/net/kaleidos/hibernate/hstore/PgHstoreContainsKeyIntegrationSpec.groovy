@@ -1,12 +1,10 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.*
-import spock.lang.*
-
+import grails.plugin.spock.IntegrationSpec
 import test.hstore.TestHstore
 
 class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
-    def pgHstoreContainsKeyService
+    def pgHstoreTestSearchService
 
     void 'Test find hstore that contains key'() {
         setup:
@@ -16,14 +14,14 @@ class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsKeyService.searchElementsWithKey("b")
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContainsKey', 'b')
 
         then:
             result.size() == 3
-            result.find { it.name=="test1" } != null
-            result.find { it.name=="test2" } != null
-            result.find { it.name=="test3" } == null
-            result.find { it.name=="test4" } != null
+            result.find { it.name == "test1" } != null
+            result.find { it.name == "test2" } != null
+            result.find { it.name == "test3" } == null
+            result.find { it.name == "test4" } != null
     }
 
     void 'Test find hstore that contains other key'() {
@@ -34,7 +32,7 @@ class PgHstoreContainsKeyIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true)
 
         when:
-            def result = pgHstoreContainsKeyService.searchElementsWithKey("X")
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContainsKey', 'X')
 
         then:
             result.size() == 0
