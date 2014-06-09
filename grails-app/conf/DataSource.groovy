@@ -30,7 +30,7 @@ environments {
             url = "jdbc:postgresql://localhost:5432/pg_extensions_test"
             username = "pg_extensions"
             password = "pg_extensions"
-            loggingSql = true
+            loggingSql = false
         }
     }
     production {
