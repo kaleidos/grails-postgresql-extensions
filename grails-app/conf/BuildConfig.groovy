@@ -14,7 +14,7 @@ grails.project.dependency.resolution = {
     }
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
-        runtime ("org.postgresql:postgresql:9.2-1004-jdbc4") {
+        runtime("org.postgresql:postgresql:9.2-1004-jdbc4") {
             export = false
         }
 
@@ -22,25 +22,25 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build(":tomcat:$grailsVersion",
-              ":release:2.2.0",
-              ":rest-client-builder:1.0.3") {
+        build ":tomcat:$grailsVersion",
+                ":release:2.2.0",
+                ":rest-client-builder:1.0.3", {
             export = false
         }
 
-        test (":code-coverage:1.2.6") {
+        test ":code-coverage:1.2.7", {
             export = false
         }
 
-        test(":spock:0.7") {
+        test ":spock:0.7", {
             exclude "spock-grails-support"
         }
 
-        compile (":guard:1.0.7") {
+        compile ":guard:1.0.7", {
             export = false
         }
 
-        runtime (":hibernate:$grailsVersion") {
+        runtime ":hibernate:$grailsVersion", {
             export = false
         }
     }

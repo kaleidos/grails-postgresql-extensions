@@ -1,0 +1,16 @@
+language: groovy
+jdk:
+  - openjdk7
+  - oraclejdk7
+
+script:
+  - ./grailsw refresh-dependencies --non-interactive
+  - ./grailsw "test-app unit: integration: -coverage -xml"
+
+notifications:
+  email:
+    recipients:
+      - lopez.ivan@gmail.com
+
+    on_success: change
+    on_failure: change
