@@ -213,7 +213,7 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
 
         when:
-            def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayContains', movie, number)
+            def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayContains', favoriteMovies: movie, favoriteNumbers: number)
 
         then:
             result.size() == 3

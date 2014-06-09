@@ -32,23 +32,25 @@ class PgArrayTestSearchService {
         }
     }
 
-    List<User> searchWithJoinByStringOrInteger(String criteriaName, Object value1, Object value2) {
+    List<User> searchWithJoinByStringOrInteger(Map params, String criteriaName) {
         User.withCriteria {
             like {
                 or {
-                    "${criteriaName}" 'favoriteMovies', value1
-                    "${criteriaName}" 'favoriteNumbers', value2
+                    params.each { entry->
+                        "${criteriaName}" (entry.key, entry.value)
+                    }
                 }
             }
         }
     }
 
-    List<User> searchWithJoinAnd(String criteriaName, Object value1, Object value2) {
+    List<User> searchWithJoinAnd(Map params, String criteriaName) {
         User.withCriteria {
             like {
                 and {
-                    "${criteriaName}" 'favoriteMovies', value1
-                    "${criteriaName}" 'favoriteNumbers', value2
+                    params.each { entry->
+                        "${criteriaName}" (entry.key, entry.value)
+                    }
                 }
             }
         }

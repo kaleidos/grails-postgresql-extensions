@@ -211,7 +211,7 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
             def user4 = new User(name: 'Dave', like: new Like(favoriteNumbers: [1, 2], favoriteMovies: ["A", "B", "D"])).save()
 
         when:
-            def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayIsContainedBy', movies, numbers)
+            def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayIsContainedBy', favoriteMovies: movies, favoriteNumbers: numbers)
 
         then:
             result.size() == 3
