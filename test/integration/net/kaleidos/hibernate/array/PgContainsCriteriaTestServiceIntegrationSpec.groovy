@@ -1,142 +1,140 @@
 package net.kaleidos.hibernate.array
 
+import grails.plugin.spock.IntegrationSpec
 import org.hibernate.HibernateException
-
-import grails.plugin.spock.*
-import spock.lang.*
-
-import test.criteria.array.User
+import spock.lang.Unroll
 import test.criteria.array.Like
+import test.criteria.array.User
 
 class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
-    def pgContainsCriteriaTestService
+    def pgArrayTestSearchService
 
     @Unroll
     void 'search #number in an array of integers'() {
         setup:
-            new Like(favoriteNumbers:[3, 7, 20]).save()
-            new Like(favoriteNumbers:[5, 17, 9, 6, 20]).save()
-            new Like(favoriteNumbers:[3, 4, 20]).save()
-            new Like(favoriteNumbers:[9, 4, 20]).save()
+            new Like(favoriteNumbers: [3, 7, 20]).save()
+            new Like(favoriteNumbers: [5, 17, 9, 6, 20]).save()
+            new Like(favoriteNumbers: [3, 4, 20]).save()
+            new Like(favoriteNumbers: [9, 4, 20]).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaIntegerArray(number)
+            def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayContains', number)
 
         then:
             result.size() == resultSize
 
         where:
-            number                | resultSize
-            3                     | 2
-            17                    | 1
-            9                     | 2
-            4                     | 2
-            1                     | 0
-            20                    | 4
-            [3,4]                 | 1
-            [3,4,7]               | 0
-            [4]                   | 2
-            [3,20]                | 2
-            []                    | 4
-            3 as Integer[]        | 2
-            [] as Integer[]       | 4
-            [3,4] as Integer[]    | 1
+            number              | resultSize
+            3                   | 2
+            17                  | 1
+            9                   | 2
+            4                   | 2
+            1                   | 0
+            20                  | 4
+            [3, 4]              | 1
+            [3, 4, 7]           | 0
+            [4]                 | 2
+            [3, 20]             | 2
+            []                  | 4
+            3 as Integer[]      | 2
+            [] as Integer[]     | 4
+            [3, 4] as Integer[] | 1
     }
 
     @Unroll
     void 'search #number in an array of longs'() {
         setup:
-            new Like(favoriteLongNumbers:[12383L, 2392348L, 3498239L]).save()
-            new Like(favoriteLongNumbers:[12383L, 98978L]).save()
-            new Like(favoriteLongNumbers:[-983893849L, 398432423L, 98978L]).save()
-            new Like(favoriteLongNumbers:[12383L]).save()
+            new Like(favoriteLongNumbers: [12383L, 2392348L, 3498239L]).save()
+            new Like(favoriteLongNumbers: [12383L, 98978L]).save()
+            new Like(favoriteLongNumbers: [-983893849L, 398432423L, 98978L]).save()
+            new Like(favoriteLongNumbers: [12383L]).save()
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaLongArray(number)
+            def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayContains', number)
 
         then:
             result.size() == resultSize
 
         where:
-              number                     | resultSize
-              12383L                     | 3
-              98978L                     | 2
-              -983893849L                | 1
-              48574L                     | 0
-              [12383L, 98978L]           | 1
-              [12383L]                   | 3
-              []                         | 4
-              [12383L, 98978L] as Long[] | 1
-              [12383L] as Long[]         | 3
-              [] as Long[]               | 4
+            number                     | resultSize
+            12383L                     | 3
+            98978L                     | 2
+            -983893849L                | 1
+            48574L                     | 0
+            [12383L, 98978L]           | 1
+            [12383L]                   | 3
+            []                         | 4
+            [12383L, 98978L] as Long[] | 1
+            [12383L] as Long[]         | 3
+            [] as Long[]               | 4
     }
 
     @Unroll
     void 'search #number in an array of floats'() {
         setup:
-            new Like(favoriteFloatNumbers:[12383f, 2392348f, 3498239f]).save()
-            new Like(favoriteFloatNumbers:[12383f, 98978f]).save()
-            new Like(favoriteFloatNumbers:[-983893849f, 398432423f, 98978f]).save()
-            new Like(favoriteFloatNumbers:[12383f]).save()
+            new Like(favoriteFloatNumbers: [12383f, 2392348f, 3498239f]).save()
+            new Like(favoriteFloatNumbers: [12383f, 98978f]).save()
+            new Like(favoriteFloatNumbers: [-983893849f, 398432423f, 98978f]).save()
+            new Like(favoriteFloatNumbers: [12383f]).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaFloatArray(number)
+            def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayContains', number)
 
         then:
             result.size() == resultSize
 
         where:
-              number                      | resultSize
-              12383f                      | 3
-              98978f                      | 2
-              -983893849f                 | 1
-              48574f                      | 0
-              [12383f, 98978f]            | 1
-              [12383f]                    | 3
-              []                          | 4
-              [12383f, 98978f] as Float[] | 1
-              [12383f] as Float[]         | 3
-              [] as Float[]               | 4
+            number                      | resultSize
+            12383f                      | 3
+            98978f                      | 2
+            -983893849f                 | 1
+            48574f                      | 0
+            [12383f, 98978f]            | 1
+            [12383f]                    | 3
+            []                          | 4
+            [12383f, 98978f] as Float[] | 1
+            [12383f] as Float[]         | 3
+            [] as Float[]               | 4
     }
 
     @Unroll
     void 'search #number in an array of double'() {
         setup:
-            new Like(favoriteDoubleNumbers:[12383d, 2392348d, 3498239d]).save()
-            new Like(favoriteDoubleNumbers:[12383d, 98978d]).save()
-            new Like(favoriteDoubleNumbers:[-983893849d, 398432423d, 98978d]).save()
-            new Like(favoriteDoubleNumbers:[12383d]).save()
+            new Like(favoriteDoubleNumbers: [12383d, 2392348d, 3498239d]).save()
+            new Like(favoriteDoubleNumbers: [12383d, 98978d]).save()
+            new Like(favoriteDoubleNumbers: [-983893849d, 398432423d, 98978d]).save()
+            new Like(favoriteDoubleNumbers: [12383d]).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaDoubleArray(number)
+            def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayContains', number)
 
         then:
             result.size() == resultSize
 
         where:
-              number                       | resultSize
-              12383d                       | 3
-              98978d                       | 2
-              -983893849d                  | 1
-              48574d                       | 0
-              [12383d, 98978d]             | 1
-              [12383d]                     | 3
-              []                           | 4
-              [12383d, 98978d] as Double[] | 1
-              [12383d] as Double[]         | 3
-              [] as Double[]               | 4
+            number                       | resultSize
+            12383d                       | 3
+            98978d                       | 2
+            -983893849d                  | 1
+            48574d                       | 0
+            [12383d, 98978d]             | 1
+            [12383d]                     | 3
+            []                           | 4
+            [12383d, 98978d] as Double[] | 1
+            [12383d] as Double[]         | 3
+            [] as Double[]               | 4
     }
 
     @Unroll
     void 'search #movie in an array of strings'() {
         setup:
-            new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies:["Spiderman", "Blade Runner", "Starwars"]).save()
-            new Like(favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"]).save()
-            new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
+            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
+            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
+            new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"]).save()
+            new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaStringArray(movie)
+            def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayContains', movie)
 
         then:
             result.size() == resultSize
@@ -159,13 +157,13 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search #juice in an array of enums'() {
         setup:
-            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
-            new Like(favoriteJuices:[Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
-            new Like(favoriteJuices:[Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
-            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
+            new Like(favoriteJuices: [Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
+            new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaEnumArray(juice)
+            def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayContains', juice)
 
         then:
             result.size() == resultSize
@@ -190,13 +188,13 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def user1 = new User(name:'John', like: new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name:'Peter', like: new Like(favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name:'Mary', like: new Like(favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            def user4 = new User(name:'Jonhny', like: new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
+            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
+            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchStringWithJoin(movie)
+            def result = pgArrayTestSearchService.searchWithJoin('favoriteMovies', 'pgArrayContains', movie)
 
         then:
             result.size() == 2
@@ -209,13 +207,13 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
     void 'search in an array of strings with join with another domain class and or statement'() {
         setup:
-            def user1 = new User(name:'John', like: new Like(favoriteNumbers:[3, 7], favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name:'Peter', like: new Like(favoriteNumbers:[5, 17, 9, 6], favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name:'Mary', like: new Like(favoriteNumbers:[3, 4], favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            def user4 = new User(name:'Jonhny', like: new Like(favoriteNumbers:[9, 4], favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteNumbers: [3, 7], favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
+            def user2 = new User(name: 'Peter', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
+            def user3 = new User(name: 'Mary', like: new Like(favoriteNumbers: [3, 4], favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
 
         when:
-            def result = pgContainsCriteriaTestService.searchStringOrIntergetWithJoin(movie, number)
+            def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayContains', movie, number)
 
         then:
             result.size() == 3
@@ -228,10 +226,9 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             number = 4
     }
 
-    @Unroll
-    void 'search a invalid list inside the array of integers'() {
+    void 'search an invalid list inside the array of integers'() {
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaIntegerArray(number)
+            def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayContains', number)
 
         then:
             thrown(HibernateException)
@@ -240,10 +237,9 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             number << [["Test"], [1, "Test"], [1L], [1, 1L]]
     }
 
-    @Unroll
-    void 'search a invalid list inside the array of long'() {
+    void 'search an invalid list inside the array of long'() {
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaLongArray(number)
+            def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayContains', number)
 
         then:
             thrown(HibernateException)
@@ -252,10 +248,9 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             number << [["Test"], [1L, "Test"], [1], [1L, 1]]
     }
 
-    @Unroll
-    void 'search a invalid list inside the array of float'() {
+    void 'search an invalid list inside the array of float'() {
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaFloatArray(number)
+            def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayContains', number)
 
         then:
             thrown(HibernateException)
@@ -264,10 +259,9 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             number << [["Test"], [1f, "Test"], [1], [1f, 1]]
     }
 
-    @Unroll
-    void 'search a invalid list inside the array of double'() {
+    void 'search an invalid list inside the array of double'() {
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaDoubleArray(number)
+            def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayContains', number)
 
         then:
             thrown(HibernateException)
@@ -276,10 +270,9 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             number << [["Test"], [1d, "Test"], [1], [1d, 1]]
     }
 
-    @Unroll
-    void 'search a invalid list inside the array of string'() {
+    void 'search an invalid list inside the array of string'() {
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaStringArray(movie)
+            def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayContains', movie)
 
         then:
             thrown(HibernateException)
@@ -288,10 +281,9 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
     }
 
-    @Unroll
     void 'search an invalid list inside the array of enum'() {
         when:
-            def result = pgContainsCriteriaTestService.searchWithCriteriaEnumArray(juice)
+            def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayContains', juice)
 
         then:
             thrown(HibernateException)
@@ -299,5 +291,4 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
         where:
             juice << [["Test"], [Like.Juice.ORANGE, "Test"], [1L], [Like.Juice.APPLE, 1L]]
     }
-
 }

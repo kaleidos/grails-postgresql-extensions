@@ -1,58 +1,57 @@
 package net.kaleidos.hibernate.array
 
+import grails.plugin.spock.IntegrationSpec
 import org.hibernate.HibernateException
-
-import grails.plugin.spock.*
-import spock.lang.*
-
-import test.criteria.array.User
+import spock.lang.Unroll
 import test.criteria.array.Like
+import test.criteria.array.User
 
 class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
-    def pgOverlapsCriteriaTestService
+    def pgArrayTestSearchService
 
     @Unroll
     void 'overlaps #number in an array of integers'() {
         setup:
-            new Like(favoriteNumbers:[3, 7, 20]).save()
-            new Like(favoriteNumbers:[5, 17, 9, 6, 20]).save()
-            new Like(favoriteNumbers:[3, 4, 20]).save()
-            new Like(favoriteNumbers:[9, 4, 20]).save()
+            new Like(favoriteNumbers: [3, 7, 20]).save()
+            new Like(favoriteNumbers: [5, 17, 9, 6, 20]).save()
+            new Like(favoriteNumbers: [3, 4, 20]).save()
+            new Like(favoriteNumbers: [9, 4, 20]).save()
 
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsIntegerArray(number)
+            def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayOverlaps', number)
 
         then:
             result.size() == resultSize
 
         where:
-            number              | resultSize
-            3                   | 2
-            17                  | 1
-            9                   | 2
-            4                   | 2
-            1                   | 0
-            20                  | 4
-            [3,4]               | 3
-            [3,4,7]             | 3
-            [4]                 | 2
-            [3,20]              | 4
-            []                  | 0
-            [4] as Integer[]    | 2
-            [3,20] as Integer[] | 4
-            [] as Integer[]     | 0
+            number               | resultSize
+            3                    | 2
+            17                   | 1
+            9                    | 2
+            4                    | 2
+            1                    | 0
+            20                   | 4
+            [3, 4]               | 3
+            [3, 4, 7]            | 3
+            [4]                  | 2
+            [3, 20]              | 4
+            []                   | 0
+            [4] as Integer[]     | 2
+            [3, 20] as Integer[] | 4
+            [] as Integer[]      | 0
     }
 
     @Unroll
     void 'overlaps #number in an array of longs'() {
         setup:
-            new Like(favoriteLongNumbers:[1L, 23L, 34L]).save()
-            new Like(favoriteLongNumbers:[1L, 7L]).save()
-            new Like(favoriteLongNumbers:[-9L, 16L, 7L]).save()
-            new Like(favoriteLongNumbers:[1L]).save()
+            new Like(favoriteLongNumbers: [1L, 23L, 34L]).save()
+            new Like(favoriteLongNumbers: [1L, 7L]).save()
+            new Like(favoriteLongNumbers: [-9L, 16L, 7L]).save()
+            new Like(favoriteLongNumbers: [1L]).save()
+
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsLongArray(number)
+            def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayOverlaps', number)
 
         then:
             result.size() == resultSize
@@ -74,25 +73,26 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'overlaps #number in an array of floats'() {
         setup:
-            new Like(favoriteFloatNumbers:[1f, 23f, 34f]).save()
-            new Like(favoriteFloatNumbers:[1f, 7f]).save()
-            new Like(favoriteFloatNumbers:[-9f, 16f, 7f]).save()
-            new Like(favoriteFloatNumbers:[1f]).save()
+            new Like(favoriteFloatNumbers: [1f, 23f, 34f]).save()
+            new Like(favoriteFloatNumbers: [1f, 7f]).save()
+            new Like(favoriteFloatNumbers: [-9f, 16f, 7f]).save()
+            new Like(favoriteFloatNumbers: [1f]).save()
+
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsFloatArray(number)
+            def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayOverlaps', number)
 
         then:
             result.size() == resultSize
 
         where:
-            number             | resultSize
-            1f                 | 3
-            7f                 | 2
-            -9f                | 1
-            100f               | 0
-            [1f, 7f]           | 4
-            [1f]               | 3
-            []                 | 0
+            number              | resultSize
+            1f                  | 3
+            7f                  | 2
+            -9f                 | 1
+            100f                | 0
+            [1f, 7f]            | 4
+            [1f]                | 3
+            []                  | 0
             [1f, 7f] as Float[] | 4
             [1f] as Float[]     | 3
             [] as Float[]       | 0
@@ -101,25 +101,26 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'overlaps #number in an array of double'() {
         setup:
-            new Like(favoriteDoubleNumbers:[1d, 23d, 34d]).save()
-            new Like(favoriteDoubleNumbers:[1d, 7d]).save()
-            new Like(favoriteDoubleNumbers:[-9d, 16d, 7d]).save()
-            new Like(favoriteDoubleNumbers:[1d]).save()
+            new Like(favoriteDoubleNumbers: [1d, 23d, 34d]).save()
+            new Like(favoriteDoubleNumbers: [1d, 7d]).save()
+            new Like(favoriteDoubleNumbers: [-9d, 16d, 7d]).save()
+            new Like(favoriteDoubleNumbers: [1d]).save()
+
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsDoubleArray(number)
+            def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayOverlaps', number)
 
         then:
             result.size() == resultSize
 
         where:
-            number             | resultSize
-            1d                 | 3
-            7d                 | 2
-            -9d                | 1
-            100d               | 0
-            [1d, 7d]           | 4
-            [1d]               | 3
-            []                 | 0
+            number               | resultSize
+            1d                   | 3
+            7d                   | 2
+            -9d                  | 1
+            100d                 | 0
+            [1d, 7d]             | 4
+            [1d]                 | 3
+            []                   | 0
             [1d, 7d] as Double[] | 4
             [1d] as Double[]     | 3
             [] as Double[]       | 0
@@ -128,13 +129,13 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search #movie in an array of strings'() {
         setup:
-            new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies:["Spiderman", "Blade Runner", "Starwars"]).save()
-            new Like(favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"]).save()
-            new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
+            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
+            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
+            new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"]).save()
+            new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
 
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsStringArray(movie)
+            def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayOverlaps', movie)
 
         then:
             result.size() == resultSize
@@ -157,13 +158,13 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search #juice in an array of enums'() {
         setup:
-            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
-            new Like(favoriteJuices:[Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
-            new Like(favoriteJuices:[Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
-            new Like(favoriteJuices:[Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
+            new Like(favoriteJuices: [Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
+            new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
 
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsEnumArray(juice)
+            def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayOverlaps', juice)
 
         then:
             result.size() == resultSize
@@ -188,13 +189,13 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def user1 = new User(name:'John', like: new Like(favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name:'Peter', like: new Like(favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name:'Mary', like: new Like(favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            def user4 = new User(name:'Jonhny', like: new Like(favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
+            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
+            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
 
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsStringWithJoin(movie)
+            def result = pgArrayTestSearchService.searchWithJoin('favoriteMovies', 'pgArrayOverlaps', movie)
 
         then:
             result.size() == 3
@@ -208,13 +209,13 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
 
     void 'search in an array of strings with join with another domain class and or statement'() {
         setup:
-            def user1 = new User(name:'John', like: new Like(favoriteNumbers:[3, 7], favoriteMovies:["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name:'Peter', like: new Like(favoriteNumbers:[5, 17, 9, 6], favoriteMovies:["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name:'Mary', like: new Like(favoriteNumbers:[3, 4], favoriteMovies:["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            def user4 = new User(name:'Jonhny', like: new Like(favoriteNumbers:[9, 4], favoriteMovies:["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteNumbers: [3, 7], favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
+            def user2 = new User(name: 'Peter', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
+            def user3 = new User(name: 'Mary', like: new Like(favoriteNumbers: [3, 4], favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
 
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsStringOrIntergetWithJoin(movie, number)
+            def result = pgArrayTestSearchService.searchWithJoinAnd('pgArrayOverlaps', movie, number)
 
         then:
             result.size() == 2
@@ -229,7 +230,7 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search a invalid list inside the array of integers'() {
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsIntegerArray(number)
+            def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayOverlaps', number)
 
         then:
             thrown(HibernateException)
@@ -241,7 +242,7 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search a invalid list inside the array of long'() {
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsLongArray(number)
+            def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayOverlaps', number)
 
         then:
             thrown(HibernateException)
@@ -253,7 +254,7 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search a invalid list inside the array of string'() {
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsStringArray(movie)
+            def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayOverlaps', movie)
 
         then:
             thrown(HibernateException)
@@ -265,7 +266,7 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search an invalid list inside the array of enum'() {
         when:
-            def result = pgOverlapsCriteriaTestService.overlapsEnumArray(juice)
+            def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayOverlaps', juice)
 
         then:
             thrown(HibernateException)
