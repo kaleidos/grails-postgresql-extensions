@@ -2,7 +2,7 @@ Grails Postgresql Extensions
 ============================
 
 [![Still maintained](http://stillmaintained.com/lmivan/grails-postgresql-extensions.png)](http://stillmaintained.com/lmivan/grails-postgresql-extensions)
-[![Build Status](https://drone.io/github.com/kaleidos/grails-postgresql-extensions/status.png)](https://drone.io/github.com/kaleidos/grails-postgresql-extensions/latest)
+[![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kaleidos/grails-postgresql-extensions/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application.
