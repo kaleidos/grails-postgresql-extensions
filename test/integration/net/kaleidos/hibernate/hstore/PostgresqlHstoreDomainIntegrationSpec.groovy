@@ -1,10 +1,8 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.*
-import spock.lang.*
-
+import grails.plugin.spock.IntegrationSpec
+import spock.lang.Unroll
 import test.hstore.TestHstore
-import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
 
 class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
 
@@ -23,9 +21,9 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testHstore.testAttributes[attribute] == value
 
         where:
-            data                  | attribute | value
-            [foo:"bar"]           | "foo"     | "bar"
-            ["foo,bar":"baz,qux"] | "foo,bar" | "baz,qux"
+            data                   | attribute | value
+            [foo: "bar"]           | "foo"     | "bar"
+            ["foo,bar": "baz,qux"] | "foo,bar" | "baz,qux"
     }
 
     @Unroll
@@ -43,9 +41,9 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testHstore.testAttributes[key] == value
 
         where:
-            data                   | key       | value
-            [foo:"bar", xxx:"abc"] | "foo"     | "bar"
-            ["foo,bar":"baz,qux"]  | "foo,bar" | "baz,qux"
+            data                     | key       | value
+            [foo: "bar", xxx: "abc"] | "foo"     | "bar"
+            ["foo,bar": "baz,qux"]   | "foo,bar" | "baz,qux"
     }
 
     @Unroll
@@ -63,10 +61,10 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             testHstore.testAttributes.size() == size
 
         where:
-            data                   | valueToRemove     | size
-            [foo:"bar", xxx:"abc"] | 'xxx'             | 1
-            ["foo,bar":"baz,qux"]  | 'foo,bar'         | 0
-            [foo:"bar"]            | 'xxx'             | 1
+            data                     | valueToRemove | size
+            [foo: "bar", xxx: "abc"] | 'xxx'         | 1
+            ["foo,bar": "baz,qux"]   | 'foo,bar'     | 0
+            [foo: "bar"]             | 'xxx'         | 1
     }
 
     @Unroll
@@ -87,8 +85,8 @@ class PostgresqlHstoreDomainIntegrationSpec extends IntegrationSpec {
             TestHstore.count() == 0
 
         where:
-            data                  | attribute | value
-            [foo:"bar"]           | "foo"     | "bar"
-            ["foo,bar":"baz,qux"] | "foo,bar" | "baz,qux"
+            data                   | attribute | value
+            [foo: "bar"]           | "foo"     | "bar"
+            ["foo,bar": "baz,qux"] | "foo,bar" | "baz,qux"
     }
 }

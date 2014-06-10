@@ -1,7 +1,8 @@
 package net.kaleidos.hibernate.usertype
 
-import grails.plugin.spock.*
-import spock.lang.*
+import spock.lang.Issue
+import spock.lang.Specification
+import spock.lang.Unroll
 
 public class HstoreHelperSpec extends Specification {
 
@@ -69,11 +70,11 @@ public class HstoreHelperSpec extends Specification {
 
     void 'map with key and value that contains a comma and space'() {
         setup:
-        def m = [:]
-        m["foo, bar"] = "baz, qux"
+            def m = [:]
+            m["foo, bar"] = "baz, qux"
 
         expect:
-        HstoreHelper.toString(m) == '"foo, bar"=>"baz, qux"'
+            HstoreHelper.toString(m) == '"foo, bar"=>"baz, qux"'
     }
 
     @Unroll
@@ -180,7 +181,7 @@ public class HstoreHelperSpec extends Specification {
             result == expected
 
         where:
-            map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"], ["foo,bar":"baz,qux"]]
+            map << [null, [:], ["a": "b"], ["a": "b", "c": "d"], ["a": "b", "c": "d", "e": "f"], ["foo,bar": "baz,qux"]]
             expected << ["", "", '"?"=>"?"', '"?"=>"?", "?"=>"?"', '"?"=>"?", "?"=>"?", "?"=>"?"', '"?"=>"?"']
     }
 
@@ -193,8 +194,8 @@ public class HstoreHelperSpec extends Specification {
             result == expected
 
         where:
-            map << [null, [:], ["a":"b"], ["a": "b", "c": "d"], ["a":"b","c":"d","e":"f"], ["foo,bar":"baz,qux"]]
-            expected << [[], [], ["a","b"], ["a","b","c","d"], ["a","b","c","d","e","f"], ["foo,bar","baz,qux"]]
+            map << [null, [:], ["a": "b"], ["a": "b", "c": "d"], ["a": "b", "c": "d", "e": "f"], ["foo,bar": "baz,qux"]]
+            expected << [[], [], ["a", "b"], ["a", "b", "c", "d"], ["a", "b", "c", "d", "e", "f"], ["foo,bar", "baz,qux"]]
     }
 
     @Issue("https://github.com/kaleidos/grails-postgresql-extensions/issues/25")

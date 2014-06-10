@@ -1,12 +1,10 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.plugin.spock.*
-import spock.lang.*
-
+import grails.plugin.spock.IntegrationSpec
 import test.hstore.TestHstore
 
 class PgHstoreIsContainedIntegrationSpec extends IntegrationSpec {
-    def pgHstoreIsContainedService
+    def pgHstoreTestSearchService
 
     void 'No element matches with the empty set'() {
         setup:
@@ -16,7 +14,7 @@ class PgHstoreIsContainedIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreIsContainedService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreIsContained', map)
 
         then:
             result.size() == 0
@@ -33,14 +31,14 @@ class PgHstoreIsContainedIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreIsContainedService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreIsContained', map)
 
         then:
             result.size() == 4
-            result.find { it.name=="test1" } != null
-            result.find { it.name=="test2" } != null
-            result.find { it.name=="test3" } != null
-            result.find { it.name=="test4" } != null
+            result.find { it.name == "test1" } != null
+            result.find { it.name == "test2" } != null
+            result.find { it.name == "test3" } != null
+            result.find { it.name == "test4" } != null
 
         where:
             map = ["a": "test", "b": "1", "c": "test", "d": "10"]
@@ -54,14 +52,14 @@ class PgHstoreIsContainedIntegrationSpec extends IntegrationSpec {
             new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
-            def result = pgHstoreIsContainedService.searchElementsWithValues(map)
+            def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreIsContained', map)
 
         then:
             result.size() == 3
-            result.find { it.name=="test1" } != null
-            result.find { it.name=="test2" } == null
-            result.find { it.name=="test3" } != null
-            result.find { it.name=="test4" } != null
+            result.find { it.name == "test1" } != null
+            result.find { it.name == "test2" } == null
+            result.find { it.name == "test3" } != null
+            result.find { it.name == "test4" } != null
 
         where:
             map = ["a": "test", "b": "1", "c": "test"]
