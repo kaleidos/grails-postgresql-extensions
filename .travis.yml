@@ -1,6 +1,7 @@
 language: groovy
 jdk:
   - openjdk7
+  - oraclejdk8
 
 addons:
   postgresql: "9.3"
