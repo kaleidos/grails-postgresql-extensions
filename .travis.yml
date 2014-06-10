@@ -5,12 +5,13 @@ jdk:
 
 script:
   - ./grailsw refresh-dependencies --non-interactive
-  - ./grailsw "test-app unit: integration: -coverage -xml"
+  - ./grailsw test-app -coverage -xml
 
 notifications:
   email:
     recipients:
       - lopez.ivan@gmail.com
+      - alonso.javier.torres@gmail.com
 
     on_success: change
     on_failure: change
