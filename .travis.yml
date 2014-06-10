@@ -3,6 +3,15 @@ jdk:
   - openjdk7
   - oraclejdk7
 
+addons:
+  postgresql: "9.3"
+
+before_script:
+  - psql -d template1 -c 'create extension hstore;' -U postgres
+  - psql -c 'create database pg_extensions_test;' -U postgres
+  - psql -c "create user pg_extensions with password 'pg_extensions';" -U postgres
+  - psql -c "grant all privileges on database pg_extensions_test to pg_extensions;" -U postgres
+
 script:
   - ./grailsw refresh-dependencies --non-interactive
   - ./grailsw test-app -coverage -xml
