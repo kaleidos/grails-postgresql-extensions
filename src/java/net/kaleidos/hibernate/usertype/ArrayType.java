@@ -1,17 +1,17 @@
 package net.kaleidos.hibernate.usertype;
 
-import java.io.Serializable;
-import java.util.Properties;
-
+import net.kaleidos.hibernate.utils.PgArrayUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.usertype.UserType;
 import org.hibernate.usertype.ParameterizedType;
+import org.hibernate.usertype.UserType;
 
+import java.io.Serializable;
 import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Properties;
 
 
 public class ArrayType implements UserType, ParameterizedType {
@@ -62,14 +62,11 @@ public class ArrayType implements UserType, ParameterizedType {
 
     @Override
     public void setParameterValues(Properties parameters) {
-        this.typeClass = (Class<?>)parameters.get("type");
+        this.typeClass = (Class<?>) parameters.get("type");
         if (typeClass == null) {
             throw new RuntimeException("The user type needs to be configured with the type. None provided");
         }
     }
-
-
-
 
     @Override
     public Class<?> returnedClass() {
@@ -78,31 +75,31 @@ public class ArrayType implements UserType, ParameterizedType {
 
     @Override
     public int[] sqlTypes() {
-        if (Integer.class.equals(this.typeClass)){
-            return new int[] { INTEGER_ARRAY };
+        if (Integer.class.equals(this.typeClass)) {
+            return new int[]{INTEGER_ARRAY};
         }
 
-        if (Long.class.equals(this.typeClass)){
-            return new int[] { LONG_ARRAY };
+        if (Long.class.equals(this.typeClass)) {
+            return new int[]{LONG_ARRAY};
         }
 
-        if (String.class.equals(this.typeClass)){
-            return new int[] { STRING_ARRAY };
+        if (String.class.equals(this.typeClass)) {
+            return new int[]{STRING_ARRAY};
         }
 
-        if (Float.class.equals(this.typeClass)){
-            return new int[] { FLOAT_ARRAY };
+        if (Float.class.equals(this.typeClass)) {
+            return new int[]{FLOAT_ARRAY};
         }
 
-        if (Double.class.equals(this.typeClass)){
-            return new int[] { DOUBLE_ARRAY };
+        if (Double.class.equals(this.typeClass)) {
+            return new int[]{DOUBLE_ARRAY};
         }
 
         if (this.typeClass.isEnum()) {
-            return new int[] { ENUM_INTEGER_ARRAY };
+            return new int[]{ENUM_INTEGER_ARRAY};
         }
 
-        throw new RuntimeException("The type " + this.typeClass  + " is not a valid type");
+        throw new RuntimeException("The type " + this.typeClass + " is not a valid type");
     }
 
     @Override
@@ -115,10 +112,10 @@ public class ArrayType implements UserType, ParameterizedType {
                 int length = java.lang.reflect.Array.getLength(array);
                 Object converted = java.lang.reflect.Array.newInstance(typeClass, length);
                 for (int i = 0; i < length; i++) {
-                    java.lang.reflect.Array.set(converted, i, idToEnum(java.lang.reflect.Array.get(array,i)));
+                    java.lang.reflect.Array.set(converted, i, idToEnum(java.lang.reflect.Array.get(array, i)));
                 }
             } else {
-                result = (Object[])typeArrayClass.cast(array.getArray());
+                result = (Object[]) typeArrayClass.cast(array.getArray());
             }
         }
         return result;
@@ -131,7 +128,7 @@ public class ArrayType implements UserType, ParameterizedType {
             return;
         }
 
-        Object[] valueToSet = (Object[])value;
+        Object[] valueToSet = (Object[]) value;
         Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
 
         if (typeClass.isEnum()) {
@@ -140,39 +137,16 @@ public class ArrayType implements UserType, ParameterizedType {
 
             for (int i = 0; i < valueToSet.length; i++) {
                 if (valueToSet[i] instanceof Integer) {
-                    converted[i] = (Integer)valueToSet[i];
+                    converted[i] = (Integer) valueToSet[i];
                 } else {
-                    converted[i] = ((Enum)valueToSet[i]).ordinal();
+                    converted[i] = ((Enum) valueToSet[i]).ordinal();
                 }
             }
             valueToSet = converted;
         }
 
-        Array array = st.getConnection().createArrayOf(getNativeSqlType(typeClass), (Object[])typeArrayClass.cast(valueToSet));
+        Array array = st.getConnection().createArrayOf(PgArrayUtils.getNativeSqlType(typeClass), (Object[]) typeArrayClass.cast(valueToSet));
         st.setArray(index, array);
-    }
-
-    private String getNativeSqlType(Class clazz) {
-        if (Integer.class.equals(this.typeClass) || this.typeClass.isEnum()){
-            return "int";
-        }
-
-        if (Long.class.equals(this.typeClass)){
-            return "int8";
-        }
-
-        if (String.class.equals(this.typeClass)){
-            return "varchar";
-        }
-
-        if (Float.class.equals(this.typeClass)){
-            return "float";
-        }
-
-        if (Double.class.equals(this.typeClass)){
-            return "float8";
-        }
-        throw new RuntimeException("Type class not valid: " + this.typeClass);
     }
 
     public Class<?> getTypeClass() {

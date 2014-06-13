@@ -1,8 +1,7 @@
 package net.kaleidos.hibernate;
 
-import net.kaleidos.hibernate.usertype.HstoreType;
 import net.kaleidos.hibernate.usertype.ArrayType;
-
+import net.kaleidos.hibernate.usertype.HstoreType;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.id.PersistentIdentifierGenerator;
@@ -31,6 +30,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
 
     /**
      * Get the native identifier generator class.
+     *
      * @return TableNameSequenceGenerator.
      */
     @Override

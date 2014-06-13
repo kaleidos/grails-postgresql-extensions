@@ -1,14 +1,14 @@
 package net.kaleidos.hibernate.criterion.array;
 
 import net.kaleidos.hibernate.usertype.ArrayType;
-
+import net.kaleidos.hibernate.utils.PgArrayUtils;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.engine.TypedValue;
-import org.hibernate.type.Type;
 import org.hibernate.type.CustomType;
+import org.hibernate.type.Type;
 import org.hibernate.util.StringHelper;
 
 /**
@@ -17,8 +17,6 @@ import org.hibernate.util.StringHelper;
 public class PgArrayExpression implements Criterion {
 
     private static final long serialVersionUID = 2872183637309166619L;
-
-    private final PgCriteriaUtils pgCriteriaUtils = new PgCriteriaUtils();
 
     private final String propertyName;
     private final Object value;
@@ -32,44 +30,52 @@ public class PgArrayExpression implements Criterion {
 
     @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
+        ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
+
+        String postgresArrayType = PgArrayUtils.getNativeSqlType(arrayType.getTypeClass()) + "[]";
+
         return StringHelper.join(
-            " and ",
-            StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " ARRAY[?]")
+                " and ",
+                StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " CAST(? as " + postgresArrayType + ")")
         );
     }
 
     @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
-        Type propertyType = criteriaQuery.getType(criteria, propertyName);
-
-        if (!(propertyType instanceof CustomType) || !(((CustomType)propertyType).getUserType() instanceof ArrayType)) {
-            throw new HibernateException("Property is not an instance of the postgres type ArrayType. Type is: " + propertyType.getClass());
-        }
-
-        ArrayType arrayType = (ArrayType)((CustomType)propertyType).getUserType();
+        ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
 
         Object[] arrValue;
         if (arrayType.getTypeClass().isEnum()) {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(
-                value,
-                Integer.class,
-                new PgCriteriaUtils.MapFunction() {
-                    @SuppressWarnings("rawtypes")
-                    public Object map(Object o) {
-                        try {
-                            return ((Enum)o).ordinal();
-                        } catch (ClassCastException e) {
-                            throw new HibernateException("Unable to cast object " + o + " to Enum.");
+            arrValue = PgArrayUtils.getValueAsArrayOfType(
+                    value,
+                    Integer.class,
+                    new PgArrayUtils.MapFunction() {
+                        @SuppressWarnings("rawtypes")
+                        public Object map(Object o) {
+                            try {
+                                return ((Enum) o).ordinal();
+                            } catch (ClassCastException e) {
+                                throw new HibernateException("Unable to cast object " + o + " to Enum.");
+                            }
                         }
                     }
-                }
             );
         } else {
-            arrValue = pgCriteriaUtils.getValueAsArrayOfType(value, arrayType.getTypeClass());
+            arrValue = PgArrayUtils.getValueAsArrayOfType(value, arrayType.getTypeClass());
         }
 
-        return new TypedValue[] {
-            criteriaQuery.getTypedValue(criteria, propertyName, arrValue)
+        return new TypedValue[]{
+                criteriaQuery.getTypedValue(criteria, propertyName, arrValue)
         };
+    }
+
+    private ArrayType checkAndGetArrayType(Criteria criteria, CriteriaQuery criteriaQuery) {
+        Type propertyType = criteriaQuery.getType(criteria, propertyName);
+
+        if (!(propertyType instanceof CustomType) || !(((CustomType) propertyType).getUserType() instanceof ArrayType)) {
+            throw new HibernateException("Property is not an instance of the postgres type ArrayType. Type is: " + propertyType.getClass());
+        }
+
+        return (ArrayType) ((CustomType) propertyType).getUserType();
     }
 }
