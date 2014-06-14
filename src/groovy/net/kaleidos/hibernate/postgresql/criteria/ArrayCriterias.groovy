@@ -4,8 +4,6 @@ import grails.orm.HibernateCriteriaBuilder
 import net.kaleidos.hibernate.criterion.array.PgArrayExpression
 import net.kaleidos.hibernate.criterion.array.PgEmptinessExpression
 
-import org.hibernate.criterion.Restrictions
-
 class ArrayCriterias {
 
     public ArrayCriterias() {
@@ -15,6 +13,7 @@ class ArrayCriterias {
         addIsEmptyOperator()
         addIsNotEmptyOperator()
         addIsEmptyOrContainsOperator()
+        addEqualsOperator()
     }
 
     private void addContainsOperator() {
@@ -137,6 +136,26 @@ class ArrayCriterias {
             } else {
                 return addToCriteria(new PgEmptinessExpression(propertyName, "="))
             }
+        }
+    }
+
+    private void addEqualsOperator() {
+        /**
+         * Creates a "equals in native array" Criterion based on the specified property name and value
+         * @param propertyName The property name
+         * @param propertyValue The property value
+         * @return A Criterion instance
+         */
+        HibernateCriteriaBuilder.metaClass.pgArrayEquals = { String propertyName, Object propertyValue ->
+            if (!validateSimpleExpression()) {
+                throwRuntimeException(new IllegalArgumentException("Call to [pgArrayEquals] with propertyName [" +
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+            }
+
+            propertyName = calculatePropertyName(propertyName)
+            propertyValue = calculatePropertyValue(propertyValue)
+
+            return addToCriteria(new PgArrayExpression(propertyName, propertyValue, "="))
         }
     }
 }
