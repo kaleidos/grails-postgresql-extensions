@@ -230,10 +230,10 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search a invalid list inside the array of integers'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayOverlaps', number)
+            pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayOverlaps', number)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             number << [["Test"], [1, "Test"], [1L], [1, 1L]]
@@ -242,10 +242,10 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search a invalid list inside the array of long'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayOverlaps', number)
+            pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayOverlaps', number)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             number << [["Test"], [1L, "Test"], [1], [1L, 1]]
@@ -254,10 +254,10 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search a invalid list inside the array of string'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayOverlaps', movie)
+            pgArrayTestSearchService.search('favoriteMovies', 'pgArrayOverlaps', movie)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
@@ -266,10 +266,10 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
     @Unroll
     void 'search an invalid list inside the array of enum'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayOverlaps', juice)
+            pgArrayTestSearchService.search('favoriteJuices', 'pgArrayOverlaps', juice)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             juice << [["Test"], [Like.Juice.ORANGE, "Test"], [1L], [Like.Juice.APPLE, 1L]]

@@ -226,10 +226,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search a invalid list inside the array of integers'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayIsContainedBy', number)
+            pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayIsContainedBy', number)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             number << [["Test"], [1, "Test"], [1L], [1, 1L]]
@@ -237,10 +237,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search a invalid list inside the array of long'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayIsContainedBy', number)
+            pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayIsContainedBy', number)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             number << [["Test"], [1L, "Test"], [1], [1L, 1]]
@@ -248,10 +248,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search a invalid list inside the array of float'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayIsContainedBy', number)
+            pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayIsContainedBy', number)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             number << [["Test"], [1f, "Test"], [1], [1f, 1]]
@@ -259,10 +259,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search a invalid list inside the array of double'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayIsContainedBy', number)
+            pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayIsContainedBy', number)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             number << [["Test"], [1d, "Test"], [1], [1d, 1]]
@@ -270,10 +270,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search a invalid list inside the array of string'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayIsContainedBy', movie)
+            pgArrayTestSearchService.search('favoriteMovies', 'pgArrayIsContainedBy', movie)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
@@ -281,10 +281,10 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends IntegrationSpec 
 
     void 'search an invalid list juice inside the array of enum'() {
         when:
-            def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayIsContainedBy', juice)
+            pgArrayTestSearchService.search('favoriteJuices', 'pgArrayIsContainedBy', juice)
 
         then:
-            thrown(HibernateException)
+            thrown HibernateException
 
         where:
             juice << [["Test"], ["Test", Like.Juice.ORANGE], [1L], ["Test", 1L]]
