@@ -1,4 +1,5 @@
 package net.kaleidos.hibernate.array
+
 import grails.plugin.spock.IntegrationSpec
 import org.hibernate.HibernateException
 import spock.lang.Unroll
@@ -159,11 +160,11 @@ class PgEqualsCriteriaTestServiceIntegrationSpec extends IntegrationSpec {
             result.size() == resultSize
 
         where:
-            juice                                    | resultSize
-            Like.Juice.PINEAPPLE                     | 1
-            [Like.Juice.ORANGE, Like.Juice.GRAPE]    | 1
-            []                                       | 1
-            [Like.Juice.GRAPE, Like.Juice.ORANGE]    | 0
+            juice                                 | resultSize
+            Like.Juice.PINEAPPLE                  | 1
+            [Like.Juice.ORANGE, Like.Juice.GRAPE] | 1
+            []                                    | 1
+            [Like.Juice.GRAPE, Like.Juice.ORANGE] | 0
     }
 
     void 'search in an array of strings with join with another domain class'() {

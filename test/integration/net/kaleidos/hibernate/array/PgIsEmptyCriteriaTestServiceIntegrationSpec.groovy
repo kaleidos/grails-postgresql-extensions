@@ -1,4 +1,5 @@
 package net.kaleidos.hibernate.array
+
 import grails.plugin.spock.IntegrationSpec
 import test.criteria.array.Like
 import test.criteria.array.User
