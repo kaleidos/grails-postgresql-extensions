@@ -5,7 +5,7 @@ Grails Postgresql Extensions
 [![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kaleidos/grails-postgresql-extensions/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-This is a grails plugin to use postgresql native elements such as arrays, hstores, json,... from a Grails application.
+This is a grails plugin that provides hibernate user types to use postgresql native types such as arrays, hstores, json,... from a Grails application. It also provides new criterias to query this new native types.
 
 Currently the plugin supports arrays and hstore and some query methods has been implemented. More native types and query methods will be added in the future.
 
@@ -20,6 +20,8 @@ Currently the plugin supports arrays and hstore and some query methods has been 
         * [Is Empty](#is-empty)
         * [Is Not Empty](#is-not-empty)
         * [Is Empty or Contains](#is-empty-or-contains)
+        * [Equals](#equals)
+        * [Not Equals](#not-equals)
   * [Hstore](#hstore)
     * [Grails 2.2.5 and 2.3.1+](#grails-225-and-231)
     * [Old Grails versions](#old-grails-versions)
@@ -229,6 +231,26 @@ def result = Like.withCriteria {
 }
 ```
 
+#### Equals
+
+With this criteria you can get all the rows that are equal to a value. To use it just use the new criteria `pgArrayEquals`:
+
+```groovy
+def result = Like.withCriteria {
+    pgArrayEquals 'favoriteNumbers', numbers
+}
+```
+
+#### Not Equals
+
+With this criteria you can get all the rows that are not equal to a value. To use it just use the new criteria `pgArrayNotEquals`:
+
+```groovy
+def result = Like.withCriteria {
+    pgArrayNotEquals 'favoriteNumbers', numbers
+}
+```
+
 
 ### Hstore
 
@@ -391,7 +413,6 @@ You can send any questions to:
 
 - Iván López: lopez.ivan@gmail.com ([@ilopmar](https://twitter.com/ilopmar))
 - Alonso Torres: alonso.javier.torres@gmail.com ([@alotor](https://twitter.com/alotor))
-- Matt Feury: mattfeury@gmail.com ([@soundandfeury](https://twitter.com/soundandfeury))
 
 Collaborations are appreciated :-)
 
@@ -399,6 +420,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* [0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) - 16/Jun/2014 - Add new array criterias: pgArrayEquals, pgArrayNotEquals
 * 0.8.1 - 24/Apr/2014 - Fix NPE when array is null.
 * 0.8 - 24/Apr/2014 - Added support for Double and Float arrays. Refactored the ArrayType to be used as a parametrized type.
 * 0.7 - Unreleased - New HstoreMapType and update plugin to Grails 2.2.5.
