@@ -3,7 +3,6 @@ Grails Postgresql Extensions
 
 [![Still maintained](http://stillmaintained.com/lmivan/grails-postgresql-extensions.png)](http://stillmaintained.com/lmivan/grails-postgresql-extensions)
 [![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kaleidos/grails-postgresql-extensions/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![Coverage Status](https://coveralls.io/repos/kaleidos/grails-postgresql-extensions/badge.png?branch=master)](https://coveralls.io/r/kaleidos/grails-postgresql-extensions?branch=master)
 
 This is a grails plugin that provides hibernate user types to use postgresql native types such as arrays, hstores, json,... from a Grails application. It also provides new criterias to query this new native types.
@@ -442,4 +441,3 @@ Release Notes
 * 0.2 - 25/Aug/2013 - Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!
 * 0.1.1 - 22/Jul/2013 - Some refactors of the code. No functionality added.
 * 0.1 - 16/Jul/2013 - Initial version of the plugin with support for integer, long and string array types and criterias pgArrayContains, pgArrayIsContainedBy, pgArrayOverlaps, pgArrayIsEmpty and pgArrayIsNotEmpty.
-
