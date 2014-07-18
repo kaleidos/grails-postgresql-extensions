@@ -37,6 +37,9 @@ Currently the plugin supports arrays and hstore and some query methods has been 
 Installation
 ------------
 
+For Hibernate 3.x you have to use a 3.x version and for Hibernate 4.x you must use a 4.x version of the plugin.
+At the moment, both versions contains the same features and functionallity.
+
 In `BuildConfig` and:
 
 ```groovy
@@ -420,6 +423,8 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* [4.0.0] - 18/Jul/2014 - Version compatible with Hibernate 4.x
+* [3.0.0] - 18/Jul/2014 - Version compatible with Hibernate 3.x
 * [0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) - 16/Jun/2014 - Add new array criterias: pgArrayEquals, pgArrayNotEquals
 * 0.8.1 - 24/Apr/2014 - Fix NPE when array is null.
 * 0.8 - 24/Apr/2014 - Added support for Double and Float arrays. Refactored the ArrayType to be used as a parametrized type.
