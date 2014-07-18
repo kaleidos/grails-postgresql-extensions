@@ -3,7 +3,7 @@ package net.kaleidos.hibernate;
 import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.usertype.HstoreType;
 import org.hibernate.dialect.Dialect;
-import org.hibernate.dialect.PostgreSQLDialect;
+import org.hibernate.dialect.PostgreSQL81Dialect;
 import org.hibernate.id.PersistentIdentifierGenerator;
 import org.hibernate.id.SequenceGenerator;
 import org.hibernate.type.Type;
@@ -11,7 +11,7 @@ import org.hibernate.type.Type;
 import java.sql.Types;
 import java.util.Properties;
 
-public class PostgresqlExtensionsDialect extends PostgreSQLDialect {
+public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
 
     /**
      * Register postgresql types

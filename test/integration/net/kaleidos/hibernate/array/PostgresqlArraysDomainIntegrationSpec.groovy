@@ -1,10 +1,10 @@
 package net.kaleidos.hibernate.array
 
-import grails.plugin.spock.IntegrationSpec
+import spock.lang.Specification
 import spock.lang.Unroll
 import test.array.*
 
-class PostgresqlArraysDomainIntegrationSpec extends IntegrationSpec {
+class PostgresqlArraysDomainIntegrationSpec extends Specification {
 
     @Unroll
     void 'save a domain class with an integer array value #numbers'() {

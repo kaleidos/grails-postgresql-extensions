@@ -1,12 +1,12 @@
 package net.kaleidos.hibernate.usertype;
 
+import org.postgresql.util.PGobject;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
-
-import org.postgresql.util.PGobject;
 
 /**
  * This class is an extended version of HStore.java from https://code.google.com/p/pg-spring-type-mapper/
@@ -23,11 +23,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         this.length = rawValue == null ? 0 : rawValue.length();
     }
 
-    public HstoreParser() {
-        this.type = "hstore";
-        this.length = 0;
-    }
-
+    @Override
     public void setValue(String rawValue) {
         if (!"hstore".equals(this.type)) {
             throw new IllegalStateException("HStore database type name should be 'hstore'");
@@ -249,8 +245,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             }
             if (sb == null) {
                 // we consumed the last quote
-                String r = value.substring(firstQuotePosition + 1, position);
-                return r;
+                return value.substring(firstQuotePosition + 1, position);
             } else {
                 return sb.toString();
             }
@@ -270,8 +265,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             // step back as we are already one char away
             position--;
             // substring is using quite a strange way of defining end position
-            final String r = value.substring(firstWordPosition, position + 1 );
-            return r;
+            return value.substring(firstWordPosition, position + 1 );
         }
 
         @Override
