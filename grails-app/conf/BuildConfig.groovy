@@ -37,6 +37,8 @@ grails.project.dependency.resolution = {
         test "org.springframework:spring-expression:$springVersion"
         test "org.springframework:spring-aop:$springVersion"
 
+        compile 'com.google.code.gson:gson:2.2.4'
+
         // Coveralls plugin
         build 'org.apache.httpcomponents:httpcore:4.3.2'
         build 'org.apache.httpcomponents:httpclient:4.3.2'
