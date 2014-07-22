@@ -109,10 +109,10 @@ public class ArrayType implements UserType, ParameterizedType {
         Array array = rs.getArray(names[0]);
         if (!rs.wasNull()) {
             if (typeClass.isEnum()) {
-                int length = java.lang.reflect.Array.getLength(array);
+                int length = java.lang.reflect.Array.getLength(array.getArray());
                 Object converted = java.lang.reflect.Array.newInstance(typeClass, length);
                 for (int i = 0; i < length; i++) {
-                    java.lang.reflect.Array.set(converted, i, idToEnum(java.lang.reflect.Array.get(array, i)));
+                    java.lang.reflect.Array.set(converted, i, idToEnum(java.lang.reflect.Array.get(array.getArray(), i)));
                 }
             } else {
                 result = (Object[]) typeArrayClass.cast(array.getArray());
