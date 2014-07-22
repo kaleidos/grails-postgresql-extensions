@@ -25,7 +25,7 @@ class PostgresqlExtensionsGrailsPlugin {
     def author = "Iván López"
     def authorEmail = "lopez.ivan@gmail.com"
     def description = '''\
-This plugin provides hibernate user types to support for Postgresql Native Types like Arrays, HStores, JSON,... as well as new criterias to query this native types
+This plugin provides hibernate user types to support for Postgresql Native Types like Array, HStore, JSON,... as well as new criterias to query this native types
 '''
 
     // URL to the plugin's documentation
