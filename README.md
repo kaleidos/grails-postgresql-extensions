@@ -5,9 +5,9 @@ Grails Postgresql Extensions
 [![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
 [![Coverage Status](https://coveralls.io/repos/kaleidos/grails-postgresql-extensions/badge.png?branch=master)](https://coveralls.io/r/kaleidos/grails-postgresql-extensions?branch=master)
 
-This is a grails plugin that provides hibernate user types to use postgresql native types such as arrays, hstores, json,... from a Grails application. It also provides new criterias to query this new native types.
+This is a grails plugin that provides hibernate user types to use Postgresql native types such as Array, Hstore, Json,... from a Grails application. It also provides new criterias to query this new native types.
 
-Currently the plugin supports arrays and hstore and some query methods has been implemented. More native types and query methods will be added in the future.
+Currently the plugin supports array, hstore and json fields as well as some query methods. More native types and query methods will be added in the future.
 
 * [Installation](#installation)
 * [Configuration](#configuration)
@@ -30,6 +30,7 @@ Currently the plugin supports arrays and hstore and some query methods has been 
         * [Contains Key](#contains-key)
         * [Contains](#contains-1)
         * [Is Contained](#is-contained-1)
+  * [JSON](#json)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -409,6 +410,47 @@ testAttributes = ["1" : "a", "2" : "b"]
 ```
 This criteria can also be used to look for exact matches
 
+
+### JSON
+
+Currently the Json support is only available in Grails 2.2.5 and 2.3.1+. Just like with the Hstore support, it's not possible to use a Map in domain classes with old Grails versions and be able to set the database type for the Map.
+
+To define a json field you only have to define a `Map` field and use the `JsonMapType` hibernate user type.
+
+```groovy
+import net.kaleidos.hibernate.usertype.JsonMapType
+
+class TestMapJson {
+
+    Map data
+
+    static constraints = {
+    }
+    static mapping = {
+        data type: JsonMapType
+    }
+}
+```
+
+#### Using Json
+
+Now you can create and instance of the domain class:
+
+```groovy
+def instance = new TestMapJson(data: [name: "Iván", age: 34, hasChilds: true, childs: [[name: 'Judith', age: 7], [name: 'Adriana', age: 4]]])
+instance.save()
+```
+
+```
+=# select * from test_map_json;
+
+ id | version | data
+----+---------+-------------------------------------------------------------------------------------------------------------
+  1 |       0 | {"hasChilds":true,"age":34,"name":"Iván","childs":[{"name":"Judith","age":7},{"name":"Adriana","age":4}]}
+
+As you can see the plugin converts to Json automatically the attributes and the lists in the map type.
+
+
 Authors
 -------
 
@@ -423,9 +465,10 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
-* [4.0.0] - 18/Jul/2014 - Version compatible with Hibernate 4.x
-* [3.0.0] - 18/Jul/2014 - Version compatible with Hibernate 3.x
-* [0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) - 16/Jun/2014 - Add new array criterias: pgArrayEquals, pgArrayNotEquals
+* 4.1.0 - 23/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
+* 4.0.0 - 18/Jul/2014 - Version compatible with Hibernate 4.x.
+* 3.0.0 - 18/Jul/2014 - Version compatible with Hibernate 3.x.
+* [0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) - 16/Jun/2014 - Add new array criterias: pgArrayEquals, pgArrayNotEquals.
 * 0.8.1 - 24/Apr/2014 - Fix NPE when array is null.
 * 0.8 - 24/Apr/2014 - Added support for Double and Float arrays. Refactored the ArrayType to be used as a parametrized type.
 * 0.7 - Unreleased - New HstoreMapType and update plugin to Grails 2.2.5.

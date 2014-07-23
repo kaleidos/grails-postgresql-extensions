@@ -3,7 +3,7 @@ import net.kaleidos.hibernate.postgresql.criteria.HstoreCriterias
 
 class PostgresqlExtensionsGrailsPlugin {
     // the plugin version
-    def version = "4.0.0"
+    def version = "4.1.0"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
@@ -25,7 +25,7 @@ class PostgresqlExtensionsGrailsPlugin {
     def author = "Iván López"
     def authorEmail = "lopez.ivan@gmail.com"
     def description = '''\
-This plugin provides hibernate user types to support for Postgresql Native Types like Arrays, HStores, JSON,... as well as new criterias to query this native types
+This plugin provides hibernate user types to support for Postgresql Native Types like Array, HStore, JSON,... as well as new criterias to query this native types
 '''
 
     // URL to the plugin's documentation

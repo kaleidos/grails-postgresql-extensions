@@ -2,6 +2,7 @@ package net.kaleidos.hibernate;
 
 import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.usertype.HstoreType;
+import net.kaleidos.hibernate.usertype.JsonMapType;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQL81Dialect;
 import org.hibernate.id.PersistentIdentifierGenerator;
@@ -26,6 +27,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
         registerColumnType(ArrayType.DOUBLE_ARRAY, "float8[]");
         registerColumnType(ArrayType.FLOAT_ARRAY, "float[]");
         registerColumnType(HstoreType.SQLTYPE, "hstore");
+        registerColumnType(JsonMapType.SQLTYPE, "json");
     }
 
     /**
