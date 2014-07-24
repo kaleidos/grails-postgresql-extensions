@@ -441,12 +441,14 @@ def instance = new TestMapJson(data: [name: "Iván", age: 34, hasChilds: true, c
 instance.save()
 ```
 
+
 ```
 =# select * from test_map_json;
 
  id | version | data
 ----+---------+-------------------------------------------------------------------------------------------------------------
   1 |       0 | {"hasChilds":true,"age":34,"name":"Iván","childs":[{"name":"Judith","age":7},{"name":"Adriana","age":4}]}
+```
 
 As you can see the plugin converts to Json automatically the attributes and the lists in the map type.
 
@@ -465,7 +467,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
-* 4.1.0 - 23/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
+* 4.1.0 - 24/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
 * 4.0.0 - 18/Jul/2014 - Version compatible with Hibernate 4.x.
 * 3.0.0 - 18/Jul/2014 - Version compatible with Hibernate 3.x.
 * [0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) - 16/Jun/2014 - Add new array criterias: pgArrayEquals, pgArrayNotEquals.
