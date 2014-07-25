@@ -1,9 +1,10 @@
 import net.kaleidos.hibernate.postgresql.criteria.ArrayCriterias
 import net.kaleidos.hibernate.postgresql.criteria.HstoreCriterias
+import net.kaleidos.hibernate.postgresql.criteria.JsonCriterias
 
 class PostgresqlExtensionsGrailsPlugin {
     // the plugin version
-    def version = "4.1.0"
+    def version = "4.2.0"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
@@ -72,6 +73,7 @@ This plugin provides hibernate user types to support for Postgresql Native Types
     def doWithDynamicMethods = { ctx ->
         new ArrayCriterias()
         new HstoreCriterias()
+        new JsonCriterias()
     }
 
     def doWithApplicationContext = { ctx ->
