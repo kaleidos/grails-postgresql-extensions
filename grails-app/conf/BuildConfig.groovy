@@ -20,6 +20,8 @@ grails.project.dependency.resolution = {
 
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
 
+        compile 'com.google.code.gson:gson:2.2.4'
+
         // Coveralls plugin
         build 'org.apache.httpcomponents:httpcore:4.3.2'
         build 'org.apache.httpcomponents:httpclient:4.3.2'
