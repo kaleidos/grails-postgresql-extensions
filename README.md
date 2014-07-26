@@ -33,6 +33,7 @@ Currently the plugin supports array, hstore and json fields as well as some quer
   * [JSON](#json)
     * [Criterias](#criterias)
         * [Has field value](#has-field-value)
+  * [Ranges](#ranges)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -488,7 +489,6 @@ instance.save()
 
 As you can see the plugin converts to Json automatically the attributes and the lists in the map type.
 
-
 #### Criterias
 
 The plugin provides some criterias to query json fields. You can check the official [Postgresql Json functions and operators](http://www.postgresql.org/docs/9.3/static/functions-json.html) in case you need additional ones.
@@ -510,6 +510,63 @@ def result = TestMapJson.withCriteria {
 
 The previous criteria will return all the rows that have a `name` attribute in the json field `data` with the value `Iván`. In this example `obj1` and `obj3`.
 
+
+
+### Ranges
+
+
+PostgreSQL has native support for range types you can check the [http://www.postgresql.org/docs/9.2/static/rangetypes.html](documentation)
+
+Grails doesn't allow to map either groovy.lang.IntRange or groovy.lang.ObjectRange to columns even if you use a custom UserType. For this reason we
+provide for a custom range wrappers depending on the kind of range you want to use.
+
+The custom range wrappers are:
+
+- net.kaleidos.hibernate.postgresql.range.IntegerRange (int4range)
+- net.kaleidos.hibernate.postgresql.range.LongRange (int8range)
+- net.kaleidos.hibernate.postgresql.range.DateRange (daterange)
+- net.kaleidos.hibernate.postgresql.range.TimestampRange (tsrange)
+
+To use a range inside your domain objects you must declare a property with one of the range wrappers and use the UserType like this:
+
+```groovy
+package test.range
+
+import net.kaleidos.hibernate.postgresql.range.IntegerRange
+import net.kaleidos.hibernate.usertype.RangeType
+
+class TestIntegerRange {
+    IntegerRange integerRange
+
+    static mapping = {
+        integerRange type:RangeType, params: ["type": IntegerRange]
+    }
+
+    static constraints = {
+        integerRange nullable: true
+    }
+}
+```
+
+#### Using Ranges
+
+Now you can use the object as any entity:
+
+```groovy
+def instance = new TestIntegerRange(integerRange: new IntegerRange(1, 100))
+instance.save()
+```
+
+
+```
+=# select * from test_integer_range;
+
+ id | version | integer_range
+----+---------+-------------------------------------------------------------------------------------------------------------
+  1 |       0 | [1, 101)
+```
+
+For integer, long and date ranges Postgres stores the range in the cannonical form "[A,B)" so the upper bound is not strict.
 
 
 Authors
