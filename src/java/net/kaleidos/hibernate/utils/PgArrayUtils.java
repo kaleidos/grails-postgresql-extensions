@@ -74,7 +74,36 @@ public class PgArrayUtils {
         public abstract Object map(Object o);
     }
 
-    public static String getNativeSqlType(Class clazz) {
+    public static String getNativeSqlTypeRead(Class clazz, boolean isStringCaseInsensitive) {
+        if (Integer.class.equals(clazz) || clazz.isEnum()) {
+            return "int[]";
+        }
+
+        if (Long.class.equals(clazz)) {
+            return "int8[]";
+        }
+
+        // When reading from the database we have to distinguish between
+        // citext[] or varchar[] to do the right casting in the queries
+        if (String.class.equals(clazz) && isStringCaseInsensitive) {
+            return "citext[]";
+        }
+
+        if (String.class.equals(clazz) && !isStringCaseInsensitive) {
+            return "varchar[]";
+        }
+
+        if (Float.class.equals(clazz)) {
+            return "float[]";
+        }
+
+        if (Double.class.equals(clazz)) {
+            return "float8[]";
+        }
+        throw new RuntimeException("Type class not valid: " + clazz);
+    }
+
+    public static String getNativeSqlTypeWrite(Class clazz) {
         if (Integer.class.equals(clazz) || clazz.isEnum()) {
             return "int";
         }
@@ -83,6 +112,8 @@ public class PgArrayUtils {
             return "int8";
         }
 
+        // When we write to the database we always use varchar, no matter if the type is
+        // varchar[] or citext[]
         if (String.class.equals(clazz)) {
             return "varchar";
         }
