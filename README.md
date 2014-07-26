@@ -111,9 +111,18 @@ development {
 
 ### Arrays
 
-The plugin supports the definition of `Integer`, `Long`, `Float`, `Double`, `String`, and `Enum` arrays in your domain classes.
+The plugin supports the definition of `Integer`, `Long`, `Float`, `Double`, `String`, `Enum` and `Citext` (case insensitive string) arrays in your domain classes.
 
-The EnumArrayType behaves almost identical to IntegerArrayType in that it stores and retrieves an array of ints. The difference, however, is that this is used with an Array of Enums, rather than Ints. The Enums are serialized to their ordinal value before persisted to the database. On retrieval, they are then converted back into their original Enum type.
+The Enum type behaves almost identical to Integer type in that it stores and retrieves an array of ints. The difference, however, is that this is used with an Array of Enums, rather than Ints. The Enums are serialized to their ordinal value before persisted to the database. On retrieval, they are then converted back into their original Enum type.
+
+The Citext is just like a String but it allows case insensitive queries at database level. You have to add the parameter `caseInsensitive` when defining the mapping in your domain class. Check the following example.
+
+If you want to use this field, first you have to install the extension:
+
+```
+CREATE EXTENSION IF NOT EXISTS citext;
+```
+
 
 ```groovy
 import net.kaleidos.hibernate.usertype.ArrayType
@@ -125,6 +134,7 @@ class Like {
     Double[] favoriteDoubleNumbers = []
     String[] favoriteMovies = []
     Juice[] favoriteJuices = []
+    String[] favoriteMoviesCI = []
 
     static enum Juice {
         ORANGE(0),
@@ -142,6 +152,7 @@ class Like {
         favoriteDoubleNumbers type:ArrayType, params: [type: Double]
         favoriteMovies type:ArrayType, params: [type: String]
         favoriteJuices type:ArrayType, params: [type: Juice]
+        favoriteMoviesCI type:ArrayType, params: [type: String, caseInsensitive: true]
     }
 }
 ```
@@ -154,7 +165,8 @@ def like1 = new Like(favoriteNumbers:[5, 17, 9, 6],
                      favoriteFloatNumbers:[0.3f, 0.1f],
                      favoriteDoubleNumbers:[100.33d, 44.11d],
                      favoriteMovies:["Spiderman", "Blade Runner", "Starwars"],
-                     favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE])
+                     favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE],
+                     favoriteMoviesCI:["Spiderman", "Blade Runner", "Starwars"])
 like1.save()
 ```
 
@@ -163,9 +175,9 @@ And now, with `psql`:
 ```
 =# select * from like;
 
- id |  favorite_long_numbers    |  favorite_float_numbers   |  favorite_double_numbers  |        favorite_movies                 | favorite_numbers | favorite_juices
-----+---------------------------+---------------------------+---------------------------+----------------------------------------+------------------+----------------
-  1 | {123,239,3498239,2344235} | {0.3,0.1}                 | {100.33,44.11}            | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}       | {0,2}
+ id |  favorite_long_numbers    |  favorite_float_numbers   |  favorite_double_numbers  |        favorite_movies                 | favorite_numbers | favorite_juices | favorite_moviesci
+----+---------------------------+---------------------------+---------------------------+----------------------------------------+------------------+-----------------+------------------------------------
+  1 | {123,239,3498239,2344235} | {0.3,0.1}                 | {100.33,44.11}            | {Spiderman,"Blade Runner",Starwars}    | {5,17,9,6}       | {0,2}           | {Spiderman,"Blade Runner",Starwars}
 ```
 
 #### Criterias
@@ -196,6 +208,11 @@ def result = Like.withCriteria {
     pgArrayContains 'favoriteJuices', juices
 }
 
+// If you use a citext field, the following query will return a movie saved with "Spiderman" or "spiderman" or "SpIdErMaN", or ...
+def movies = ['SPIDERMAN']
+def result = Like.withCriteria {
+    pgArrayContains 'favoriteMoviesCI', movies
+}
 ```
 
 #### Is contained
