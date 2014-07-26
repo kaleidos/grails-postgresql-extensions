@@ -186,6 +186,35 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
             []                                       | 4
     }
 
+    @Unroll
+    void 'search #movie in an array of case insensitive strings'() {
+        setup:
+            new Like(favoriteMoviesCI: ["The Matrix", "The Lord of the Rings"]).save()
+            new Like(favoriteMoviesCI: ["Spiderman", "Blade Runner", "Starwars"]).save()
+            new Like(favoriteMoviesCI: ["Romeo & Juliet", "Casablanca", "Starwars"]).save()
+            new Like(favoriteMoviesCI: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
+
+        when:
+            def result = pgArrayTestSearchService.search('favoriteMoviesCI', 'pgArrayContains', movie)
+
+        then:
+            result.size() == resultSize
+
+        where:
+            movie                                      | resultSize
+            "THE MATRIX"                               | 1
+            "the LORD of the RINGs"                    | 2
+            "Blade RUNNER"                             | 2
+            "STARwars"                                 | 2
+            "The USUAL Suspects"                       | 0
+            ["StARWars", "RoMEo & JuLIet"]             | 1
+            ["The LORD of THE Rings"]                  | 2
+            []                                         | 4
+            ["Starwars", "ROMEO & Juliet"] as String[] | 1
+            ["The Lord of THE Rings"] as String[]      | 2
+            [] as String[]                             | 4
+    }
+
     void 'search in an array of strings with join with another domain class'() {
         setup:
             def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
@@ -290,5 +319,16 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
 
         where:
             juice << [["Test"], [Like.Juice.ORANGE, "Test"], [1L], [Like.Juice.APPLE, 1L]]
+    }
+
+    void 'search an invalid list inside the array of case insensitive string'() {
+        when:
+            pgArrayTestSearchService.search('favoriteMoviesCI', 'pgArrayContains', movie)
+
+        then:
+            thrown HibernateException
+
+        where:
+            movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
     }
 }
