@@ -28,9 +28,11 @@ Currently the plugin supports array, hstore and json fields as well as some quer
     * [Using Hstore](#using-hstore)
     * [Criterias](#hstore-criterias)
         * [Contains Key](#contains-key)
-        * [Contains](#contains-1)
-        * [Is Contained](#is-contained-1)
+        * [Contains](#contains)
+        * [Is Contained](#is-contained)
   * [JSON](#json)
+    * [Criterias](#criterias)
+        * [Has field value](#has-field-value)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -421,7 +423,6 @@ To define a json field you only have to define a `Map` field and use the `JsonMa
 import net.kaleidos.hibernate.usertype.JsonMapType
 
 class TestMapJson {
-
     Map data
 
     static constraints = {
@@ -453,6 +454,29 @@ instance.save()
 As you can see the plugin converts to Json automatically the attributes and the lists in the map type.
 
 
+#### Criterias
+
+The plugin provides some criterias to query json fields. You can check the official [Postgresql Json functions and operators](http://www.postgresql.org/docs/9.3/static/functions-json.html) in case you need additional ones.
+
+##### Has field value
+
+With this criteria you can check if a json field contains some value in some key. To use it just use the criteria `PgJsonHasFieldValue`:
+
+
+```groovy
+def obj1 = new TestMapJson(data: [name: 'Iván', lastName: 'López']).save(flush: true)
+def obj2 = new TestMapJson(data: [name: 'Alonso', lastName: 'Torres']).save(flush: true)
+def obj3 = new TestMapJson(data: [name: 'Iván', lastName: 'Pérez']).save(flush: true)
+
+def result = TestMapJson.withCriteria {
+    PgJsonHasFieldValue 'data', 'name', 'Iván'
+}
+```
+
+The previous criteria will return all the rows that have a `name` attribute in the json field `data` with the value `Iván`. In this example `obj1` and `obj3`.
+
+
+
 Authors
 -------
 
@@ -467,6 +491,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 4.2.0 - 28/Jul/2014 - Hiberate 4.x. PgJsonHasFieldValue criteria.
 * 4.1.0 - 24/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
 * 4.0.0 - 18/Jul/2014 - Version compatible with Hibernate 4.x.
 * 3.0.0 - 18/Jul/2014 - Version compatible with Hibernate 3.x.
