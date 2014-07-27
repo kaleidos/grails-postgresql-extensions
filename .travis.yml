@@ -8,6 +8,7 @@ addons:
 
 before_script:
   - psql -d template1 -c 'create extension hstore;' -U postgres
+  - psql -d template1 -c 'create extension citext;' -U postgres
   - psql -c 'create database pg_extensions_test;' -U postgres
   - psql -c "create user pg_extensions with password 'pg_extensions';" -U postgres
   - psql -c "grant all privileges on database pg_extensions_test to pg_extensions;" -U postgres
