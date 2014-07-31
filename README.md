@@ -41,15 +41,32 @@ Installation
 ------------
 
 For Hibernate 3.x you have to use a 3.x version and for Hibernate 4.x you must use a 4.x version of the plugin.
-At the moment, both versions contains the same features and functionallity.
+At the moment, both versions contain the same features and functionallity.
 
-In `BuildConfig` and:
+In `BuildConfig.groovy` add the following to install the plugin:
 
 ```groovy
-compile (":postgresql-extensions:<version>") {
-    excludes "hibernate"
+plugins {
+    compile (":postgresql-extensions:<version>") {
+        excludes "hibernate"
+    }
 }
 ```
+
+Please note that you also have to install the Grails Hibernate plugin: [Hibernate 3](http://grails.org/plugin/hibernate) or [Hibernate 4](http://grails.org/plugin/hibernate4) and the Postgresql jdbc driver. You can see all available Postgresql jdbc libraries versions at [MVN Repository](http://mvnrepository.com/artifact/org.postgresql/postgresql).
+
+```groovy
+dependencies {
+    // Hibernate 4
+    compile ":hibernate4:4.3.5.5"
+
+    // Hibernate 3
+    compile ":hibernate:3.6.10.17"
+
+    runtime 'org.postgresql:postgresql:9.2-1004-jdbc4'
+}
+```
+
 
 Configuration
 -------------
