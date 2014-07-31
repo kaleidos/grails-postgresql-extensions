@@ -14,7 +14,7 @@ grails-postgresql-extensions-*.zip
 *.iml
 *.swp
 *.ids
-*.ipw
+*.ipr
 *.iws
 out/
 projectFilesBackup/
