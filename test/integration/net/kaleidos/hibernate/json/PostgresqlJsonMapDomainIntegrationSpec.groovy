@@ -1,10 +1,10 @@
 package net.kaleidos.hibernate.json
 
-import spock.lang.Specification
+import grails.plugin.spock.IntegrationSpec
 import spock.lang.Unroll
 import test.json.TestMapJson
 
-class PostgresqlJsonMapDomainIntegrationSpec extends Specification {
+class PostgresqlJsonMapDomainIntegrationSpec extends IntegrationSpec {
 
     @Unroll
     void 'save a domain class with a map #map to json'() {
