@@ -508,7 +508,9 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 3.2.0 - 02/Aug/2014 - Hiberate 3.x. PgJsonHasFieldValue criteria.
 * 4.2.0 - 28/Jul/2014 - Hiberate 4.x. PgJsonHasFieldValue criteria.
+* 3.1.0 - 25/Jul/2014 - Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
 * 4.1.0 - 24/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
 * 4.0.0 - 18/Jul/2014 - Version compatible with Hibernate 4.x.
 * 3.0.0 - 18/Jul/2014 - Version compatible with Hibernate 3.x.
