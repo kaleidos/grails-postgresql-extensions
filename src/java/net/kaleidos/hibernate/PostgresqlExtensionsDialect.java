@@ -1,5 +1,6 @@
 package net.kaleidos.hibernate;
 
+import grails.util.Holders;
 import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.usertype.HstoreType;
 import net.kaleidos.hibernate.usertype.JsonMapType;
@@ -53,14 +54,19 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
          */
         @Override
         public void configure(final Type type, final Properties params, final Dialect dialect) {
-            if (params.getProperty(SEQUENCE) == null || params.getProperty(SEQUENCE).length() == 0) {
-                String tableName = params.getProperty(PersistentIdentifierGenerator.TABLE);
-                String schemaName = params.getProperty("schemaName");
-                if (schemaName != null) {
-                    params.setProperty(PersistentIdentifierGenerator.SCHEMA, schemaName);
-                }
-                if (tableName != null) {
-                    params.setProperty(SEQUENCE, "seq_" + tableName);
+
+            Boolean sequencePerTable = (Boolean) Holders.getFlatConfig().get("dataSource.postgresql.extensions.sequence_per_table");
+
+            if ((sequencePerTable == null) || sequencePerTable) {
+                if (params.getProperty(SEQUENCE) == null || params.getProperty(SEQUENCE).length() == 0) {
+                    String tableName = params.getProperty(PersistentIdentifierGenerator.TABLE);
+                    String schemaName = params.getProperty("schemaName");
+                    if (schemaName != null) {
+                        params.setProperty(PersistentIdentifierGenerator.SCHEMA, schemaName);
+                    }
+                    if (tableName != null) {
+                        params.setProperty(SEQUENCE, "seq_" + tableName);
+                    }
                 }
             }
             super.configure(type, params, dialect);
