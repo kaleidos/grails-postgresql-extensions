@@ -94,6 +94,18 @@ development {
 
 If you just only add the dialect, hibernate will create a new sequence for every table to generate the sequential ids instead of a global sequence for all your tables.
 
+You can also deactive this behaviour and create only one sequence for all the tables with the following property in your datasource definition:
+
+```groovy
+development {
+    dataSource {
+       ...
+       postgresql.extensions.sequence_per_table = false
+       ...
+    }
+}
+```
+
 
 ## Native Types
 
@@ -514,6 +526,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix #49. Configure sequence per table or a global sequence for all tables.
 * 3.2.0 - 02/Aug/2014 - Hiberate 3.x. PgJsonHasFieldValue criteria.
 * 4.2.0 - 28/Jul/2014 - Hiberate 4.x. PgJsonHasFieldValue criteria.
 * 3.1.0 - 25/Jul/2014 - Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
