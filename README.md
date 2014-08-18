@@ -526,7 +526,8 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
-* 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix #49. Configure sequence per table or a global sequence for all tables.
+* 3.3.0 - 18/Aug/2014 - Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
+* 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 3.2.0 - 02/Aug/2014 - Hiberate 3.x. PgJsonHasFieldValue criteria.
 * 4.2.0 - 28/Jul/2014 - Hiberate 4.x. PgJsonHasFieldValue criteria.
 * 3.1.0 - 25/Jul/2014 - Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
