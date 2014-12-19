@@ -495,7 +495,7 @@ The plugin provides some criterias to query json fields. You can check the offic
 
 ##### Has field value
 
-With this criteria you can check if a json field contains some value in some key. To use it just use the criteria `PgJsonHasFieldValue`:
+With this criteria you can check if a json field contains some value in some key. To use it just use the criteria `pgJsonHasFieldValue`:
 
 
 ```groovy
@@ -504,7 +504,7 @@ def obj2 = new TestMapJson(data: [name: 'Alonso', lastName: 'Torres']).save(flus
 def obj3 = new TestMapJson(data: [name: 'Iván', lastName: 'Pérez']).save(flush: true)
 
 def result = TestMapJson.withCriteria {
-    PgJsonHasFieldValue 'data', 'name', 'Iván'
+    pgJsonHasFieldValue 'data', 'name', 'Iván'
 }
 ```
 
@@ -528,8 +528,8 @@ Release Notes
 
 * 3.3.0 - 18/Aug/2014 - Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
-* 3.2.0 - 02/Aug/2014 - Hiberate 3.x. PgJsonHasFieldValue criteria.
-* 4.2.0 - 28/Jul/2014 - Hiberate 4.x. PgJsonHasFieldValue criteria.
+* 3.2.0 - 02/Aug/2014 - Hiberate 3.x. pgJsonHasFieldValue criteria.
+* 4.2.0 - 28/Jul/2014 - Hiberate 4.x. pgJsonHasFieldValue criteria.
 * 3.1.0 - 25/Jul/2014 - Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
 * 4.1.0 - 24/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
 * 4.0.0 - 18/Jul/2014 - Version compatible with Hibernate 4.x.
