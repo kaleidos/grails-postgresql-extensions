@@ -24,7 +24,6 @@ public class PgJsonExpression implements Criterion {
         this.op = op;
     }
 
-    @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
                 " and ",
@@ -32,7 +31,6 @@ public class PgJsonExpression implements Criterion {
         );
     }
 
-    @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return new TypedValue[]{
             new TypedValue(new StringType(), value)

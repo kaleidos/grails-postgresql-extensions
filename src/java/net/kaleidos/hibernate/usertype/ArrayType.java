@@ -7,11 +7,12 @@ import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class ArrayType implements UserType, ParameterizedType {
@@ -22,91 +23,75 @@ public class ArrayType implements UserType, ParameterizedType {
     public static final int FLOAT_ARRAY = 90005;
     public static final int DOUBLE_ARRAY = 90006;
 
+    private static final Map<Class, Integer> CLASS_TO_SQL_CODE = new HashMap<Class, Integer>();
+    static {
+        CLASS_TO_SQL_CODE.put(Integer.class, INTEGER_ARRAY);
+        CLASS_TO_SQL_CODE.put(Long.class, LONG_ARRAY);
+        CLASS_TO_SQL_CODE.put(String.class, STRING_ARRAY);
+        CLASS_TO_SQL_CODE.put(Float.class, FLOAT_ARRAY);
+        CLASS_TO_SQL_CODE.put(Double.class, DOUBLE_ARRAY);
+    }
+
     private Class<?> typeClass;
     private BidiEnumMap bidiMap;
 
-    @Override
     public Object assemble(Serializable cached, Object owner) throws HibernateException {
         return cached;
     }
 
-    @Override
     public Serializable disassemble(Object value) throws HibernateException {
         return (Serializable) value;
     }
 
-    @Override
     public boolean equals(Object x, Object y) throws HibernateException {
         return x == null ? y == null : x.equals(y);
     }
 
-    @Override
     public int hashCode(Object value) throws HibernateException {
         return value == null ? 0 : value.hashCode();
     }
 
-    @Override
     public boolean isMutable() {
         return true;
     }
 
-    @Override
     public Object deepCopy(Object value) throws HibernateException {
         return value;
     }
 
-    @Override
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
     }
 
-    @Override
     public void setParameterValues(Properties parameters) {
-        this.typeClass = (Class<?>) parameters.get("type");
+        typeClass = (Class<?>) parameters.get("type");
         if (typeClass == null) {
             throw new RuntimeException("The user type needs to be configured with the type. None provided");
         }
     }
 
-    @Override
     public Class<?> returnedClass() {
-        return java.lang.reflect.Array.newInstance(this.typeClass, 0).getClass();
+        return java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
     }
 
-    @Override
     public int[] sqlTypes() {
-        if (Integer.class.equals(this.typeClass)) {
-            return new int[]{INTEGER_ARRAY};
+
+        Integer type = CLASS_TO_SQL_CODE.get(typeClass);
+        if (type != null) {
+            return new int[] { type };
         }
 
-        if (Long.class.equals(this.typeClass)) {
-            return new int[]{LONG_ARRAY};
-        }
-
-        if (String.class.equals(this.typeClass)) {
-            return new int[]{STRING_ARRAY};
-        }
-
-        if (Float.class.equals(this.typeClass)) {
-            return new int[]{FLOAT_ARRAY};
-        }
-
-        if (Double.class.equals(this.typeClass)) {
-            return new int[]{DOUBLE_ARRAY};
-        }
-
-        if (this.typeClass.isEnum()) {
+        if (typeClass.isEnum()) {
             return new int[]{ENUM_INTEGER_ARRAY};
         }
 
-        throw new RuntimeException("The type " + this.typeClass + " is not a valid type");
+        throw new RuntimeException("The type " + typeClass + " is not a valid type");
     }
 
-    @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         Object[] result = null;
         Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
-        Array array = rs.getArray(names[0]);
+        java.sql.Array array = rs.getArray(names[0]);
         if (!rs.wasNull()) {
             if (typeClass.isEnum()) {
                 int length = java.lang.reflect.Array.getLength(array);
@@ -121,7 +106,6 @@ public class ArrayType implements UserType, ParameterizedType {
         return result;
     }
 
-    @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.ARRAY);
@@ -145,22 +129,22 @@ public class ArrayType implements UserType, ParameterizedType {
             valueToSet = converted;
         }
 
-        Array array = st.getConnection().createArrayOf(PgArrayUtils.getNativeSqlType(typeClass), (Object[]) typeArrayClass.cast(valueToSet));
+        java.sql.Array array = st.getConnection().createArrayOf(PgArrayUtils.getNativeSqlType(typeClass), (Object[]) typeArrayClass.cast(valueToSet));
         st.setArray(index, array);
     }
 
     public Class<?> getTypeClass() {
-        return this.typeClass;
+        return typeClass;
     }
 
-    private Object idToEnum(Object id) throws HibernateException, SQLException {
+    private Object idToEnum(Object id) throws HibernateException {
         try {
             if (bidiMap == null) {
-                bidiMap = new BidiEnumMap(this.typeClass);
+                bidiMap = new BidiEnumMap(typeClass);
             }
             return bidiMap.getEnumValue(id);
         } catch (Exception e) {
-            throw new HibernateException("Unable to create bidirectional enum map for " + typeClass + " with nested exception: " + e.toString());
+            throw new HibernateException("Unable to create bidirectional enum map for " + typeClass, e);
         }
     }
 }

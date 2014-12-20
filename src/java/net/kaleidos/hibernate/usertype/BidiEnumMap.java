@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class BidiEnumMap implements Serializable {
     private static final long serialVersionUID = 3325751131102095834L;
 
@@ -22,7 +23,7 @@ public class BidiEnumMap implements Serializable {
 
     public BidiEnumMap(Class<?> enumClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(String.format("Building Bidirectional Enum Map..."));
+            LOG.debug("Building Bidirectional Enum Map...");
         }
 
         EnumMap enumToKey = new EnumMap(enumClass);

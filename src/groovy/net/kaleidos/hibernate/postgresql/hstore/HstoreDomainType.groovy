@@ -3,8 +3,8 @@ package net.kaleidos.hibernate.postgresql.hstore
 class HstoreDomainType {
     Map dataStore
 
-    public HstoreDomainType(Map data) {
-        this.dataStore = data
+    HstoreDomainType(Map data) {
+        dataStore = data
     }
 
     def methodMissing(String name, args) {
@@ -20,7 +20,7 @@ class HstoreDomainType {
         this.@dataStore[name] = value
     }
 
-    public String toString() {
-        this.dataStore.toString()
+    String toString() {
+        dataStore.toString()
     }
 }

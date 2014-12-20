@@ -9,7 +9,5 @@ class User {
         table "pg_extensions_user"
     }
 
-    public String toString() {
-        return name
-    }
+    String toString() { name }
 }

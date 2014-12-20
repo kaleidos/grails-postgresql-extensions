@@ -1,14 +1,26 @@
 package net.kaleidos.hibernate.utils;
 
+import java.lang.reflect.Array;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.hibernate.HibernateException;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
 /**
- * Protected class with utils for the different criteria queries
+ * Utils for the different criteria queries.
  */
 public class PgArrayUtils {
+
+    private static final Map<Class<?>, String> CLASS_TO_TYPE_NAME = new HashMap<Class<?>, String>();
+    static {
+        CLASS_TO_TYPE_NAME.put(Integer.class, "int");
+        CLASS_TO_TYPE_NAME.put(Long.class, "int8");
+        CLASS_TO_TYPE_NAME.put(String.class, "varchar");
+        CLASS_TO_TYPE_NAME.put(Float.class, "float");
+        CLASS_TO_TYPE_NAME.put(Double.class, "float8");
+    }
+
     /**
      * Returns a new array wrapping the parameter value. The type of the array
      * will be the type passed as parameter
@@ -26,12 +38,12 @@ public class PgArrayUtils {
             List<Object> valueAsList = (List<Object>) targetValue;
             arrValue = (Object[]) Array.newInstance(expectedType, valueAsList.size());
 
-            // We will iterate the collection and if the value it's not a valid value we throw the exception
-            for (int i = 0; i < valueAsList.size(); i++) {
-                if (expectedType.isInstance(valueAsList.get(i))) {
-                    arrValue[i] = expectedType.cast(valueAsList.get(i));
+            for (int i = 0, count = valueAsList.size(); i < count; i++) {
+                Object object = valueAsList.get(i);
+                if (expectedType.isInstance(object)) {
+                    arrValue[i] = expectedType.cast(object);
                 } else if (mapFunction != null) {
-                    arrValue[i] = expectedType.cast(mapFunction.map(valueAsList.get(i)));
+                    arrValue[i] = expectedType.cast(mapFunction.map(object));
                 } else {
                     throw new HibernateException("criteria doesn't support values of type: " +
                             targetValue.getClass().getName() + ". Try: " + expectedType + " or List<" + expectedType + "> instead");
@@ -62,38 +74,28 @@ public class PgArrayUtils {
     }
 
     /**
-     * Simple class for passing a closure that takes an Object and transforms it into a new value.
+     * Takes an Object and transforms it into a new value.
      */
-    public static abstract class MapFunction {
+    public interface MapFunction {
         /**
          * Transforms an object into some new value.
          *
-         * @param o the object we want to transform
-         * @return some transformed version of the object
+         * @param o the object
+         * @return some new value
          */
-        public abstract Object map(Object o);
+        Object map(Object o);
     }
 
-    public static String getNativeSqlType(Class clazz) {
-        if (Integer.class.equals(clazz) || clazz.isEnum()) {
+    public static String getNativeSqlType(Class<?> clazz) {
+        String typeName = CLASS_TO_TYPE_NAME.get(clazz);
+        if (typeName != null) {
+            return typeName;
+        }
+
+        if (clazz.isEnum()) {
             return "int";
         }
 
-        if (Long.class.equals(clazz)) {
-            return "int8";
-        }
-
-        if (String.class.equals(clazz)) {
-            return "varchar";
-        }
-
-        if (Float.class.equals(clazz)) {
-            return "float";
-        }
-
-        if (Double.class.equals(clazz)) {
-            return "float8";
-        }
         throw new RuntimeException("Type class not valid: " + clazz);
     }
 }
