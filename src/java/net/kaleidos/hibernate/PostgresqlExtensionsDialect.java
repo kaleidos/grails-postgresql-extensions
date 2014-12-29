@@ -29,6 +29,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
         registerColumnType(ArrayType.FLOAT_ARRAY, "float[]");
         registerColumnType(HstoreType.SQLTYPE, "hstore");
         registerColumnType(JsonMapType.SQLTYPE, "json");
+        registerColumnType(ArrayType.CASE_INSENSITIVE_STRING_ARRAY, "citext[]");
     }
 
     /**

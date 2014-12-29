@@ -101,4 +101,20 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
         where:
             days << [null, [], [TestEnum.Day.MONDAY], [TestEnum.Day.SUNDAY, TestEnum.Day.SATURDAY], [TestEnum.Day.WEDNESDAY, TestEnum.Day.THURSDAY, TestEnum.Day.TUESDAY]]
     }
+
+    @Unroll
+    void 'save a domain class with an citext array value #citext'() {
+        setup:
+            def testCitext = new TestCitext(citextArray: citext)
+
+        when:
+            testCitext.save(flush: true)
+
+        then:
+            testCitext.hasErrors() == false
+            testCitext.citextArray?.length == citext?.size()
+
+        where:
+            citext << [null, [], ["string 1"], ["string 1", "string 2"], ["string 1", "string 2", "string 3"]]
+    }
 }

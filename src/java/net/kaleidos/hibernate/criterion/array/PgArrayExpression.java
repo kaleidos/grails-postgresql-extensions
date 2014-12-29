@@ -32,7 +32,7 @@ public class PgArrayExpression implements Criterion {
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
 
-        String postgresArrayType = PgArrayUtils.getNativeSqlType(arrayType.getTypeClass()) + "[]";
+        String postgresArrayType = PgArrayUtils.getNativeSqlTypeRead(arrayType.getTypeClass(), arrayType.isStringCaseInsensitive());
 
         return StringHelper.join(
                 " and ",
