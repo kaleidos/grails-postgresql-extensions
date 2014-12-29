@@ -4,6 +4,7 @@ import grails.util.Holders;
 import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.usertype.HstoreType;
 import net.kaleidos.hibernate.usertype.JsonMapType;
+import net.kaleidos.hibernate.usertype.RangeType;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQL81Dialect;
 import org.hibernate.id.PersistentIdentifierGenerator;
@@ -29,6 +30,11 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
         registerColumnType(ArrayType.FLOAT_ARRAY, "float[]");
         registerColumnType(HstoreType.SQLTYPE, "hstore");
         registerColumnType(JsonMapType.SQLTYPE, "json");
+        registerColumnType(RangeType.INTEGER_RANGE, "int4range");
+        registerColumnType(RangeType.LONG_RANGE, "int8range");
+        registerColumnType(RangeType.TIMESTAMP_RANGE, "tsrange");
+        //registerColumnType(RangeType.TIMESTAMP_TZ_RANGE, "tstzrange");
+        registerColumnType(RangeType.DATE_RANGE, "daterange");
     }
 
     /**

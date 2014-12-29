@@ -13,7 +13,7 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "" // one of '', 'create', 'create-drop','update'
+            dbCreate = "create-drop" // one of '', 'create', 'create-drop','update'
             driverClassName = "org.postgresql.Driver"
             dialect = "net.kaleidos.hibernate.PostgresqlExtensionsDialect"
             url = "jdbc:postgresql://localhost:5432/pg_extensions"
