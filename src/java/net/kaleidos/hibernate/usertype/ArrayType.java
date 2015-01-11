@@ -24,6 +24,7 @@ public class ArrayType implements UserType, ParameterizedType {
     public static final int DOUBLE_ARRAY = 90006;
 
     private static final Map<Class, Integer> CLASS_TO_SQL_CODE = new HashMap<Class, Integer>();
+
     static {
         CLASS_TO_SQL_CODE.put(Integer.class, INTEGER_ARRAY);
         CLASS_TO_SQL_CODE.put(Long.class, LONG_ARRAY);
@@ -35,34 +36,42 @@ public class ArrayType implements UserType, ParameterizedType {
     private Class<?> typeClass;
     private BidiEnumMap bidiMap;
 
+    @Override
     public Object assemble(Serializable cached, Object owner) throws HibernateException {
         return cached;
     }
 
+    @Override
     public Serializable disassemble(Object value) throws HibernateException {
         return (Serializable) value;
     }
 
+    @Override
     public boolean equals(Object x, Object y) throws HibernateException {
         return x == null ? y == null : x.equals(y);
     }
 
+    @Override
     public int hashCode(Object value) throws HibernateException {
         return value == null ? 0 : value.hashCode();
     }
 
+    @Override
     public boolean isMutable() {
         return true;
     }
 
+    @Override
     public Object deepCopy(Object value) throws HibernateException {
         return value;
     }
 
+    @Override
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
     }
 
+    @Override
     public void setParameterValues(Properties parameters) {
         typeClass = (Class<?>) parameters.get("type");
         if (typeClass == null) {
@@ -70,10 +79,12 @@ public class ArrayType implements UserType, ParameterizedType {
         }
     }
 
+    @Override
     public Class<?> returnedClass() {
         return java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
     }
 
+    @Override
     public int[] sqlTypes() {
 
         Integer type = CLASS_TO_SQL_CODE.get(typeClass);
@@ -88,6 +99,7 @@ public class ArrayType implements UserType, ParameterizedType {
         throw new RuntimeException("The type " + typeClass + " is not a valid type");
     }
 
+    @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         Object[] result = null;
         Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
@@ -106,6 +118,7 @@ public class ArrayType implements UserType, ParameterizedType {
         return result;
     }
 
+    @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.ARRAY);

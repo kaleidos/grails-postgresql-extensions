@@ -19,6 +19,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
      * Register postgresql types
      */
     public PostgresqlExtensionsDialect() {
+        super();
         registerColumnType(Types.ARRAY, "array");
         registerColumnType(ArrayType.LONG_ARRAY, "int8[]");
         registerColumnType(ArrayType.INTEGER_ARRAY, "int[]");

@@ -28,6 +28,7 @@ public class PgArrayExpression implements Criterion {
         this.op = op;
     }
 
+    @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
 
@@ -39,6 +40,7 @@ public class PgArrayExpression implements Criterion {
         );
     }
 
+    @Override
     public TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         ArrayType arrayType = checkAndGetArrayType(criteria, criteriaQuery);
 

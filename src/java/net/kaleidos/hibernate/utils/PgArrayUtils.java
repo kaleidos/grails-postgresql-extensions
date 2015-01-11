@@ -1,11 +1,11 @@
 package net.kaleidos.hibernate.utils;
 
+import org.hibernate.HibernateException;
+
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.hibernate.HibernateException;
 
 /**
  * Utils for the different criteria queries.
@@ -13,6 +13,7 @@ import org.hibernate.HibernateException;
 public class PgArrayUtils {
 
     private static final Map<Class<?>, String> CLASS_TO_TYPE_NAME = new HashMap<Class<?>, String>();
+
     static {
         CLASS_TO_TYPE_NAME.put(Integer.class, "int");
         CLASS_TO_TYPE_NAME.put(Long.class, "int8");

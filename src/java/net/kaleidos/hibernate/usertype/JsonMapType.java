@@ -24,27 +24,33 @@ public class JsonMapType implements UserType {
 
     private final Gson gson = new GsonBuilder().create();
 
+    @Override
     public int[] sqlTypes() {
         return new int[]{SQLTYPE};
     }
 
+    @Override
     public Class<?> returnedClass() {
         return userType.getClass();
     }
 
+    @Override
     public boolean equals(Object x, Object y) throws HibernateException {
         return ObjectUtils.equals(x, y);
     }
 
+    @Override
     public int hashCode(Object x) throws HibernateException {
         return x == null ? 0 : x.hashCode();
     }
 
+    @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         String jsonString = rs.getString(names[0]);
         return gson.fromJson(jsonString, userType);
     }
 
+    @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.OTHER);
@@ -54,6 +60,7 @@ public class JsonMapType implements UserType {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
     public Object deepCopy(Object value) throws HibernateException {
         if (value == null) {
          return null;
@@ -63,18 +70,22 @@ public class JsonMapType implements UserType {
         return new HashMap(m);
     }
 
+    @Override
     public boolean isMutable() {
         return true;
     }
 
+    @Override
     public Serializable disassemble(Object value) throws HibernateException {
         return gson.toJson(value, userType);
     }
 
+    @Override
     public Object assemble(Serializable cached, Object owner) throws HibernateException {
         return gson.fromJson((String) cached, userType);
     }
 
+    @Override
     public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return original;
     }

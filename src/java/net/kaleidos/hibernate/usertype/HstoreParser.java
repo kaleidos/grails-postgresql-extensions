@@ -1,14 +1,13 @@
 package net.kaleidos.hibernate.usertype;
 
 import org.postgresql.util.PGobject;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
-
-import org.springframework.util.Assert;
 
 /**
  * This class is an extended version of HStore.java from https://code.google.com/p/pg-spring-type-mapper/
@@ -54,14 +53,17 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             this.value = value;
         }
 
+        @Override
         public String getKey() {
             return key;
         }
 
+        @Override
         public String getValue() {
             return value;
         }
 
+        @Override
         public String setValue(String value) {
             final String oldValue = this.value;
             this.value = value;
@@ -91,6 +93,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             advance();
         }
 
+        @Override
         public boolean hasNext() {
             return nextEntry != null;
         }
@@ -267,6 +270,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             return value.substring(firstWordPosition, position + 1 );
         }
 
+        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
