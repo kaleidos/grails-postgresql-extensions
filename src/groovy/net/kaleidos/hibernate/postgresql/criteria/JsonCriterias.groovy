@@ -5,7 +5,7 @@ import net.kaleidos.hibernate.criterion.json.PgJsonExpression
 
 class JsonCriterias {
 
-    public JsonCriterias() {
+    JsonCriterias() {
         addHasFieldValueOperator()
     }
 
@@ -17,7 +17,7 @@ class JsonCriterias {
          * @param propertyValue The property value
          * @return A Criterion instance
          */
-        HibernateCriteriaBuilder.metaClass.pgJsonHasFieldValue = { String propertyName, String jsonAttribute, Object propertyValue ->
+        HibernateCriteriaBuilder.metaClass.pgJsonHasFieldValue = { String propertyName, String jsonAttribute, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgJsonHasFieldValue] with propertyName [" +
                     propertyName + "], jsonAttribute [" + jsonAttribute + "] and value [" + propertyValue + "] not allowed here."))

@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Helper class to convert Maps to String according to hstore syntax
- * and vice versa
+ * Converts Maps to String and vice versa according to hstore syntax.
  */
 public class HstoreHelper {
 
@@ -59,28 +58,27 @@ public class HstoreHelper {
     public static List<String> asListKeyValue(Map<String, String> m) {
         List<String> result = new LinkedList<String>();
         if (m != null && !m.isEmpty()) {
-            for (String key : m.keySet()) {
-                result.add(key);
-                result.add(String.valueOf(m.get(key)));
+            for (Map.Entry<String, String> entry : m.entrySet()) {
+                result.add(entry.getKey());
+                result.add(entry.getValue());
             }
         }
         return result;
     }
 
+    @SuppressWarnings("rawtypes")
     public static HstoreDomainType toHstoreDomainType(String s) {
         Map m = HstoreHelper.toMap(s);
 
         return new HstoreDomainType(m);
     }
 
+    @SuppressWarnings("rawtypes")
     public static Map toMap(String s) {
-        Map<String, String> m = new HashMap<String, String>();
         if (s == null || s.equals("")) {
-            return m;
+            return new HashMap<String, String>();
         }
         HstoreParser parser = new HstoreParser(s);
-        m = parser.asMap();
-
-        return m;
+        return parser.asMap();
     }
 }

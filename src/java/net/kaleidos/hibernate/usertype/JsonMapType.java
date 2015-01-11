@@ -30,7 +30,7 @@ public class JsonMapType implements UserType {
     }
 
     @Override
-    public Class returnedClass() {
+    public Class<?> returnedClass() {
         return userType.getClass();
     }
 
@@ -59,18 +59,15 @@ public class JsonMapType implements UserType {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public Object deepCopy(Object value) throws HibernateException {
-        if (value != null) {
-            Map m = (Map) value;
-
-            if (m == null) {
-                m = new HashMap();
-            }
-            return new HashMap(m);
-        } else {
-            return null;
+        if (value == null) {
+         return null;
         }
+
+        Map m = (Map) value;
+        return new HashMap(m);
     }
 
     @Override

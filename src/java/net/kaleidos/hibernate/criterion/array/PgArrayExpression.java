@@ -50,6 +50,7 @@ public class PgArrayExpression implements Criterion {
                     value,
                     Integer.class,
                     new PgArrayUtils.MapFunction() {
+                        @Override
                         @SuppressWarnings("rawtypes")
                         public Object map(Object o) {
                             try {

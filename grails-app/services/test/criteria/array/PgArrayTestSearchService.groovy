@@ -4,7 +4,7 @@ class PgArrayTestSearchService {
 
     static transactional = false
 
-    List<Like> search(String field, String criteriaName, Object value) {
+    List<Like> search(String field, String criteriaName, value) {
         Like.withCriteria {
             "${criteriaName}" field, value
         }
@@ -16,7 +16,7 @@ class PgArrayTestSearchService {
         }
     }
 
-    List<User> searchWithJoin(String field, String criteriaName, Object value) {
+    List<User> searchWithJoin(String field, String criteriaName, value) {
         User.withCriteria {
             like {
                 "${criteriaName}" field, value

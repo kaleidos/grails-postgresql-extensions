@@ -48,9 +48,7 @@ In `BuildConfig.groovy` add the following to install the plugin:
 ```groovy
 plugins {
     ...
-    compile (":postgresql-extensions:<version>") {
-        excludes "hibernate"
-    }
+    compile ":postgresql-extensions:<version>"
     ...
 }
 ```
@@ -61,7 +59,7 @@ Please note that you also have to install the Grails Hibernate plugin: [Hibernat
 plugins {
     // Hibernate 4
     compile ":hibernate4:4.3.5.5"
-    
+
     // Hibernate 3
     compile ":hibernate:3.6.10.17"
 }
