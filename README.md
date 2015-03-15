@@ -33,6 +33,7 @@ Currently the plugin supports array, hstore and json fields as well as some quer
   * [JSON](#json)
     * [Criterias](#criterias)
         * [Has field value](#has-field-value)
+  * [JSONB](#jsonb)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -510,6 +511,30 @@ The previous criteria will return all the rows that have a `name` attribute in t
 
 
 
+#### JSONB
+
+Since version postgresql-extensions 4.4.0 it is possible to using [Postgresql Jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html)
+instead of just json. You need to use at least Postgresql 9.4.
+
+To define a jsonb field you only have to define a `Map` field and use the `JsonbMapType` hibernate user type.
+
+```groovy
+import net.kaleidos.hibernate.usertype.JsonbMapType
+
+class TestMapJsonb {
+    Map data
+
+    static constraints = {
+    }
+    static mapping = {
+        data type: JsonbMapType
+    }
+}
+```
+
+The same criterias implemented for Json are valid for Jsonb.
+
+
 Authors
 -------
 
@@ -524,6 +549,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 4.4.0 - 15/Mar/2015 - Hibernate 4.x. Add support for Jsonb.
 * 3.3.0 - 18/Aug/2014 - Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 3.2.0 - 02/Aug/2014 - Hiberate 3.x. pgJsonHasFieldValue criteria.
