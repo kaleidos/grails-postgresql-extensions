@@ -29,7 +29,7 @@ public class BidiEnumMap implements Serializable {
         EnumMap enumToKey = new EnumMap(enumClass);
         HashMap keytoEnum = new HashMap();
 
-        Method idAccessor = enumClass.getMethod(ENUM_ID_ACCESSOR);
+        Method idAccessor = getIdAccessor(enumClass);
 
         Method valuesAccessor = enumClass.getMethod("values");
         Object[] values = (Object[]) valuesAccessor.invoke(enumClass);
@@ -47,11 +47,18 @@ public class BidiEnumMap implements Serializable {
         this.keytoEnum = Collections.unmodifiableMap(keytoEnum);
     }
 
-    public Object getEnumValue(Object id) {
+    private Method getIdAccessor(Class<?> enumClass) throws NoSuchMethodException {
+        for (Method method : enumClass.getMethods())
+            if (method.getName().equals(ENUM_ID_ACCESSOR))
+                return method;
+        return enumClass.getMethod("ordinal");
+    }
+
+    public Object getEnumValue(int id) {
         return keytoEnum.get(id);
     }
 
-    public Object getKey(Object enumValue) {
-        return enumToKey.get(enumValue);
+    public int getKey(Object enumValue) {
+        return (Integer)enumToKey.get(enumValue);
     }
 }
