@@ -1,3 +1,5 @@
+package net.kaleidos.hibernate.postgresql
+
 import net.kaleidos.hibernate.postgresql.criteria.ArrayCriterias
 import net.kaleidos.hibernate.postgresql.criteria.HstoreCriterias
 import net.kaleidos.hibernate.postgresql.criteria.JsonCriterias
@@ -5,7 +7,7 @@ import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
 
 class PostgresqlExtensionsGrailsPlugin {
     def version = "4.4.0"
-    def grailsVersion = "2.0 > *"
+    def grailsVersion = "3.0 > *"
     def pluginExcludes = [
         "grails-app/controllers/**",
         "grails-app/domain/**",
