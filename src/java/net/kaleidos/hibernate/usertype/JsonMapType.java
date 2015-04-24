@@ -46,7 +46,7 @@ public class JsonMapType implements UserType {
 
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
-        String jsonString = rs.getString(names[0]);
+        String jsonString = (String) rs.getObject(names[0]);
         return gson.fromJson(jsonString, userType);
     }
 
@@ -59,11 +59,11 @@ public class JsonMapType implements UserType {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public Object deepCopy(Object value) throws HibernateException {
         if (value == null) {
-         return null;
+            return null;
         }
 
         Map m = (Map) value;
