@@ -46,7 +46,7 @@ public class JsonMapType implements UserType {
 
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
-        String jsonString = rs.getString(names[0]);
+        String jsonString = (String)rs.getObject(names[0]);
         return gson.fromJson(jsonString, userType);
     }
 
