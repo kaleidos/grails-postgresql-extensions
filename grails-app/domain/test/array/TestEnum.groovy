@@ -13,8 +13,8 @@ class TestEnum {
         SATURDAY(5),
         SUNDAY(6)
 
-        private final int value
-        Day(int value)  { this.value = value }
+        final int id
+        Day(int id)  { this.id = id }
     }
 
     Day[] days
