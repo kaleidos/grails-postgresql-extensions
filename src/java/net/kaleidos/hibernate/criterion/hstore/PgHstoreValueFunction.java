@@ -14,9 +14,9 @@ import org.hibernate.type.StringType;
 public class PgHstoreValueFunction implements Criterion {
     private static final long serialVersionUID = 2872183637309166619L;
 
-    private final String propertyName;
-    private final Object value;
-    private final String function;
+    protected final String propertyName;
+    protected final Object value;
+    protected final String function;
 
     protected PgHstoreValueFunction(String propertyName, Object value, String function) {
         this.propertyName = propertyName;
@@ -27,10 +27,10 @@ public class PgHstoreValueFunction implements Criterion {
     @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         String[] columns = StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), "");
-        for (int i=0; i<columns.length; i++) {
+        for (int i = 0; i < columns.length; i++) {
             columns[i] = function + "(" + columns[i] + "," + "?)";
         }
-        return StringHelper.join( " and ", columns);
+        return StringHelper.join(" and ", columns);
     }
 
     @Override
