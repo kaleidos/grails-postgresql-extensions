@@ -1,7 +1,7 @@
 package net.kaleidos.hibernate.postgresql.criteria
-
 import grails.orm.HibernateCriteriaBuilder
 import net.kaleidos.hibernate.criterion.array.PgArrayExpression
+import net.kaleidos.hibernate.criterion.array.PgArrayILikeFunction
 import net.kaleidos.hibernate.criterion.array.PgEmptinessExpression
 
 class ArrayCriterias {
@@ -15,6 +15,7 @@ class ArrayCriterias {
         addIsEmptyOrContainsOperator()
         addEqualsOperator()
         addNotEqualsOperator()
+        addILikeOperator()
     }
 
     private void addContainsOperator() {
@@ -177,6 +178,26 @@ class ArrayCriterias {
             propertyValue = calculatePropertyValue(propertyValue)
 
             return addToCriteria(new PgArrayExpression(propertyName, propertyValue, "<>"))
+        }
+    }
+
+    private void addILikeOperator() {
+        /**
+         * Creates a "ilike in native array" Criterion based on the specified property name and value
+         * @param propertyName The property name
+         * @param propertyValue The property value
+         * @return A Criterion instance
+         */
+        HibernateCriteriaBuilder.metaClass.pgArrayILike = { String propertyName, String propertyValue ->
+            if (!validateSimpleExpression()) {
+                throwRuntimeException(new IllegalArgumentException("Call to [pgArrayILike] with propertyName [" +
+                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+            }
+
+            propertyName = calculatePropertyName(propertyName)
+            propertyValue = calculatePropertyValue(propertyValue)
+
+            return addToCriteria(new PgArrayILikeFunction(propertyName, propertyValue))
         }
     }
 }

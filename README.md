@@ -22,6 +22,7 @@ Currently the plugin supports array, hstore and json fields as well as some quer
         * [Is Empty or Contains](#is-empty-or-contains)
         * [Equals](#equals)
         * [Not Equals](#not-equals)
+        * [Ilike](#ilike)
   * [Hstore](#hstore)
     * [Grails 2.2.5 and 2.3.1+](#grails-225-and-231)
     * [Old Grails versions](#old-grails-versions)
@@ -289,6 +290,20 @@ With this criteria you can get all the rows that are not equal to a value. To us
 ```groovy
 def result = Like.withCriteria {
     pgArrayNotEquals 'favoriteNumbers', numbers
+}
+```
+
+#### ILike
+
+With this criteria you can get all the rows that are ilike to a value. To use it just use the new criteria `pgArrayILike`.
+
+It only can be used on arrays of string.
+
+It uses the ilike syntaxis, so you can do for example:
+
+```groovy
+def result = Like.withCriteria {
+    pgArrayILike 'favoriteMovies', "%tarwar%"
 }
 ```
 
