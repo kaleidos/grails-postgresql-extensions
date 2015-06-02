@@ -11,7 +11,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class BidiEnumMap implements Serializable {
     private static final long serialVersionUID = 3325751131102095834L;
 
@@ -48,9 +48,11 @@ public class BidiEnumMap implements Serializable {
     }
 
     private Method getIdAccessor(Class<?> enumClass) throws NoSuchMethodException {
-        for (Method method : enumClass.getMethods())
-            if (method.getName().equals(ENUM_ID_ACCESSOR))
+        for (Method method : enumClass.getMethods()) {
+            if (method.getName().equals(ENUM_ID_ACCESSOR)) {
                 return method;
+            }
+        }
         return enumClass.getMethod("ordinal");
     }
 
@@ -59,6 +61,6 @@ public class BidiEnumMap implements Serializable {
     }
 
     public int getKey(Object enumValue) {
-        return (Integer)enumToKey.get(enumValue);
+        return (Integer) enumToKey.get(enumValue);
     }
 }
