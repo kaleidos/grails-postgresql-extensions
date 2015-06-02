@@ -88,15 +88,15 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
 
     @Unroll
     void 'save a domain class with an enum array value #days'() {
-        setup:
-            def testEnum = new TestEnum(days: days)
-
         when:
-            testEnum.save(flush: true)
+            // Domain saving and retrieving should be in different sessions. Only in that case Hibernate will invoke
+            // nullSafeGet on the corresponding user type and will not use current session's cache.
+            def id = TestEnum.withNewSession {
+                new TestEnum(days: days).save(flush: true, failOnError: true).id
+            }
 
         then:
-            testEnum.hasErrors() == false
-            testEnum.days?.length == days?.size()
+            TestEnum.get(id).days as List == days
 
         where:
             days << [null, [], [TestEnum.Day.MONDAY], [TestEnum.Day.SUNDAY, TestEnum.Day.SATURDAY], [TestEnum.Day.WEDNESDAY, TestEnum.Day.THURSDAY, TestEnum.Day.TUESDAY]]

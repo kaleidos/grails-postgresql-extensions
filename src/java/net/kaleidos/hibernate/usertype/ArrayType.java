@@ -7,6 +7,7 @@ import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
 import java.io.Serializable;
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -89,7 +90,7 @@ public class ArrayType implements UserType, ParameterizedType {
 
         Integer type = CLASS_TO_SQL_CODE.get(typeClass);
         if (type != null) {
-            return new int[] { type };
+            return new int[]{type};
         }
 
         if (typeClass.isEnum()) {
@@ -101,18 +102,19 @@ public class ArrayType implements UserType, ParameterizedType {
 
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
-        Object[] result = null;
+        Object result = null;
         Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
-        java.sql.Array array = rs.getArray(names[0]);
+        Array sqlArray = rs.getArray(names[0]);
         if (!rs.wasNull()) {
+            Object array = sqlArray.getArray();
             if (typeClass.isEnum()) {
-                int length = java.lang.reflect.Array.getLength(array);
-                Object converted = java.lang.reflect.Array.newInstance(typeClass, length);
+                int length = array != null ? java.lang.reflect.Array.getLength(array) : 0;
+                result = java.lang.reflect.Array.newInstance(typeClass, length);
                 for (int i = 0; i < length; i++) {
-                    java.lang.reflect.Array.set(converted, i, idToEnum(java.lang.reflect.Array.get(array, i)));
+                    java.lang.reflect.Array.set(result, i, idToEnum((Integer) java.lang.reflect.Array.get(array, i)));
                 }
             } else {
-                result = (Object[]) typeArrayClass.cast(array.getArray());
+                result = typeArrayClass.cast(array);
             }
         }
         return result;
@@ -136,7 +138,7 @@ public class ArrayType implements UserType, ParameterizedType {
                 if (valueToSet[i] instanceof Integer) {
                     converted[i] = (Integer) valueToSet[i];
                 } else {
-                    converted[i] = ((Enum) valueToSet[i]).ordinal();
+                    converted[i] = enumToId(valueToSet[i]);
                 }
             }
             valueToSet = converted;
@@ -150,14 +152,22 @@ public class ArrayType implements UserType, ParameterizedType {
         return typeClass;
     }
 
-    private Object idToEnum(Object id) throws HibernateException {
+    private void ensureBidiMapInitialized() throws HibernateException {
         try {
-            if (bidiMap == null) {
+            if (bidiMap == null)
                 bidiMap = new BidiEnumMap(typeClass);
-            }
-            return bidiMap.getEnumValue(id);
         } catch (Exception e) {
             throw new HibernateException("Unable to create bidirectional enum map for " + typeClass, e);
         }
+    }
+
+    private Object idToEnum(int id) throws HibernateException {
+        ensureBidiMapInitialized();
+        return bidiMap.getEnumValue(id);
+    }
+
+    private int enumToId(Object enumValue) throws HibernateException {
+        ensureBidiMapInitialized();
+        return bidiMap.getKey(enumValue);
     }
 }

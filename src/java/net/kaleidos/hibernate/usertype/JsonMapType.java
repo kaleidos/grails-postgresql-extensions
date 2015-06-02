@@ -22,7 +22,7 @@ public class JsonMapType implements UserType {
 
     private final Type userType = Map.class;
 
-    private final Gson gson = new GsonBuilder().create();
+    private final Gson gson = new GsonBuilder().serializeNulls().create();
 
     @Override
     public int[] sqlTypes() {

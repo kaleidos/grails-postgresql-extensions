@@ -24,8 +24,8 @@ class Like {
         CARROT(7),
         LEMON(8)
 
-        private final int value
-        Juice(int value)  { this.value = value }
+        private final int id
+        Juice(int id)  { this.id = id }
     }
 
     static mapping = {
