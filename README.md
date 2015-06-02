@@ -33,6 +33,7 @@ Currently the plugin supports array, hstore and json fields as well as some quer
   * [JSON](#json)
     * [Criterias](#criterias)
         * [Has field value](#has-field-value)
+  * [JSONB](#jsonb)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -61,7 +62,7 @@ Please note that you also have to install the Grails Hibernate plugin: [Hibernat
 plugins {
     // Hibernate 4
     compile ":hibernate4:4.3.5.5"
-    
+
     // Hibernate 3
     compile ":hibernate:3.6.10.17"
 }
@@ -511,6 +512,29 @@ def result = TestMapJson.withCriteria {
 The previous criteria will return all the rows that have a `name` attribute in the json field `data` with the value `Iván`. In this example `obj1` and `obj3`.
 
 
+#### JSONB
+
+Since version postgresql-extensions 4.4.0 it is possible to using [Postgresql Jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html)
+instead of just json. You need to use at least Postgresql 9.4.
+
+To define a jsonb field you only have to define a `Map` field and use the `JsonbMapType` hibernate user type.
+
+```groovy
+import net.kaleidos.hibernate.usertype.JsonbMapType
+
+class TestMapJsonb {
+    Map data
+
+    static constraints = {
+    }
+    static mapping = {
+        data type: JsonbMapType
+    }
+}
+```
+
+The same criterias implemented for Json are valid for Jsonb.
+
 
 Authors
 -------
@@ -526,6 +550,11 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 3.5.0 - 02/Jun/2015 - Hibernate 3.x. GR8Conf Hackergarten! Add Jsonb support for Hibernate 3.x [#64](https://github.com/kaleidos/grails-postgresql-extensions/issues/64)
+* 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
+[#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67),
+[#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69)
+* 4.4.0 - 15/Mar/2015 - Hibernate 4.x. Add support for Jsonb.
 * 3.3.0 - 17/Aug/2014 - Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 3.2.0 - 02/Aug/2014 - Hiberate 3.x. PgJsonHasFieldValue criteria.
