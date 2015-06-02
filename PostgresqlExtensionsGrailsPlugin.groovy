@@ -4,7 +4,7 @@ import net.kaleidos.hibernate.postgresql.criteria.JsonCriterias
 import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
 
 class PostgresqlExtensionsGrailsPlugin {
-    def version = "4.4.0"
+    def version = "4.5.0"
     def grailsVersion = "2.0 > *"
     def pluginExcludes = [
         "grails-app/controllers/**",
@@ -21,7 +21,7 @@ class PostgresqlExtensionsGrailsPlugin {
     def author = "Iván López"
     def authorEmail = "lopez.ivan@gmail.com"
     def description = '''\
-Provides Hibernate user types to support for Postgresql Native Types like Array, HStore, JSON,... as well as new criterias to query this native types
+Provides Hibernate user types to support for Postgresql Native Types like Array, HStore, JSON, JSONB,... as well as new criterias to query this native types
 '''
 
     def documentation = "https://github.com/kaleidos/grails-postgresql-extensions/blob/master/README.md"
