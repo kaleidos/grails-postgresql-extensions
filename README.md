@@ -30,6 +30,7 @@ Currently the plugin supports array, hstore and json fields as well as some quer
         * [Contains Key](#contains-key)
         * [Contains](#contains)
         * [Is Contained](#is-contained)
+        * [ILike Value](#ilike-value)
   * [JSON](#json)
     * [Criterias](#criterias)
         * [Has field value](#has-field-value)
@@ -446,6 +447,16 @@ testAttributes = ["1" : "a", "2" : "b"]
 ```
 This criteria can also be used to look for exact matches
 
+##### ILike Value
+
+With this operation you can search for rows that contains an Hstore in which any value matches (ilike) to the parameter. It uses the ilike syntaxis, so you can do for example:
+
+```groovy
+def wantedValue = "%my-value%"
+def result = MyDomain.withCriteria {
+    pgHstoreILikeValue "attributes", wantedKey
+}
+```
 
 ### JSON
 
