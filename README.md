@@ -578,6 +578,7 @@ Release Notes
 * 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
 [#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67),
 [#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69)
+* 3.4.0 - 02/Jun/2015 - Hibernate 3.x. GR8Conf Hackergarten! Add Jsonb support for Hibernate 3.x [#64](https://github.com/kaleidos/grails-postgresql-extensions/issues/64)
 * 4.4.0 - 15/Mar/2015 - Hibernate 4.x. Add support for Jsonb.
 * 3.3.0 - 18/Aug/2014 - Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 * 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
