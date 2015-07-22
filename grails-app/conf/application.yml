@@ -1,0 +1,28 @@
+grails:
+    profile: web-plugin
+    codegen:
+        defaultPackage: grails.postgresql.extensions
+info:
+    app:
+        name: '@info.app.name@'
+        version: '@info.app.version@'
+        grailsVersion: '@info.app.grailsVersion@'
+spring:
+    groovy:
+        template:
+            check-template-location: false
+
+
+---
+dataSource:
+    pooled: true
+    jmxExport: true
+    driverClassName: org.postgresql.Driver
+    dialect: net.kaleidos.hibernate.PostgresqlExtensionsDialect
+    username: pg_extensions
+    password: pg_extensions
+    url: jdbc:postgresql://localhost/pg_extensions_test
+    dbCreate: create
+
+hibernate:
+    dialect: net.kaleidos.hibernate.PostgresqlExtensionsDialect
