@@ -2,7 +2,6 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import grails.util.BuildSettings
 import grails.util.Environment
 
-
 // See http://logback.qos.ch/manual/groovy.html for details on configuration
 appender('STDOUT', ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
@@ -10,7 +9,7 @@ appender('STDOUT', ConsoleAppender) {
     }
 }
 
-root(DEBUG, ['STDOUT'])
+root(ERROR, ['STDOUT'])
 
 if(Environment.current == Environment.DEVELOPMENT) {
     def targetDir = BuildSettings.TARGET_DIR

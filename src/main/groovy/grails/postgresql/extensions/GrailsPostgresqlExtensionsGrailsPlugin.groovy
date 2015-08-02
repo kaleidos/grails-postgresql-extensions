@@ -32,43 +32,20 @@ Provides Hibernate user types to support for Postgresql Native Types like Array,
     // URL to the plugin's documentation
     def documentation = "https://github.com/kaleidos/grails-postgresql-extensions/blob/master/README.md"
 
-    // Extra (optional) plugin metadata
-
     // License: one of 'APACHE', 'GPL2', 'GPL3'
     def license = "APACHE"
 
     // Details of company behind the plugin (if there is one)
-    def organization = [ name: "Kaleidos", url: "http://kaleidos.net" ]
+    def organization = [name: "Kaleidos", url: "http://kaleidos.net"]
 
     // Any additional developers beyond the author specified above.
-    def developers = [ [ name: "Alonso Torres", email: "alonso.javier.torres@gmail.com" ]]
+    def developers = [[name: "Alonso Torres", email: "alonso.javier.torres@gmail.com"]]
 
     // Location of the plugin's issue tracker.
-    def issueManagement = [ system: "GITHUB", url: "https://github.com/kaleidos/grails-postgresql-extensions/issues" ]
+    def issueManagement = [system: "GITHUB", url: "https://github.com/kaleidos/grails-postgresql-extensions/issues"]
 
     // Online location of the plugin's browseable source code.
-    def scm = [ url: "https://github.com/kaleidos/grails-postgresql-extensions" ]
-
-    // TODO: Extract to utils class or service
-    private decorateConstructor(className, metaclass) {
-        def hstoreProperties = []
-        metaclass.properties.each { prop->
-            if (prop.type == HstoreDomainType) {
-                println "[PostgresqlExtensions] Adding property ${className}.${prop.name} as a hstore property"
-                hstoreProperties << prop.name
-            }
-        }
-
-        if (hstoreProperties.size() > 0) {
-            def constructor = metaclass.retrieveConstructor(Map)
-            metaclass.constructor = { Map m ->
-                hstoreProperties.each { name->
-                    m[name] = new HstoreDomainType(m[name])
-                }
-                return constructor.newInstance(m)
-            }
-        }
-    }
+    def scm = [url: "https://github.com/kaleidos/grails-postgresql-extensions"]
 
     void doWithDynamicMethods() {
         new ArrayCriterias()
@@ -79,6 +56,27 @@ Provides Hibernate user types to support for Postgresql Native Types like Array,
     void doWithApplicationContext() {
         for (domainClass in grailsApplication.domainClasses) {
             decorateConstructor(domainClass.clazz.name, domainClass.metaClass)
+        }
+    }
+
+    // TODO: Extract to utils class or service
+    private decorateConstructor(className, metaclass) {
+        def hstoreProperties = []
+        metaclass.properties.each { prop ->
+            if (prop.type == HstoreDomainType) {
+                println "[PostgresqlExtensions] Adding property ${className}.${prop.name} as a hstore property"
+                hstoreProperties << prop.name
+            }
+        }
+
+        if (hstoreProperties.size() > 0) {
+            def constructor = metaclass.retrieveConstructor(Map)
+            metaclass.constructor = { Map m ->
+                hstoreProperties.each { name ->
+                    m[name] = new HstoreDomainType(m[name])
+                }
+                return constructor.newInstance(m)
+            }
         }
     }
 }

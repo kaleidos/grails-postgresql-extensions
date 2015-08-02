@@ -1,4 +1,5 @@
 package net.kaleidos.hibernate.array
+
 import grails.test.mixin.integration.Integration
 import org.hibernate.HibernateException
 import org.springframework.beans.factory.annotation.Autowired

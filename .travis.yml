@@ -6,6 +6,8 @@ jdk:
 addons:
   postgresql: "9.4"
 
+sudo: false
+
 before_script:
   - psql -d template1 -c 'create extension hstore;' -U postgres
   - psql -c 'create database pg_extensions_test;' -U postgres
