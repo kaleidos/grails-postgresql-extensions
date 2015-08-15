@@ -36,6 +36,7 @@ Currently the plugin supports array, hstore and json fields as well as some quer
     * [Criterias](#criterias)
         * [Has field value](#has-field-value)
   * [JSONB](#jsonb)
+  * [Order](#order)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
@@ -561,6 +562,58 @@ class TestMapJsonb {
 The same criterias implemented for Json are valid for Jsonb.
 
 
+#### Order
+
+##### Random order
+
+Sometimes you need to get some results ordered randomly from the database. Postgres provides a native function to do
+that. So you can write something like this:
+
+```sql
+select * from foo order by random();
+```
+
+The plugin now offers a new order method to do this random sorting:
+
+```groovy
+import static net.kaleidos.hibernate.order.OrderByRandom.byRandom
+
+class MyService {
+    List<TestMapJsonb> orderByRandom() {
+        return TestMapJsonb.withCriteria {
+            order byRandom()
+        }
+    }
+}
+```
+
+##### Sql formula
+
+You may need to do a more complex sorting. Imagine that you have a table with a `jsonb` column and you want to order
+by a field in that json. Using sql you can write:
+
+```sql
+select * from foo order by (stats->'intensity') desc
+```
+
+With the plugin you can do the same with a new order method called `sqlFormula`:
+
+```groovy
+import static net.kaleidos.hibernate.order.OrderBySqlFormula.sqlFormula
+
+class MyService {
+    List<TestMapJsonb> orderByJson() {
+        return TestMapJsonb.withCriteria {
+            order sqlFormula("(data->'name') desc")
+        }
+    }
+}
+```
+
+It's important to note that the "raw" sql is appended to the criteria, so you need to be sure that it's valid because
+if not you'll get a sql error during runtime.
+
+
 Authors
 -------
 
@@ -575,6 +628,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 4.6.0 - 08/Sep/2015 - Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
 * 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
 [#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67),
 [#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69)
