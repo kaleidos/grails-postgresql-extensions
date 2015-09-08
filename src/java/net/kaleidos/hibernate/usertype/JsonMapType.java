@@ -6,6 +6,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.usertype.UserType;
+import org.postgresql.util.PGobject;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -46,7 +47,7 @@ public class JsonMapType implements UserType {
 
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
-        String jsonString = (String) rs.getObject(names[0]);
+        String jsonString = ((PGobject)rs.getObject(names[0])).getValue();
         return gson.fromJson(jsonString, userType);
     }
 
