@@ -35,6 +35,7 @@ public class ArrayType implements UserType, ParameterizedType {
     }
 
     private Class<?> typeClass;
+    private int[] arrayDimensions;
     private BidiEnumMap bidiMap;
 
     @Override
@@ -78,11 +79,14 @@ public class ArrayType implements UserType, ParameterizedType {
         if (typeClass == null) {
             throw new RuntimeException("The user type needs to be configured with the type. None provided");
         }
+        Integer dimension = 1;
+        if (parameters.containsKey("dim")) dimension = (Integer)(parameters.get("dim"));
+        arrayDimensions = new int[dimension];
     }
 
     @Override
     public Class<?> returnedClass() {
-        return java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
+        return java.lang.reflect.Array.newInstance(typeClass, arrayDimensions).getClass();
     }
 
     @Override
@@ -103,7 +107,7 @@ public class ArrayType implements UserType, ParameterizedType {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
         Object result = null;
-        Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
+        Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, arrayDimensions).getClass();
         Array sqlArray = rs.getArray(names[0]);
         if (!rs.wasNull()) {
             Object array = sqlArray.getArray();
@@ -128,7 +132,7 @@ public class ArrayType implements UserType, ParameterizedType {
         }
 
         Object[] valueToSet = (Object[]) value;
-        Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
+        Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, arrayDimensions).getClass();
 
         if (typeClass.isEnum()) {
             typeArrayClass = Integer[].class;
