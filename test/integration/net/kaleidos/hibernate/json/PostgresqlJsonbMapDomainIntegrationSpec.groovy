@@ -6,16 +6,23 @@ import test.json.TestMapJsonb
 class PostgresqlJsonbMapDomainIntegrationSpec extends Specification {
 
     @Unroll
-    void 'save a domain class with a map #map to jsonb'() {
+    void 'save and read a domain class with a map #map to jsonb'() {
         setup:
             def testMapJsonb = new TestMapJsonb(data: map)
 
         when:
-            testMapJsonb.save(flush: true)
+            // Domain saving and retrieving should be in different sessions. Only in that case Hibernate will invoke
+            // nullSafeGet on the corresponding user type and will not use current session's cache.
+            TestMapJsonb.withNewSession {
+                testMapJsonb.save(flush: true)
+            }
 
         then:
             testMapJsonb.hasErrors() == false
-            testMapJsonb.data == map
+
+        and:
+            def obj = testMapJsonb.get(testMapJsonb.id)
+            obj.data == map
 
         where:
             map << [null, [:], [name: 'Ivan', age: 34]]
