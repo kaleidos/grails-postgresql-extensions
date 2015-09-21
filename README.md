@@ -628,6 +628,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 4.6.1 - 21/Sep/2015 - Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
 * 4.6.0 - 08/Sep/2015 - Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
 * 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
 [#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67),
