@@ -12,14 +12,7 @@ class GrailsPostgresqlExtensionsGrailsPlugin extends Plugin {
     def grailsVersion = "3.0.1 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        "grails-app/controllers/**",
-        "grails-app/domain/**",
-        "grails-app/i18n/**",
-        "grails-app/services/**",
-        "grails-app/taglib/**",
-        "grails-app/utils/**",
-        "grails-app/views/**",
-        "web-app/**"
+        'test/**'
     ]
 
     def title = "Grails Postgresql Extensions Plugin"
