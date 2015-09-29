@@ -593,7 +593,7 @@ You may need to do a more complex sorting. Imagine that you have a table with a 
 by a field in that json. Using sql you can write:
 
 ```sql
-select * from foo order by (stats->'intensity') desc
+select * from foo order by (data->'name') desc
 ```
 
 With the plugin you can do the same with a new order method called `sqlFormula`:
