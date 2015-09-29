@@ -31,31 +31,10 @@ Provides Hibernate user types to support for Postgresql Native Types like Array,
 
     def documentation = "https://github.com/kaleidos/grails-postgresql-extensions/blob/master/README.md"
     def license = "APACHE"
-    def organization = [ name: "Kaleidos", url: "http://kaleidos.net" ]
-    def developers = [ [ name: "Alonso Torres", email: "alonso.javier.torres@gmail.com" ]]
-    def issueManagement = [ system: "GITHUB", url: "https://github.com/kaleidos/grails-postgresql-extensions/issues" ]
-    def scm = [ url: "https://github.com/kaleidos/grails-postgresql-extensions" ]
-
-    // TODO: Extract to utils class or service
-    private decorateConstructor(className, metaclass) {
-        def hstoreProperties = []
-        metaclass.properties.each { prop->
-            if (prop.type == HstoreDomainType) {
-                println "[PostgresqlExtensions] Adding property ${className}.${prop.name} as a hstore property"
-                hstoreProperties << prop.name
-            }
-        }
-
-        if (hstoreProperties.size() > 0) {
-            def constructor = metaclass.retrieveConstructor(Map)
-            metaclass.constructor = { Map m ->
-                hstoreProperties.each { name->
-                    m[name] = new HstoreDomainType(m[name])
-                }
-                return constructor.newInstance(m)
-            }
-        }
-    }
+    def organization = [name: "Kaleidos", url: "http://kaleidos.net"]
+    def developers = [[name: "Alonso Torres", email: "alonso.javier.torres@gmail.com"]]
+    def issueManagement = [system: "GITHUB", url: "https://github.com/kaleidos/grails-postgresql-extensions/issues"]
+    def scm = [url: "https://github.com/kaleidos/grails-postgresql-extensions"]
 
     void doWithDynamicMethods() {
         new ArrayCriterias()
@@ -66,6 +45,27 @@ Provides Hibernate user types to support for Postgresql Native Types like Array,
     void doWithApplicationContext() {
         for (domainClass in grailsApplication.domainClasses) {
             decorateConstructor(domainClass.clazz.name, domainClass.metaClass)
+        }
+    }
+
+    // TODO: Extract to utils class or service
+    private decorateConstructor(className, metaclass) {
+        def hstoreProperties = []
+        metaclass.properties.each { prop ->
+            if (prop.type == HstoreDomainType) {
+                println "[PostgresqlExtensions] Adding property ${className}.${prop.name} as a hstore property"
+                hstoreProperties << prop.name
+            }
+        }
+
+        if (hstoreProperties.size() > 0) {
+            def constructor = metaclass.retrieveConstructor(Map)
+            metaclass.constructor = { Map m ->
+                hstoreProperties.each { name ->
+                    m[name] = new HstoreDomainType(m[name])
+                }
+                return constructor.newInstance(m)
+            }
         }
     }
 }

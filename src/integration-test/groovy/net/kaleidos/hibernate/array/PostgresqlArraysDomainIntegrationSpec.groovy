@@ -4,7 +4,12 @@ import grails.test.mixin.integration.Integration
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import spock.lang.Unroll
-import test.array.*
+import test.array.TestDouble
+import test.array.TestEnum
+import test.array.TestFloat
+import test.array.TestInteger
+import test.array.TestLong
+import test.array.TestString
 
 @Integration
 @Transactional

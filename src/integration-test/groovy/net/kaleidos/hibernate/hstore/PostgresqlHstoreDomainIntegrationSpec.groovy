@@ -1,5 +1,5 @@
 package net.kaleidos.hibernate.hstore
-import grails.plugin.spock.*
+
 import grails.test.mixin.integration.Integration
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
