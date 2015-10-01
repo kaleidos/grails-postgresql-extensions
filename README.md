@@ -1,18 +1,19 @@
-Grails Postgresql Extensions
-============================
+# Grails Postgresql Extensions
 
 [![Still maintained](http://stillmaintained.com/lmivan/grails-postgresql-extensions.png)](http://stillmaintained.com/lmivan/grails-postgresql-extensions)
 [![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
-[![Coverage Status](https://coveralls.io/repos/kaleidos/grails-postgresql-extensions/badge.png?branch=master)](https://coveralls.io/r/kaleidos/grails-postgresql-extensions?branch=master)
 
-This is a grails plugin that provides hibernate user types to use Postgresql native types such as Array, Hstore, Json,... from a Grails application. It also provides new criterias to query this new native types.
+This is a grails plugin that provides hibernate user types to use Postgresql native types such as Array, Hstore, Json,
+Jsonb... from a Grails application. It also provides new criterias to query this new native types.
 
-Currently the plugin supports array, hstore and json fields as well as some query methods. More native types and query methods will be added in the future.
+Currently the plugin supports array, hstore, json and jsonb fields as well as some query methods.
+More native types and query methods will be added in the future.
 
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Native Types](#native-types)
   * [Arrays](#arrays)
+    * [Example](#example)
     * [Criterias](#criterias)
         * [Contains](#contains)
         * [Is contained](#is-contained)
@@ -24,8 +25,6 @@ Currently the plugin supports array, hstore and json fields as well as some quer
         * [Not Equals](#not-equals)
         * [Ilike](#ilike)
   * [Hstore](#hstore)
-    * [Grails 2.2.5 and 2.3.1+](#grails-225-and-231)
-    * [Old Grails versions](#old-grails-versions)
     * [Using Hstore](#using-hstore)
     * [Criterias](#hstore-criterias)
         * [Contains Key](#contains-key)
@@ -33,78 +32,80 @@ Currently the plugin supports array, hstore and json fields as well as some quer
         * [Is Contained](#is-contained)
         * [ILike Value](#ilike-value)
   * [JSON](#json)
+    * [Using json](#using-json)
     * [Criterias](#criterias)
         * [Has field value](#has-field-value)
   * [JSONB](#jsonb)
   * [Order](#order)
+    * [Random order](#random-order)
+    * [Sql formula](#sql-formula)
 * [Authors](#authors)
 * [Release Notes](#release-notes)
 
 
-Installation
-------------
+## Installation
 
-For Hibernate 3.x you have to use a 3.x version and for Hibernate 4.x you must use a 4.x version of the plugin.
-At the moment, both versions contain the same features and functionallity.
+The Grails 3 version only supports Hibernate 4.X. In `build.gradle` add the `jcenter` repository and the following
+dependency to install the plugin:
 
-In `BuildConfig.groovy` add the following to install the plugin:
 
 ```groovy
-plugins {
+repositories {
     ...
-    compile ":postgresql-extensions:<version>"
+    jcenter()
     ...
-}
-```
-
-Please note that you also have to install the Grails Hibernate plugin: [Hibernate 3](http://grails.org/plugin/hibernate) or [Hibernate 4](http://grails.org/plugin/hibernate4) and the Postgresql jdbc driver. You can see all available Postgresql jdbc libraries versions at [MVN Repository](http://mvnrepository.com/artifact/org.postgresql/postgresql).
-
-```groovy
-plugins {
-    // Hibernate 4
-    compile ":hibernate4:4.3.5.5"
-
-    // Hibernate 3
-    compile ":hibernate:3.6.10.17"
 }
 
 dependencies {
     ...
-    runtime 'org.postgresql:postgresql:9.2-1004-jdbc4'
+    compile 'org.grails.plugins:postgresql-extensions:<version>'
     ...
 }
 ```
 
-
-Configuration
--------------
-
-After install the plugin you have to use a new Postgresql Hibernate Dialect in your application. Add it to the `DataSource.groovy` file:
+Please note that you also have to install the Grails Hibernate 4 plugin and the Postgresql jdbc driver. You can see
+all available Postgresql jdbc libraries versions at [MVN Repository](http://mvnrepository.com/artifact/org.postgresql/postgresql).
 
 ```groovy
-development {
-    dataSource {
-        dbCreate = ""
-        driverClassName = "org.postgresql.Driver"
-        dialect = "net.kaleidos.hibernate.PostgresqlExtensionsDialect"
-        url = "jdbc:postgresql://localhost:5432/db-name"
-        username = "user"
-        password = "password"
-    }
+dependencies {
+    ...
+    compile 'org.grails.plugins:hibernate:4.3.10.4'
+    provided 'org.postgresql:postgresql:9.4-1203-jdbc4'
+    ...
 }
 ```
 
-If you just only add the dialect, hibernate will create a new sequence for every table to generate the sequential ids instead of a global sequence for all your tables.
+## Configuration
 
-You can also deactive this behaviour and create only one sequence for all the tables with the following property in your datasource definition:
+After install the plugin you have to use a new Postgresql Hibernate Dialect in your application. Add it to the
+`application.yml` file:
 
-```groovy
-development {
-    dataSource {
-       ...
-       postgresql.extensions.sequence_per_table = false
-       ...
-    }
+```yaml
+---
+dataSource:
+    pooled: true
+    jmxExport: true
+    driverClassName: org.postgresql.Driver
+    username: user
+    password: password
+    url: jdbc:postgresql://localhost:5432/db_name
+    dbCreate: update
+
+hibernate:
+    dialect: net.kaleidos.hibernate.PostgresqlExtensionsDialect
+```
+
+If you just only add the dialect, hibernate will create a new sequence for every table to generate the sequential ids
+used for the primary keys instead of a global sequence for all your tables.
+
+You can also deactivate this behaviour and create only one unique sequence for all the tables with the following
+property in your datasource definition:
+
+```yaml
+dataSource:
+  postgresql:
+    extensions:
+      sequence_per_table: false
 }
 ```
 
@@ -113,9 +114,15 @@ development {
 
 ### Arrays
 
-The plugin supports the definition of `Integer`, `Long`, `Float`, `Double`, `String`, and `Enum` arrays in your domain classes.
+The plugin supports the definition of `Integer`, `Long`, `Float`, `Double`, `String`, and `Enum` arrays in your domain
+classes.
 
-The EnumArrayType behaves almost identical to IntegerArrayType in that it stores and retrieves an array of ints. The difference, however, is that this is used with an Array of Enums, rather than Ints. The Enums are serialized to their ordinal value before persisted to the database. On retrieval, they are then converted back into their original Enum type.
+The `Enum` arrays behaves almost identical to `Integer` arrays in that they store and retrieve an array of ints. The
+difference, however, is that this is used with an Array of Enums, rather than Ints. The Enums are serialized to their
+ordinal value before persisted to the database. On retrieval, they are then converted back into their original `Enum`
+type.
+
+#### Example
 
 ```groovy
 import net.kaleidos.hibernate.usertype.ArrayType
@@ -148,16 +155,17 @@ class Like {
 }
 ```
 
-Now you can create domain objects using lists (or arrays) of integers, longs and strings and when you save the object it will be stored as an postgresql array:
+Now you can create domain objects using lists (or arrays) of integers, longs and strings and when you save the object
+it will be stored as an postgresql array:
 
 ```groovy
-def like1 = new Like(favoriteNumbers:[5, 17, 9, 6],
-                     favoriteLongNumbers:[123, 239, 3498239, 2344235],
-                     favoriteFloatNumbers:[0.3f, 0.1f],
-                     favoriteDoubleNumbers:[100.33d, 44.11d],
-                     favoriteMovies:["Spiderman", "Blade Runner", "Starwars"],
-                     favoriteJuices:[Like.Juice.ORANGE, Like.Juice.GRAPE])
-like1.save()
+def myLikes = new Like(favoriteNumbers: [5, 17, 9, 6],
+                     favoriteLongNumbers: [123, 239, 3498239, 2344235],
+                     favoriteFloatNumbers: [0.3f, 0.1f],
+                     favoriteDoubleNumbers: [100.33d, 44.11d],
+                     favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"],
+                     favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE])
+myLikes.save()
 ```
 
 And now, with `psql`:
@@ -172,12 +180,17 @@ And now, with `psql`:
 
 #### Criterias
 
-The plugin also include some hibernate criterias to use in your queries. Please check the [services](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/grails-app/services/test/criteria/array) and the [tests](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/test/integration/net/kaleidos/hibernate/array) created to see all usage examples.
-You can also check the official [Postgresql Array operators](http://www.postgresql.org/docs/9.2/static/functions-array.html#ARRAY-OPERATORS-TABLE).
+The plugin also includes some hibernate criterias to use in your queries. Please check the
+[services](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/grails-app/services/test/criteria/array)
+and the [tests](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/src/integration-test/groovy/net/kaleidos/hibernate/array)
+created to see all usage examples.
+
+You can also check the official [Postgresql Array operators](http://www.postgresql.org/docs/9.4/static/functions-array.html#ARRAY-OPERATORS-TABLE).
 
 ##### Contains
 
-With this criteria you can get all the rows that contains all the values in the array field. To use it just use the new criteria `pgArrayContains`:
+With this criteria you can get all the rows that contain all the values in the array field. To use it just use the new
+criteria `pgArrayContains`:
 
 ```groovy
 // number can be just a value...
@@ -202,7 +215,8 @@ def result = Like.withCriteria {
 
 #### Is contained
 
-With this criteria you can get all the rows that are contained by the values. To use it just use the new criteria `pgArrayIsContainedBy`:
+With this criteria you can get all the rows that are contained by the values. To use it just use the new criteria
+`pgArrayIsContainedBy`:
 
 ```groovy
 // movie can be just a string or a list
@@ -222,7 +236,8 @@ def results = User.withCriteria {
 
 #### Overlaps
 
-With this criteria you can get all the rows that contains any of the values. To use it just use the new criteria `pgArrayOverlaps`:
+With this criteria you can get all the rows that contains any of the values. To use it just use the new criteria
+`pgArrayOverlaps`:
 
 ```groovy
 def result = Like.withCriteria {
@@ -232,7 +247,8 @@ def result = Like.withCriteria {
 
 #### Is Empty
 
-With this criteria you can get all the rows that contains an-empty array in the selected field. To use it just use the new criteria `pgArrayIsEmpty`:
+With this criteria you can get all the rows that contains an-empty array in the selected field. To use it just use the
+new criteria `pgArrayIsEmpty`:
 
 ```groovy
 def result = Like.withCriteria {
@@ -242,7 +258,8 @@ def result = Like.withCriteria {
 
 #### Is Not Empty
 
-With this criteria you can get all the rows that contains a not empty array in the selected field. To use it just use the new criteria `pgArrayIsNotEmpty`:
+With this criteria you can get all the rows that contains a not empty array in the selected field. To use it just use
+the new criteria `pgArrayIsNotEmpty`:
 
 ```groovy
 def result = Like.withCriteria {
@@ -252,7 +269,8 @@ def result = Like.withCriteria {
 
 #### Is Empty or Contains
 
-This criteria is a mix of the `pgContains` and `pgIsEmpty`. Sometimes you have to execute 'pgContains' criteria if the list has elements or a 'pgIsEmpty' if the list is empty. It could be something like this:
+This criteria is a mix of the `pgContains` and `pgIsEmpty`. Sometimes you have to execute 'pgContains' criteria if the
+list has elements or a 'pgIsEmpty' if the list is empty. It could be something like this:
 
 ```groovy
 def numbers = ... // A list with zero or more elements
@@ -286,7 +304,8 @@ def result = Like.withCriteria {
 
 #### Not Equals
 
-With this criteria you can get all the rows that are not equal to a value. To use it just use the new criteria `pgArrayNotEquals`:
+With this criteria you can get all the rows that are not equal to a value. To use it just use the new criteria
+`pgArrayNotEquals`:
 
 ```groovy
 def result = Like.withCriteria {
@@ -311,10 +330,11 @@ def result = Like.withCriteria {
 
 ### Hstore
 
-The first thing you need to do is install hstore support in Postgresql. In Debian/Ubuntu you have to install the `postgresql-contrib` package:
+The first thing you need to do is install hstore support in Postgresql. In Debian/Ubuntu you have to install the
+`postgresql-contrib` package:
 
 ```
-sudo apt-get install postgresql-contrib-9.2
+sudo apt-get install postgresql-contrib-9.4
 ```
 
 Once the package is installed in the system you have to create the extension in the database you want to use hstore into:
@@ -333,9 +353,9 @@ You can test that the hstore extension is correctly installed running:
 (1 row)
 ```
 
-#### Grails 2.2.5 and 2.3.1+
+#### Using Hstore
 
-Depending on the version of Grails you're using, you have two different options to configure the mapping. For new versions of Grails you only have to define the domain class with a `Map` attribute and use the Hibernate user type `HstoreMapType`.
+You only have to define the domain class with a `Map` attribute and use the Hibernate user type `HstoreMapType`.
 
 ```groovy
 import net.kaleidos.hibernate.usertype.HstoreMapType
@@ -343,6 +363,7 @@ import net.kaleidos.hibernate.usertype.HstoreMapType
 class TestHstore {
 
     Map testAttributes
+    String anotherProperty
 
     static mapping = {
         testAttributes type: HstoreMapType
@@ -350,59 +371,14 @@ class TestHstore {
 }
 ```
 
-#### Old Grails versions
-
-Until [GRAILS-10335](http://jira.grails.org/browse/GRAILS-10335) has been fixed it hasn't been possible to override neither a Map, List, Set nor a Bag in a Domain class using a custom Hibernate user type.
-
-If you define the previous domain class and execute `grails schema-export` you will get the following database schema:
-
-```sql
-create table test_hstore (id int8 not null, version int8 not null, primary key (id));
-create table test_hstore_test_attributes (test_attributes int8, test_attributes_idx varchar(255), test_attributes_elt hstore not null);
-```
-
-As you can see, Grails creates another table with the key and the value. This is not what we can get because Postgresql provides the hstore type just for this.
-
-So what can we do? We create the class [HstoreDomainType](https://github.com/kaleidos/grails-postgresql-extensions/blob/master/src/groovy/net/kaleidos/hibernate/postgresql/hstore/HstoreDomainType.groovy) to use it in domain classes instead of Map. This class, using Groovy Metaprogramming handles the `Map` type.
-Now, with this AST Transformation `net.kaleidos.hibernate.postgresql.hstore.Hstore` (implemented [here](https://github.com/kaleidos/grails-postgresql-extensions/blob/master/src/groovy/net/kaleidos/hibernate/postgresql/hstore/HstoreASTTransformation.groovy)) we convert the properties with type `Map` to properties with type `HstoreDomainType`. And this is how the magic works :-)
-
-Now if you annotate the property and execute again `grails schema-export` you'll get the right ddl (note the `hstore` type for the property `test_attribute`):
+Now you can create and instance of the domain class. Due to a limitation of the Hstore Postgresql type you can only
+store Strings as key and value.
 
 ```groovy
-import net.kaleidos.hibernate.postgresql.hstore.Hstore
-import net.kaleidos.hibernate.usertype.HstoreType
-
-class TestHstore {
-    @Hstore
-    Map testAttributes
-
-    String anotherProperty
-
-    static constrains = {
-        anotherProperty nullable: false
-    }
-
-    static mapping = {
-        testAttributes type: HstoreType
-    }
-}
-```
-
-```sql
-create table test_hstore (id int8 not null, version int8 not null, test_attributes hstore not null, primary key (id));
-```
-
-Note that you only have to define the property as `Map`, annotate with `@Hstore` and define the Hibernate user type `HstoreType`.
-
-#### Using Hstore
-
-Now you can create and instance of the domain class. Due to a limitation of the Hstore Postgresql type you can only store Strings as key and value.
-
-```groovy
-def instance = new TestHstore(testAttributes:[foo:"bar"], anotherProperty:"Groovy Rocks!")
+def instance = new TestHstore(testAttributes: [foo: "bar"], anotherProperty: "Groovy Rocks!")
 instance.save()
 
-def instance2 = new TestHstore(testAttributes:[xxx:1, zzz:123], anotherProperty:"")
+def instance2 = new TestHstore(testAttributes: [xxx: 1, zzz: 123], anotherProperty: "")
 instance2.save()
 ```
 
@@ -416,18 +392,18 @@ instance2.save()
 ```
 
 
-#### HSTORE Criterias
+#### Hstore Criterias
 
-We have added the following criteria operations to query rows using the Hstore custom type. You can
+The following criteria operations are available to query rows using the Hstore custom type. You can
 check the [services](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/grails-app/services/test/criteria/hstore)
-and the [tests](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/test/integration/net/kaleidos/hibernate/hstore)
-to help you to developp your own criterias.
+and the [tests](https://github.com/kaleidos/grails-postgresql-extensions/tree/master/src/integration-test/groovy/net/kaleidos/hibernate/hstore)
+created to see all usage examples.
 
-You can also check the official [Postgresql Hstore operators](http://www.postgresql.org/docs/9.0/static/hstore.html).
+You can also check the official [Postgresql Hstore operators](http://www.postgresql.org/docs/9.4/static/hstore.html).
 
 ##### Contains Key
 
-With this operation you can search for rows that contains an Hstore with the key passd as parameter.
+With this operation you can search for rows that contain an Hstore with the key passed as parameter.
 
 ```groovy
 def wantedKey = "my-custom-key"
@@ -438,7 +414,8 @@ def result = MyDomain.withCriteria {
 
 ##### Contains
 
-You can search for data that contains certain pairs of (key,value)
+You can search for data that contains certain pairs of _key_ and _value_.
+
 ```groovy
 def result = Users.withCriteria {
     pgHstoreContains 'configuration', ["language": "es"]
@@ -452,20 +429,22 @@ passed as parameter.
 
 ```groovy
 def result = TestHstore.withCriteria {
-    pgHstoreIsContained 'testAttributes', ["1" : "a", "2" : "b"]
+    pgHstoreIsContained 'testAttributes', ["1": "a", "2": "b"]
 }
 ```
 The example above returns the rows that contains elements like:
+
 ```
-testAttributes = ["1" : "a"]
-testAttributes = ["2" : "b"]
-testAttributes = ["1" : "a", "2" : "b"]
+testAttributes = ["1": "a"]
+testAttributes = ["2": "b"]
+testAttributes = ["1": "a", "2": "b"]
 ```
-This criteria can also be used to look for exact matches
+This criteria can also be used to look for exact matches.
 
 ##### ILike Value
 
-With this operation you can search for rows that contains an Hstore in which any value matches (ilike) to the parameter. It uses the ilike syntaxis, so you can do for example:
+With this operation you can search for rows that contain an Hstore in which any value matches (ilike) to the parameter.
+It uses the ilike syntaxis, so you can do for example:
 
 ```groovy
 def wantedValue = "%my-value%"
@@ -475,8 +454,6 @@ def result = MyDomain.withCriteria {
 ```
 
 ### JSON
-
-Currently the Json support is only available in Grails 2.2.5 and 2.3.1+. Just like with the Hstore support, it's not possible to use a Map in domain classes with old Grails versions and be able to set the database type for the Map.
 
 To define a json field you only have to define a `Map` field and use the `JsonMapType` hibernate user type.
 
@@ -499,7 +476,7 @@ class TestMapJson {
 Now you can create and instance of the domain class:
 
 ```groovy
-def instance = new TestMapJson(data: [name: "Iván", age: 34, hasChilds: true, childs: [[name: 'Judith', age: 7], [name: 'Adriana', age: 4]]])
+def instance = new TestMapJson(data: [name: "Iván", age: 35, hasChilds: true, childs: [[name: 'Judith', age: 8], [name: 'Adriana', age: 5]]])
 instance.save()
 ```
 
@@ -509,7 +486,7 @@ instance.save()
 
  id | version | data
 ----+---------+-------------------------------------------------------------------------------------------------------------
-  1 |       0 | {"hasChilds":true,"age":34,"name":"Iván","childs":[{"name":"Judith","age":7},{"name":"Adriana","age":4}]}
+  1 |       0 | {"hasChilds":true,"age":35,"name":"Iván","childs":[{"name":"Judith","age":8},{"name":"Adriana","age":5}]}
 ```
 
 As you can see the plugin converts to Json automatically the attributes and the lists in the map type.
@@ -517,11 +494,14 @@ As you can see the plugin converts to Json automatically the attributes and the 
 
 #### Criterias
 
-The plugin provides some criterias to query json fields. You can check the official [Postgresql Json functions and operators](http://www.postgresql.org/docs/9.3/static/functions-json.html) in case you need additional ones.
+The plugin provides some criterias to query json fields. You can check the official
+[Postgresql Json functions and operators](http://www.postgresql.org/docs/9.4/static/functions-json.html) in case you
+need additional ones.
 
 ##### Has field value
 
-With this criteria you can check if a json field contains some value in some key. To use it just use the criteria `pgJsonHasFieldValue`:
+With this criteria you can check if a json field contains some _value_ in some _key_. To use it just use the criteria
+`pgJsonHasFieldValue`:
 
 
 ```groovy
@@ -534,13 +514,14 @@ def result = TestMapJson.withCriteria {
 }
 ```
 
-The previous criteria will return all the rows that have a `name` attribute in the json field `data` with the value `Iván`. In this example `obj1` and `obj3`.
+The previous criteria will return all the rows that have a `name` attribute in the json field `data` with the value
+`Iván`. In this example `obj1` and `obj3`.
 
 
 
-#### JSONB
+### JSONB
 
-Since version postgresql-extensions 4.4.0 it is possible to using [Postgresql Jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html)
+Since postgresql-extensions version 4.4.0 it is possible to use [Postgresql Jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html)
 instead of just json. You need to use at least Postgresql 9.4.
 
 To define a jsonb field you only have to define a `Map` field and use the `JsonbMapType` hibernate user type.
@@ -562,9 +543,9 @@ class TestMapJsonb {
 The same criterias implemented for Json are valid for Jsonb.
 
 
-#### Order
+### Order
 
-##### Random order
+#### Random order
 
 Sometimes you need to get some results ordered randomly from the database. Postgres provides a native function to do
 that. So you can write something like this:
@@ -587,7 +568,7 @@ class MyService {
 }
 ```
 
-##### Sql formula
+#### Sql formula
 
 You may need to do a more complex sorting. Imagine that you have a table with a `jsonb` column and you want to order
 by a field in that json. Using sql you can write:
@@ -614,8 +595,7 @@ It's important to note that the "raw" sql is appended to the criteria, so you ne
 if not you'll get a sql error during runtime.
 
 
-Authors
--------
+## Authors
 
 You can send any questions to:
 
@@ -625,9 +605,9 @@ You can send any questions to:
 Collaborations are appreciated :-)
 
 
-Release Notes
--------------
+## Release Notes
 
+* 4.6.1 - 02/Oct/2015 - Plugin migrated to Grails 3.
 * 4.6.1 - 21/Sep/2015 - Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
 * 4.6.0 - 08/Sep/2015 - Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
 * 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
