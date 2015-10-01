@@ -98,5 +98,12 @@ task wrapper(type: Wrapper) {
     gradleVersion = gradleWrapperVersion
 }
 
-
+bintray {
+    pkg {
+        userOrg = 'kaleidos' // If you want to publish to an organization
+        name = "net.kaleidos:grails-postgresql-extensions"
+        issueTrackerUrl = "https://github.com/kaleidosnet/grails-grails-postgresql-extensions/issues"
+        vcsUrl = "https://github.com/kaleidosnet/grails-grails-postgresql-extensions/issues"
+    }
+}
 
