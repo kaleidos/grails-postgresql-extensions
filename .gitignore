@@ -20,3 +20,5 @@ grails-postgresql-extensions-*.zip.sha1
 /out
 /projectFilesBackup
 *.log
+.gradle/
+build/

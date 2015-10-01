@@ -6,6 +6,8 @@ jdk:
 addons:
   postgresql: "9.4"
 
+sudo: false
+
 before_script:
   - psql -d template1 -c 'create extension hstore;' -U postgres
   - psql -c 'create database pg_extensions_test;' -U postgres
@@ -13,8 +15,7 @@ before_script:
   - psql -c "grant all privileges on database pg_extensions_test to pg_extensions;" -U postgres
 
 script:
-  - ./grailsw refresh-dependencies --non-interactive
-  - ./grailsw test-app -coverage -xml
+  - ./gradlew clean build
 
 notifications:
   email:
@@ -25,5 +26,5 @@ notifications:
     on_success: change
     on_failure: change
 
-after_success:
-  - ./grailsw coveralls
+#after_success:
+#  - ./gradlew cobertura coveralls
