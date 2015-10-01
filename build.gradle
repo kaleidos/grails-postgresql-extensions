@@ -20,8 +20,8 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
-version '5.0.0-SNAPSHOT'
-group 'net.kaleidos'
+version '4.6.1'
+group 'org.grails.plugins'
 
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
