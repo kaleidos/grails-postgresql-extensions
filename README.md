@@ -607,40 +607,40 @@ Collaborations are appreciated :-)
 
 ## Release Notes
 
-* 4.6.1 - 02/Oct/2015 - Plugin migrated to Grails 3.
-* 4.6.1 - 21/Sep/2015 - Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
-* 4.6.0 - 08/Sep/2015 - Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
-* 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
-[#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67),
-[#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69)
-* 3.4.0 - 02/Jun/2015 - Hibernate 3.x. GR8Conf Hackergarten! Add Jsonb support for Hibernate 3.x [#64](https://github.com/kaleidos/grails-postgresql-extensions/issues/64)
-* 4.4.0 - 15/Mar/2015 - Hibernate 4.x. Add support for Jsonb.
-* 3.3.0 - 18/Aug/2014 - Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
-* 4.3.0 - 17/Aug/2014 - Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
-* 3.2.0 - 02/Aug/2014 - Hiberate 3.x. pgJsonHasFieldValue criteria.
-* 4.2.0 - 28/Jul/2014 - Hiberate 4.x. pgJsonHasFieldValue criteria.
-* 3.1.0 - 25/Jul/2014 - Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
-* 4.1.0 - 24/Jul/2014 - Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
-* 4.0.0 - 18/Jul/2014 - Version compatible with Hibernate 4.x.
-* 3.0.0 - 18/Jul/2014 - Version compatible with Hibernate 3.x.
-* [0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) - 16/Jun/2014 - Add new array criterias: pgArrayEquals, pgArrayNotEquals.
-* 0.8.1 - 24/Apr/2014 - Fix NPE when array is null.
-* 0.8 - 24/Apr/2014 - Added support for Double and Float arrays. Refactored the ArrayType to be used as a parametrized type.
-* 0.7 - Unreleased - New HstoreMapType and update plugin to Grails 2.2.5.
-* 0.6.8 - 22/Apr/2014 - Fix NPE in HstoreType.
-* 0.6.7 - 14/Feb/2014 - Support Java Arrays in criterias.
-* 0.6.6 - 14/Feb/2014 - New criteria pgArrayIsEmptyOrContains.
-* 0.6.5 - 13/Feb/2014 - Fix bug deleting instances with Hstore type. Thanks to Manuel Unno Vio!
-* 0.6.4 - 30/Jan/2014 - Convert automatically the keys of Hstore to string.
-* 0.6.3 - 19/Jan/2014 - Display the class name during startup when detecting a hstore property.
-* 0.6.2 - Unreleased - Refactor some tests.
-* 0.6.1 - 28/Nov/2013 - Update postgresql jdbc driver to version 9.2 and do not export hibernate plugin.
-* 0.6 - 21/Nov/2013 - Use a more complete Hstore parser. Thanks to Moritz Kobel!
-* 0.5.1 - 10/Nov/2013 - Change base directory to compile AST before the plugin classes. Thanks to Moritz Kobel!
-* 0.5 - 08/Nov/2013 - Add criteria operation for Hstore types.
-* 0.4.1 - Unreleased - Compile AST before the project itself.
-* 0.4 - 28/Oct/2013 - Add support to Hstore. It's only possible to save and get, but no queries has been implemented.
-* 0.3 - 18/Sep/2013 - Add support to define the schema name for the sequences.
-* 0.2 - 25/Aug/2013 - Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!
-* 0.1.1 - 22/Jul/2013 - Some refactors of the code. No functionality added.
-* 0.1 - 16/Jul/2013 - Initial version of the plugin with support for integer, long and string array types and criterias pgArrayContains, pgArrayIsContainedBy, pgArrayOverlaps, pgArrayIsEmpty and pgArrayIsNotEmpty.
+Version | Date        | Comments
+------- | ------------| ---------
+4.6.1   | 02/0ct/2015 | Plugin migrated to Grails 3
+4.6.1   | 21/Sep/2015 | Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
+4.6.0   | 08/Sep/2015 | Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
+4.5.0   | 02/Jun/2015 | Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62), [#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67), [#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69)
+3.4.0   | 02/Jun/2015 | Hibernate 3.x. GR8Conf Hackergarten! Add Jsonb support for Hibernate 3.x [#64](https://github.com/kaleidos/grails-postgresql-extensions/issues/64)
+4.4.0   | 15/Mar/2015 | Hibernate 4.x. Add support for Jsonb.
+3.3.0   | 18/Aug/2014 | Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
+4.3.0   | 17/Aug/2014 | Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
+3.2.0   | 02/Aug/2014 | Hiberate 3.x. pgJsonHasFieldValue criteria.
+4.2.0   | 28/Jul/2014 | Hiberate 4.x. pgJsonHasFieldValue criteria.
+3.1.0   | 25/Jul/2014 | Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
+4.1.0   | 24/Jul/2014 | Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
+4.0.0   | 18/Jul/2014 | Version compatible with Hibernate 4.x.
+3.0.0   | 18/Jul/2014 | Version compatible with Hibernate 3.x.
+[0.9](https://github.com/kaleidos/grails-postgresql-extensions/issues?milestone=1) | 16/Jun/2014 | Add new array criterias: pgArrayEquals, pgArrayNotEquals.
+0.8.1   | 24/Apr/2014 | Fix NPE when array is null.
+0.8     | 24/Apr/2014 | Added support for Double and Float arrays. Refactored the ArrayType to be used as a parametrized type.
+0.7     | Unreleased  | New HstoreMapType and update plugin to Grails 2.2.5.
+0.6.8   | 22/Apr/2014 | Fix NPE in HstoreType.
+0.6.7   | 14/Feb/2014 | Support Java Arrays in criterias.
+0.6.6   | 14/Feb/2014 | New criteria pgArrayIsEmptyOrContains.
+0.6.5   | 13/Feb/2014 | Fix bug deleting instances with Hstore type. Thanks to Manuel Unno Vio!
+0.6.4   | 30/Jan/2014 | Convert automatically the keys of Hstore to string.
+0.6.3   | 19/Jan/2014 | Display the class name during startup when detecting a hstore property.
+0.6.2   | Unreleased  | Refactor some tests.
+0.6.1   | 28/Nov/2013 | Update postgresql jdbc driver to version 9.2 and do not export hibernate plugin.
+0.6     | 21/Nov/2013 | Use a more complete Hstore parser. Thanks to Moritz Kobel!
+0.5.1   | 10/Nov/2013 | Change base directory to compile AST before the plugin classes. Thanks to Moritz Kobel!
+0.5     | 08/Nov/2013 | Add criteria operation for Hstore types.
+0.4.1   | Unreleased  | Compile AST before the project itself.
+0.4     | 28/Oct/2013 | Add support to Hstore. It's only possible to save and get, but no queries has been implemented.
+0.3     | 18/Sep/2013 | Add support to define the schema name for the sequences.
+0.2     | 25/Aug/2013 | Support for arrays of Enums with automatic serialization/deserialization to ordinal integer value. Thanks to Matt Feury!
+0.1.1   | 22/Jul/2013 | Some refactors of the code. No functionality added.
+0.1     | 16/Jul/2013 | Initial version of the plugin with support for integer, long and string array types and criterias pgArrayContains, pgArrayIsContainedBy, pgArrayOverlaps, pgArrayIsEmpty and pgArrayIsNotEmpty.
