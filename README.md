@@ -1,6 +1,5 @@
 # Grails Postgresql Extensions
 
-[![Still maintained](http://stillmaintained.com/lmivan/grails-postgresql-extensions.png)](http://stillmaintained.com/lmivan/grails-postgresql-extensions)
 [![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
 
 This is a grails plugin that provides hibernate user types to use Postgresql native types such as Array, Hstore, Json,
