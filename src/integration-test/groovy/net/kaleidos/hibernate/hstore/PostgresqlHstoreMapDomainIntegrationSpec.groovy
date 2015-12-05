@@ -19,7 +19,7 @@ class PostgresqlHstoreMapDomainIntegrationSpec extends Specification {
             testHstoreMap.save()
 
         then:
-            testHstoreMap.hasErrors() == false
+            !testHstoreMap.hasErrors()
             testHstoreMap.testAttributes != null
             testHstoreMap.testAttributes.size() == data.size()
             testHstoreMap.testAttributes[attribute] == value
@@ -39,7 +39,7 @@ class PostgresqlHstoreMapDomainIntegrationSpec extends Specification {
             def testHstoreMap = TestHstoreMap.findAll().first()
 
         then:
-            testHstoreMap.hasErrors() == false
+            !testHstoreMap.hasErrors()
             testHstoreMap.testAttributes != null
             testHstoreMap.testAttributes.size() == data.size()
             testHstoreMap.testAttributes[key] == value
@@ -60,7 +60,7 @@ class PostgresqlHstoreMapDomainIntegrationSpec extends Specification {
             testHstoreMap.testAttributes.remove(valueToRemove)
 
         then:
-            testHstoreMap.hasErrors() == false
+            !testHstoreMap.hasErrors()
             testHstoreMap.testAttributes != null
             testHstoreMap.testAttributes.size() == size
 
@@ -80,7 +80,7 @@ class PostgresqlHstoreMapDomainIntegrationSpec extends Specification {
             testHstoreMap.save()
 
         and: 'The instance is saved'
-            assert testHstoreMap.hasErrors() == false
+            assert !testHstoreMap.hasErrors()
 
         and: 'I try to delete it'
             testHstoreMap.delete()

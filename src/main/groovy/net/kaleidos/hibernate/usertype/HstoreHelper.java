@@ -1,7 +1,5 @@
 package net.kaleidos.hibernate.usertype;
 
-import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,13 +62,6 @@ public class HstoreHelper {
             }
         }
         return result;
-    }
-
-    @SuppressWarnings("rawtypes")
-    public static HstoreDomainType toHstoreDomainType(String s) {
-        Map m = HstoreHelper.toMap(s);
-
-        return new HstoreDomainType(m);
     }
 
     @SuppressWarnings("rawtypes")

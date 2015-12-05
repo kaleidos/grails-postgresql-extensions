@@ -4,7 +4,6 @@ import grails.plugins.Plugin
 import net.kaleidos.hibernate.postgresql.criteria.ArrayCriterias
 import net.kaleidos.hibernate.postgresql.criteria.HstoreCriterias
 import net.kaleidos.hibernate.postgresql.criteria.JsonCriterias
-import net.kaleidos.hibernate.postgresql.hstore.HstoreDomainType
 
 class GrailsPostgresqlExtensionsGrailsPlugin extends Plugin {
 
@@ -33,32 +32,5 @@ Provides Hibernate user types to support for Postgresql Native Types like Array,
         new ArrayCriterias()
         new HstoreCriterias()
         new JsonCriterias()
-    }
-
-    void doWithApplicationContext() {
-        for (domainClass in grailsApplication.domainClasses) {
-            decorateConstructor(domainClass.clazz.name, domainClass.metaClass)
-        }
-    }
-
-    // TODO: Extract to utils class or service
-    private decorateConstructor(className, metaclass) {
-        def hstoreProperties = []
-        metaclass.properties.each { prop ->
-            if (prop.type == HstoreDomainType) {
-                println "[PostgresqlExtensions] Adding property ${className}.${prop.name} as a hstore property"
-                hstoreProperties << prop.name
-            }
-        }
-
-        if (hstoreProperties.size() > 0) {
-            def constructor = metaclass.retrieveConstructor(Map)
-            metaclass.constructor = { Map m ->
-                hstoreProperties.each { name ->
-                    m[name] = new HstoreDomainType(m[name])
-                }
-                return constructor.newInstance(m)
-            }
-        }
     }
 }

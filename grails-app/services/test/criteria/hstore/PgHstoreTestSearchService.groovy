@@ -1,12 +1,12 @@
 package test.criteria.hstore
 
-import test.hstore.TestHstore
+import test.hstore.TestHstoreMap
 
 class PgHstoreTestSearchService {
     static transactional = false
 
-    List<TestHstore> search(String field, String criteriaName, value) {
-        TestHstore.withCriteria {
+    List<TestHstoreMap> search(String field, String criteriaName, value) {
+        TestHstoreMap.withCriteria {
             "${criteriaName}" field, value
         }
     }

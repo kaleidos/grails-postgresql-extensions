@@ -20,7 +20,7 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
-version '4.6.1'
+version '4.6.2'
 group 'org.grails.plugins'
 
 apply plugin: 'maven-publish'
@@ -101,7 +101,7 @@ task wrapper(type: Wrapper) {
 bintray {
     pkg {
         userOrg = 'kaleidos' // If you want to publish to an organization
-        name = "net.kaleidos:grails-postgresql-extensions"
+        name = "org.grails.plugins:postgresql-extensions"
         issueTrackerUrl = "https://github.com/kaleidosnet/grails-grails-postgresql-extensions/issues"
         vcsUrl = "https://github.com/kaleidosnet/grails-grails-postgresql-extensions/issues"
     }

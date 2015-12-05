@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import test.criteria.hstore.PgHstoreTestSearchService
-import test.hstore.TestHstore
+import test.hstore.TestHstoreMap
 
 @Integration
 @Transactional
@@ -15,10 +15,10 @@ class PgHstoreIsContainedIntegrationSpec extends Specification {
 
     void 'No element matches with the empty set'() {
         setup:
-            new TestHstore(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
-            new TestHstore(name: "test2", testAttributes: ["d": "10"]).save(flush: true)
-            new TestHstore(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
-            new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
+            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
+            new TestHstoreMap(name: "test2", testAttributes: ["d": "10"]).save(flush: true)
+            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
+            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
             def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreIsContained', map)
@@ -32,10 +32,10 @@ class PgHstoreIsContainedIntegrationSpec extends Specification {
 
     void 'All elements matches'() {
         setup:
-            new TestHstore(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
-            new TestHstore(name: "test2", testAttributes: ["d": "10"]).save(flush: true)
-            new TestHstore(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
-            new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
+            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
+            new TestHstoreMap(name: "test2", testAttributes: ["d": "10"]).save(flush: true)
+            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
+            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
             def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreIsContained', map)
@@ -53,10 +53,10 @@ class PgHstoreIsContainedIntegrationSpec extends Specification {
 
     void 'Some elements matches'() {
         setup:
-            new TestHstore(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
-            new TestHstore(name: "test2", testAttributes: ["d": "10"]).save(flush: true)
-            new TestHstore(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
-            new TestHstore(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
+            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
+            new TestHstoreMap(name: "test2", testAttributes: ["d": "10"]).save(flush: true)
+            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
+            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "1"]).save(flush: true)
 
         when:
             def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreIsContained', map)
