@@ -32,9 +32,12 @@ More native types and query methods will be added in the future.
         * [ILike Value](#ilike-value)
   * [JSON](#json)
     * [Using json](#using-json)
-    * [Criterias](#criterias)
+    * [Criterias](#json-criterias)
         * [Has field value](#has-field-value)
   * [JSONB](#jsonb)
+    * [Criterias](#jsonb-criterias)
+        * [Contains](#contains)
+        * [Is contained](#is-contained)
   * [Order](#order)
     * [Random order](#random-order)
     * [Sql formula](#sql-formula)
@@ -491,10 +494,10 @@ instance.save()
 As you can see the plugin converts to Json automatically the attributes and the lists in the map type.
 
 
-#### Criterias
+#### Json Criterias
 
 The plugin provides some criterias to query json fields. You can check the official
-[Postgresql Json functions and operators](http://www.postgresql.org/docs/9.4/static/functions-json.html) in case you
+[Postgresql Json functions and operators](http://www.postgresql.org/docs/9.3/static/functions-json.html) in case you
 need additional ones.
 
 ##### Has field value
@@ -518,7 +521,7 @@ The previous criteria will return all the rows that have a `name` attribute in t
 
 
 
-### JSONB
+### Jsonb
 
 Since postgresql-extensions version 4.4.0 it is possible to use [Postgresql Jsonb](http://www.postgresql.org/docs/9.4/static/datatype-json.html)
 instead of just json. You need to use at least Postgresql 9.4.
@@ -539,7 +542,48 @@ class TestMapJsonb {
 }
 ```
 
-The same criterias implemented for Json are valid for Jsonb.
+#### Jsonb Criterias
+
+The same criterias implemented for Json are valid for Jsonb. Besides that, there are some criterias that are only
+valid for Jsonb. Check the [documentation](http://www.postgresql.org/docs/9.4/static/functions-json.html).
+
+
+##### Contains
+
+With this criteria you can get all the rows that contain all the values in the map. To use it just use the criteria
+`pgJsonContains`:
+
+```groovy
+def obj1 = new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true)
+def obj2 = new TestMapJsonb(data: [b: 1, d: '2']).save(flush: true)
+def obj3 = new TestMapJsonb(data: [a: 'foo', b: '1', c: 'test',]).save(flush: true)
+
+def result = TestMapJsonb.withCriteria {
+    pgJsonbContains data, [a: 'foo', b: '1']
+}
+```
+
+The previous criteria will return all the rows that contains all the keys/values (`[a: 'foo', b: '1']` in the example)
+in the `data` field. In this example will return `obj1` and `obj3`.
+
+
+#### Is contained
+
+With this criteria you can get all the rows that are contained by the values. To use it just use the criteria
+`pgArrayIsContainedBy`:
+
+```groovy
+def obj1 = new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true)
+def obj2 = new TestMapJsonb(data: [b: 1, d: '2']).save(flush: true)
+def obj3 = new TestMapJsonb(data: [b: '1', a: 'foo', c: 'test',]).save(flush: true)
+
+def result = TestMapJsonb.withCriteria {
+    pgJsonbIsContained data, [a: 'foo', b: '1', c: 'test']
+}
+```
+
+The previous criteria will return all the rows that are contained in the map. In the example it will retun the objects
+ `obj1` and `obj3`.
 
 
 ### Order
@@ -608,7 +652,8 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
-4.6.2   | 05/Dec/2015 | Cleanup old code for support Hstore in old Grails versions
+4.6.3   | 08/Dec/2015 | Grails 3: Add new criterias for Jsonb: contains and isContained.
+4.6.2   | 05/Dec/2015 | Grails 3: Cleanup old code for support Hstore in old Grails versions
 4.6.1   | 02/0ct/2015 | Plugin migrated to Grails 3
 4.6.1   | 21/Sep/2015 | Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
 4.6.0   | 08/Sep/2015 | Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
