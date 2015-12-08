@@ -652,6 +652,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+4.6.3   | 08/Dec/2015 | Grails 3: Add new criterias for Jsonb: contains and isContained.
 4.6.2   | 05/Dec/2015 | Grails 3: Cleanup old code for support Hstore in old Grails versions
 4.6.1   | 02/0ct/2015 | Plugin migrated to Grails 3
 4.6.1   | 21/Sep/2015 | Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
