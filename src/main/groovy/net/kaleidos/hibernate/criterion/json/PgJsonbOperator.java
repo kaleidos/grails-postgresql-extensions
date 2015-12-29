@@ -25,7 +25,7 @@ public class PgJsonbOperator implements Criterion {
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
             " and ",
-            StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), op + "?")
+            StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), " " + op + " ?")
         );
     }
 

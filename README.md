@@ -653,6 +653,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+4.6.4   | 29/Dec/2015 | Grails 3: Cleanup and new jar file with the same functionality as previous version. It seems that version 4.6.3 is corrupted.
 4.6.3   | 08/Dec/2015 | Grails 3: Add new criterias for Jsonb: contains and isContained.
 4.6.2   | 05/Dec/2015 | Grails 3: Cleanup old code for support Hstore in old Grails versions
 4.6.1   | 02/0ct/2015 | Plugin migrated to Grails 3
