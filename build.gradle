@@ -50,6 +50,12 @@ cobertura {
 
 jar {
     exclude 'test/**'
+    exclude 'UrlMappings.groovy'
+    exclude 'error.gsp'
+    exclude 'messages.properties'
+    exclude 'hibernate/**'
+    exclude 'layouts/**'
+    exclude 'spring/**'
 
     doFirst {
         File pd = new File(buildDir, 'classes/main/META-INF/grails-plugin.xml')
