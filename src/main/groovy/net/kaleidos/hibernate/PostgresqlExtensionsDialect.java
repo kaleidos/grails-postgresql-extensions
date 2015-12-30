@@ -3,6 +3,7 @@ package net.kaleidos.hibernate;
 import grails.util.Holders;
 import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.usertype.HstoreMapType;
+import net.kaleidos.hibernate.usertype.JsonListType;
 import net.kaleidos.hibernate.usertype.JsonMapType;
 import net.kaleidos.hibernate.usertype.JsonbMapType;
 import org.hibernate.dialect.Dialect;
@@ -31,6 +32,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
         registerColumnType(HstoreMapType.SQLTYPE, "hstore");
         registerColumnType(JsonMapType.SQLTYPE, "json");
         registerColumnType(JsonbMapType.SQLTYPE, "jsonb");
+        registerColumnType(JsonListType.SQLTYPE, "json");
     }
 
     /**
