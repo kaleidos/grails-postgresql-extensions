@@ -5,6 +5,7 @@ import net.kaleidos.hibernate.usertype.ArrayType;
 import net.kaleidos.hibernate.usertype.HstoreMapType;
 import net.kaleidos.hibernate.usertype.JsonListType;
 import net.kaleidos.hibernate.usertype.JsonMapType;
+import net.kaleidos.hibernate.usertype.JsonbListType;
 import net.kaleidos.hibernate.usertype.JsonbMapType;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQL81Dialect;
@@ -33,6 +34,7 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
         registerColumnType(JsonMapType.SQLTYPE, "json");
         registerColumnType(JsonbMapType.SQLTYPE, "jsonb");
         registerColumnType(JsonListType.SQLTYPE, "json");
+        registerColumnType(JsonbListType.SQLTYPE, "jsonb");
     }
 
     /**
