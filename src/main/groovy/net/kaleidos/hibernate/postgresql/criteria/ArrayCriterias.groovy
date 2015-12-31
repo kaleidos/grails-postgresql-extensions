@@ -1,4 +1,5 @@
 package net.kaleidos.hibernate.postgresql.criteria
+
 import grails.orm.HibernateCriteriaBuilder
 import net.kaleidos.hibernate.criterion.array.PgArrayExpression
 import net.kaleidos.hibernate.criterion.array.PgArrayILikeFunction
@@ -28,7 +29,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayContains = { String propertyName, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayContains] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -48,7 +49,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayIsContainedBy = { String propertyName, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsContainedBy] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -68,7 +69,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayOverlaps = { String propertyName, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgOverlap] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -87,7 +88,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayIsEmpty = { String propertyName ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsEmpty] with propertyName [" +
-                        propertyName + "] not allowed here."))
+                    propertyName + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -105,7 +106,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayIsNotEmpty = { String propertyName ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsNotEmpty] with propertyName [" +
-                        propertyName + "] not allowed here."))
+                    propertyName + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -127,7 +128,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayIsEmptyOrContains = { String propertyName, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayIsEmptyOrContains] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -151,7 +152,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayEquals = { String propertyName, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayEquals] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -171,7 +172,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayNotEquals = { String propertyName, propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayNotEquals] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
@@ -191,7 +192,7 @@ class ArrayCriterias {
         HibernateCriteriaBuilder.metaClass.pgArrayILike = { String propertyName, String propertyValue ->
             if (!validateSimpleExpression()) {
                 throwRuntimeException(new IllegalArgumentException("Call to [pgArrayILike] with propertyName [" +
-                        propertyName + "] and value [" + propertyValue + "] not allowed here."))
+                    propertyName + "] and value [" + propertyValue + "] not allowed here."))
             }
 
             propertyName = calculatePropertyName(propertyName)
