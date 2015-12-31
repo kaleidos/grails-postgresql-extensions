@@ -57,9 +57,9 @@ public class PostgresqlExtensionsDialect extends PostgreSQL81Dialect {
         @Override
         public void configure(final Type type, final Properties params, final Dialect dialect) {
 
-            Boolean sequencePerTable = (Boolean) Holders.getFlatConfig().get("dataSource.postgresql.extensions.sequence_per_table");
+            Boolean sequencePerTable = Holders.getConfig().getProperty("dataSource.postgresql.extensions.sequence_per_table", Boolean.class, true);
 
-            if ((sequencePerTable == null) || sequencePerTable) {
+            if (sequencePerTable) {
                 if (params.getProperty(SEQUENCE) == null || params.getProperty(SEQUENCE).length() == 0) {
                     String tableName = params.getProperty(PersistentIdentifierGenerator.TABLE);
                     String schemaName = params.getProperty("schemaName");
