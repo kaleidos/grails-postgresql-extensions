@@ -1,9 +1,10 @@
-package net.kaleidos.hibernate.order;
+package net.kaleidos.hibernate.order
 
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.CriteriaQuery;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
+import groovy.transform.CompileStatic
+import org.hibernate.Criteria
+import org.hibernate.HibernateException
+import org.hibernate.criterion.CriteriaQuery
+import org.hibernate.criterion.Order
 
 /**
  * Extends {@link org.hibernate.criterion.Order} to allow ordering by an SQL formula passed by the user.
@@ -12,26 +13,27 @@ import org.hibernate.HibernateException;
  * From: http://blog.tremend.ro/2008/06/10/how-to-order-by-a-custom-sql-formulaexpression-when-using-hibernate-criteria-api/
  *
  */
-public class OrderBySqlFormula extends Order {
-    private String sqlFormula;
+@CompileStatic
+class OrderBySqlFormula extends Order {
+    private String sqlFormula
 
     /**
      * Constructor for Order.
      * @param sqlFormula an SQL formula that will be appended to the resulting SQL query
      */
     protected OrderBySqlFormula(String sqlFormula) {
-        super(sqlFormula, true);
-        this.sqlFormula = sqlFormula;
+        super(sqlFormula, true)
+        this.sqlFormula = sqlFormula
     }
 
     @Override
-    public String toString() {
-        return sqlFormula;
+    String toString() {
+        sqlFormula
     }
 
     @Override
-    public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
-        return sqlFormula;
+    String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
+        sqlFormula
     }
 
     /**
@@ -40,7 +42,7 @@ public class OrderBySqlFormula extends Order {
      * @param sqlFormula an SQL formula that will be appended to the resulting SQL query
      * @return Order
      */
-    public static Order sqlFormula(String sqlFormula) {
-        return new OrderBySqlFormula(sqlFormula);
+    static Order sqlFormula(String sqlFormula) {
+        new OrderBySqlFormula(sqlFormula)
     }
 }
