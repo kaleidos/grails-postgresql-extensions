@@ -17,6 +17,7 @@ class PgArrayUtils {
         (String) : 'varchar',
         (Float)  : 'float',
         (Double) : 'float8',
+        (UUID)   : 'uuid',
     ]
 
     /**

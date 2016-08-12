@@ -15,6 +15,7 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 public class ArrayType implements UserType, ParameterizedType {
     public static final int INTEGER_ARRAY = 90001;
@@ -23,6 +24,7 @@ public class ArrayType implements UserType, ParameterizedType {
     public static final int ENUM_INTEGER_ARRAY = 90004;
     public static final int FLOAT_ARRAY = 90005;
     public static final int DOUBLE_ARRAY = 90006;
+    public static final int UUID_ARRAY = 90007;
 
     private static final Map<Class, Integer> CLASS_TO_SQL_CODE = new HashMap<Class, Integer>();
 
@@ -32,6 +34,7 @@ public class ArrayType implements UserType, ParameterizedType {
         CLASS_TO_SQL_CODE.put(String.class, STRING_ARRAY);
         CLASS_TO_SQL_CODE.put(Float.class, FLOAT_ARRAY);
         CLASS_TO_SQL_CODE.put(Double.class, DOUBLE_ARRAY);
+        CLASS_TO_SQL_CODE.put(UUID.class, UUID_ARRAY);
     }
 
     private Class<?> typeClass;

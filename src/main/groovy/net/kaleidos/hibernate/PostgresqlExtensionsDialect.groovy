@@ -30,6 +30,7 @@ class PostgresqlExtensionsDialect extends PostgreSQL9Dialect {
         registerColumnType(ArrayType.STRING_ARRAY, 'varchar[]')
         registerColumnType(ArrayType.DOUBLE_ARRAY, 'float8[]')
         registerColumnType(ArrayType.FLOAT_ARRAY, 'float[]')
+        registerColumnType(ArrayType.UUID_ARRAY, '_uuid')
         registerColumnType(HstoreMapType.SQLTYPE, 'hstore')
         registerColumnType(JsonMapType.SQLTYPE, 'json')
         registerColumnType(JsonbMapType.SQLTYPE, 'jsonb')
