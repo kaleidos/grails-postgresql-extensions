@@ -12,6 +12,7 @@ class Like {
     Juice[] favoriteJuices = []
     Double[] favoriteDoubleNumbers = []
     Float[] favoriteFloatNumbers = []
+    UUID[] favoriteMovieUUIDs = []
 
     static enum Juice {
         ORANGE(0),
@@ -37,5 +38,6 @@ class Like {
         favoriteJuices type:ArrayType, params: [type: Juice]
         favoriteFloatNumbers type:ArrayType, params: [type: Float]
         favoriteDoubleNumbers type:ArrayType, params: [type: Double]
+        favoriteMovieUUIDs type:ArrayType, params: [type: UUID]
     }
 }

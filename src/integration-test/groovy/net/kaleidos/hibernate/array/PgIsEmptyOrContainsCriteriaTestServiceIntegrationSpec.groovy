@@ -138,6 +138,31 @@ class PgIsEmptyOrContainsCriteriaTestServiceIntegrationSpec extends Specificatio
     }
 
     @Unroll
+    void 'search #movie in an array of UUIDs'() {
+        setup:
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
+        new Like(favoriteMovieUUIDs: []).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+
+        when:
+        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayIsEmptyOrContains', movie)
+
+        then:
+        result.size() == resultSize
+
+        where:
+        movie                                                             | resultSize
+        UuidBuilder.createUUIDs(["The Matrix"])                           | 1
+        UuidBuilder.createUUIDs(["Starwars", "Romeo & Juliet"])           | 1
+        UuidBuilder.createUUIDs(["The Lord of the Rings"])                | 2
+        []                                                                | 1
+        UuidBuilder.createUUIDs(["Starwars", "Romeo & Juliet"]) as UUID[] | 1
+        UuidBuilder.createUUIDs(["The Lord of the Rings"]) as UUID[]      | 2
+        [] as UUID[]                                                      | 1
+    }
+
+    @Unroll
     void 'search #juice in an array of enums'() {
         setup:
             new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save()

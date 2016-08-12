@@ -271,6 +271,18 @@ class PgOverlapsCriteriaTestServiceIntegrationSpec extends Specification {
     }
 
     @Unroll
+    void 'search an invalid list inside the array of UUID'() {
+        when:
+        pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayOverlaps', movie)
+
+        then:
+        thrown HibernateException
+
+        where:
+        movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
+    }
+
+    @Unroll
     void 'search an invalid list inside the array of enum'() {
         when:
             pgArrayTestSearchService.search('favoriteJuices', 'pgArrayOverlaps', juice)

@@ -10,6 +10,7 @@ import test.array.TestFloat
 import test.array.TestInteger
 import test.array.TestLong
 import test.array.TestString
+import test.array.TestUuid
 
 @Integration
 @Transactional
@@ -93,6 +94,22 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
 
         where:
             strings << [null, [], ["string 1"], ["string 1", "string 2"], ["string 1", "string 2", "string 3"]]
+    }
+
+    @Unroll
+    void 'save a domain class with an UUID array value #uuids'() {
+        setup:
+        def testUuid = new TestUuid(uuidArray: uuids)
+
+        when:
+        testUuid.save(flush: true)
+
+        then:
+        testUuid.hasErrors() == false
+        testUuid.uuidArray?.length == uuids?.size()
+
+        where:
+        uuids << [null, [], [UUID.randomUUID()], [UUID.randomUUID(), UUID.randomUUID()], [UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()]]
     }
 
     @Unroll

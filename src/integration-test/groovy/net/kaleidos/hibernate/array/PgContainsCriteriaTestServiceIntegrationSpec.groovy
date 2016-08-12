@@ -162,6 +162,35 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     }
 
     @Unroll
+    void 'search #movie in an array of UUIDs'() {
+        setup:
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Casablanca", "Starwars"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+
+        when:
+        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayContains', movie)
+
+        then:
+        result.size() == resultSize
+
+        where:
+        movie                                                             | resultSize
+        UuidBuilder.createUUID("The Matrix")                              | 1
+        UuidBuilder.createUUID("The Lord of the Rings")                   | 2
+        UuidBuilder.createUUID("Blade Runner")                            | 2
+        UuidBuilder.createUUID("Starwars")                                | 2
+        UuidBuilder.createUUID("The Usual Suspects")                      | 0
+        UuidBuilder.createUUIDs(["Starwars", "Romeo & Juliet"])           | 1
+        UuidBuilder.createUUIDs(["The Lord of the Rings"])                | 2
+        []                                                                | 4
+        UuidBuilder.createUUIDs(["Starwars", "Romeo & Juliet"]) as UUID[] | 1
+        UuidBuilder.createUUIDs(["The Lord of the Rings"]) as UUID[]      | 2
+        [] as UUID[]                                                      | 4
+    }
+
+    @Unroll
     void 'search #juice in an array of enums'() {
         setup:
             new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
@@ -286,6 +315,17 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
 
         where:
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
+    }
+
+    void 'search an invalid list inside the array of UUID'() {
+        when:
+        pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayContains', movie)
+
+        then:
+        thrown HibernateException
+
+        where:
+        movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
     }
 
     void 'search an invalid list inside the array of enum'() {

@@ -159,6 +159,33 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends Specification {
     }
 
     @Unroll
+    void 'search #movie in an array of UUIDs'() {
+        setup:
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["A", "B", "C", "D", "E"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["D", "E", "F", "G"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["A", "Z"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["B"])).save()
+
+        when:
+        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayIsContainedBy', movie)
+
+        then:
+        result.size() == resultSize
+
+        where:
+        movie                                                                       | resultSize
+        UuidBuilder.createUUID("A")                                                 | 0
+        UuidBuilder.createUUID("B")                                                 | 1
+        UuidBuilder.createUUIDs(["A", "Z"])                                         | 1
+        UuidBuilder.createUUIDs(["B", "D", "E", "F", "G"])                          | 2
+        UuidBuilder.createUUIDs(["A", "B", "C", "D", "E", "F", "G", "H", "I", "Z"]) | 4
+        []                                                                          | 0
+        UuidBuilder.createUUIDs(["A", "Z"]) as UUID[]                               | 1
+        UuidBuilder.createUUIDs(["B", "D", "E", "F", "G"]) as UUID[]                | 2
+        [] as UUID[]                                                                | 0
+    }
+
+    @Unroll
     void 'search #juice in an array of enums'() {
         setup:
             new Like(favoriteJuices: [Like.Juice.ORANGE]).save()
@@ -284,6 +311,17 @@ class PgIsContainedByCriteriaTestServiceIntegrationSpec extends Specification {
 
         where:
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
+    }
+
+    void 'search an invalid list inside the array of UUID'() {
+        when:
+        pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayIsContainedBy', movie)
+
+        then:
+        thrown HibernateException
+
+        where:
+            movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
     }
 
     void 'search an invalid list juice inside the array of enum'() {
