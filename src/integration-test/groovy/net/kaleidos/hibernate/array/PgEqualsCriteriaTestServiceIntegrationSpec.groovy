@@ -124,7 +124,7 @@ class PgEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     }
 
     @Unroll
-    void 'check equals for #number in an array of strings'() {
+    void 'check equals for #movie in an array of strings'() {
         setup:
             new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
             new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
