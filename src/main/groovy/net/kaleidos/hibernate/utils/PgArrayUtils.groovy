@@ -12,10 +12,10 @@ import java.lang.reflect.Array
 class PgArrayUtils {
 
     private static final Map<Class<?>, String> CLASS_TO_TYPE_NAME = [
-        (Integer): 'int',
+        (Integer): 'int4',
         (Long)   : 'int8',
         (String) : 'varchar',
-        (Float)  : 'float',
+        (Float)  : 'float4',
         (Double) : 'float8',
     ]
 
