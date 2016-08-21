@@ -13,22 +13,24 @@ public class PgJsonExpression implements Criterion {
     private static final long serialVersionUID = 8372629374639273L;
 
     private final String propertyName;
+    private final String jsonOp;
     private final String jsonAttribute;
+    private final String sqlOp;
     private final Object value;
-    private final String op;
 
-    protected PgJsonExpression(String propertyName, String jsonAttribute, Object value, String op) {
+    protected PgJsonExpression(String propertyName, String jsonOp, String jsonAttribute, String sqlOp, Object value) {
         this.propertyName = propertyName;
+        this.jsonOp = jsonOp;
         this.jsonAttribute = jsonAttribute;
+        this.sqlOp = sqlOp;
         this.value = value;
-        this.op = op;
     }
 
     @Override
     public String toSqlString(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         return StringHelper.join(
                 " and ",
-                StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), "->>'" + jsonAttribute + "' " + op + " ?")
+                StringHelper.suffix(criteriaQuery.findColumns(propertyName, criteria), jsonOp + "'" + jsonAttribute + "' " + sqlOp + " ?")
         );
     }
 
