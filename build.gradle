@@ -1,6 +1,7 @@
 buildscript {
     ext {
         grailsVersion = project.grailsVersion
+        gormVersion = project.gormVersion
     }
     repositories {
         mavenLocal()
@@ -9,9 +10,9 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath 'org.grails.plugins:hibernate4:5.0.0'
-        classpath 'net.saliman:gradle-cobertura-plugin:2.2.7'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+        classpath "org.grails.plugins:hibernate5:$gormVersion"
+        classpath 'net.saliman:gradle-cobertura-plugin:2.3.2'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
     }
 }
 
@@ -32,8 +33,10 @@ apply plugin: 'com.github.kt3k.coveralls'
 
 
 ext {
-    grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
+    grailsVersion = project.grailsVersion
+    gormVersion = project.gormVersion
+    hibernateVersion = project.hibernateVersion
 }
 
 sourceCompatibility = 1.7
@@ -92,15 +95,19 @@ dependencies {
     testRuntime 'net.sourceforge.htmlunit:htmlunit:2.18'
 
     // plugins
-    provided 'org.grails.plugins:hibernate4'
-    provided 'org.hibernate:hibernate-ehcache'
+    provided 'org.grails.plugins:hibernate5'
 
     provided 'org.postgresql:postgresql:9.4.1211.jre7'
     // libraries
-    provided 'org.postgresql:postgresql:9.4.1207'
+    provided "org.hibernate:hibernate-core:$hibernateVersion"
+    provided("org.hibernate:hibernate-ehcache:$hibernateVersion") {
+        exclude group: 'net.sf.ehcache', module: 'ehcache'
+    }
+    provided 'org.postgresql:postgresql:9.4.1211'
 
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile 'commons-lang:commons-lang:2.6'
+    // TODO useful?
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'org.apache.commons:commons-lang3:3.5'
 }
 
 task wrapper(type: Wrapper) {
@@ -122,7 +129,7 @@ grailsPublish {
     userOrg = 'kaleidos'
     repo = 'plugins'
 
-    websiteUrl = 'http://foo.com/myplugin'
+    websiteUrl = 'https://github.com/kaleidos/grails-postgresql-extensions'
     license {
         name = 'Apache-2.0'
     }
