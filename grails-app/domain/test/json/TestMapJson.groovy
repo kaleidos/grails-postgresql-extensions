@@ -7,6 +7,7 @@ class TestMapJson {
     Map data
 
     static constraints = {
+        data nullable: true
     }
     static mapping = {
         data type: JsonMapType
