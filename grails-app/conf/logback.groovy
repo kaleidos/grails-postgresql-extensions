@@ -1,4 +1,3 @@
-import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import grails.util.BuildSettings
 import grails.util.Environment
 
@@ -9,20 +8,17 @@ appender('STDOUT', ConsoleAppender) {
     }
 }
 
-root(ERROR, ['STDOUT'])
-
-if(Environment.current == Environment.DEVELOPMENT) {
-    def targetDir = BuildSettings.TARGET_DIR
-    if(targetDir) {
-
-        appender("FULL_STACKTRACE", FileAppender) {
-
-            file = "${targetDir}/stacktrace.log"
-            append = true
-            encoder(PatternLayoutEncoder) {
-                pattern = "%level %logger - %msg%n"
-            }
+def targetDir = BuildSettings.TARGET_DIR
+if (Environment.isDevelopmentMode() && targetDir != null) {
+    appender("FULL_STACKTRACE", FileAppender) {
+        file = "${targetDir}/stacktrace.log"
+        append = true
+        encoder(PatternLayoutEncoder) {
+            pattern = "%level %logger - %msg%n"
         }
-        logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false )
     }
+    logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
+    root(ERROR, ['STDOUT', 'FULL_STACKTRACE'])
+} else {
+    root(ERROR, ['STDOUT'])
 }
