@@ -6,9 +6,9 @@ import net.kaleidos.hibernate.usertype.ArrayType
 import net.kaleidos.hibernate.usertype.HstoreMapType
 import net.kaleidos.hibernate.usertype.JsonMapType
 import net.kaleidos.hibernate.usertype.JsonbMapType
-import org.hibernate.dialect.Dialect
 import org.hibernate.dialect.PostgreSQL9Dialect
-import org.hibernate.id.SequenceGenerator
+import org.hibernate.id.enhanced.SequenceStyleGenerator
+import org.hibernate.service.ServiceRegistry
 import org.hibernate.type.Type
 
 import java.sql.Types
@@ -24,12 +24,12 @@ class PostgresqlExtensionsDialect extends PostgreSQL9Dialect {
     PostgresqlExtensionsDialect() {
         super()
         registerColumnType(Types.ARRAY, 'array')
-        registerColumnType(ArrayType.LONG_ARRAY, 'int8[]')
-        registerColumnType(ArrayType.INTEGER_ARRAY, 'int[]')
-        registerColumnType(ArrayType.ENUM_INTEGER_ARRAY, 'int[]')
-        registerColumnType(ArrayType.STRING_ARRAY, 'varchar[]')
-        registerColumnType(ArrayType.DOUBLE_ARRAY, 'float8[]')
-        registerColumnType(ArrayType.FLOAT_ARRAY, 'float[]')
+        registerColumnType(ArrayType.LONG_ARRAY, '_int8')
+        registerColumnType(ArrayType.INTEGER_ARRAY, '_int4')
+        registerColumnType(ArrayType.ENUM_INTEGER_ARRAY, '_int4')
+        registerColumnType(ArrayType.STRING_ARRAY, '_varchar')
+        registerColumnType(ArrayType.DOUBLE_ARRAY, '_float8')
+        registerColumnType(ArrayType.FLOAT_ARRAY, '_float4')
         registerColumnType(HstoreMapType.SQLTYPE, 'hstore')
         registerColumnType(JsonMapType.SQLTYPE, 'json')
         registerColumnType(JsonbMapType.SQLTYPE, 'jsonb')
@@ -49,31 +49,31 @@ class PostgresqlExtensionsDialect extends PostgreSQL9Dialect {
      * Creates a sequence per table instead of the default behavior of one sequence.
      * From <a href='http://www.hibernate.org/296.html'>http://www.hibernate.org/296.html</a>
      */
-    static class TableNameSequenceGenerator extends SequenceGenerator {
+    static class TableNameSequenceGenerator extends SequenceStyleGenerator {
 
         /**
          * {@inheritDoc}
-         * If the parameters do not contain a {@link SequenceGenerator#SEQUENCE} name, we
+         * If the parameters do not contain a {@link SequenceStyleGenerator#SEQUENCE} name, we
          * assign one based on the table name.
          */
         @Override
-        void configure(final Type type, final Properties params, final Dialect dialect) {
-
+        void configure(Type type, Properties params, ServiceRegistry serviceRegistry) {
             Boolean sequencePerTable = Holders.config.getProperty(SEQUENCE_PER_TABLE, Boolean, true)
 
             if (sequencePerTable) {
-                if (!params.getProperty(SEQUENCE)) {
+                if (!params.getProperty(SEQUENCE_PARAM)) {
                     String tableName = params.getProperty(TABLE)
                     String schemaName = params.getProperty('schemaName')
                     if (schemaName) {
                         params.setProperty(SCHEMA, schemaName)
                     }
                     if (tableName) {
-                        params.setProperty(SEQUENCE, "seq_${tableName}")
+                        params.setProperty(SEQUENCE_PARAM, "seq_${tableName}")
                     }
                 }
             }
-            super.configure(type, params, dialect)
+            super.configure(type, params, serviceRegistry)
         }
     }
+
 }

@@ -8,10 +8,10 @@ import net.kaleidos.hibernate.postgresql.criteria.JsonCriterias
 class GrailsPostgresqlExtensionsGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
-    def grailsVersion = "3.0.1 > *"
+    def grailsVersion = "3.2.0 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        'test/**'
+            'test/**'
     ]
 
     def title = "Grails Postgresql Extensions Plugin"
@@ -33,4 +33,5 @@ Provides Hibernate user types to support for Postgresql Native Types like Array,
         new HstoreCriterias()
         new JsonCriterias()
     }
+
 }
