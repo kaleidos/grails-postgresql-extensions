@@ -101,7 +101,7 @@ dependencies {
     provided("org.hibernate:hibernate-ehcache:$hibernateVersion") {
         exclude group: 'net.sf.ehcache', module: 'ehcache'
     }
-    provided 'org.postgresql:postgresql:9.4.1211'
+    provided 'org.postgresql:postgresql:9.4.1211.jre7'
 
     // TODO useful?
     compile 'com.google.code.gson:gson:2.7'
