@@ -16,7 +16,7 @@ class PgJsonEqualsIntegrationSpec extends Specification {
     PgJsonTestSearchService pgJsonTestSearchService
 
     @Unroll
-    void 'Test equals finding value: #value'() {
+    void 'Test equals finding value: #value (json)'() {
         setup:
             new TestMapJson(data: [name: 'Iván', lastName: 'López']).save(flush: true)
             new TestMapJson(data: [name: 'Alonso', lastName: 'Torres']).save(flush: true)
