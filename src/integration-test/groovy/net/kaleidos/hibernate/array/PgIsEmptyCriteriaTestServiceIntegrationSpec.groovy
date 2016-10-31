@@ -80,6 +80,19 @@ class PgIsEmptyCriteriaTestServiceIntegrationSpec extends Specification {
             result.size() == 2
     }
 
+    void 'search for empty UUID arrays'() {
+        setup:
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
+        new Like(favoriteMovieUUIDs: []).save()
+        new Like(favoriteMovieUUIDs: []).save()
+
+        when:
+        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayIsEmpty')
+
+        then:
+        result.size() == 2
+    }
+
     void 'search for empty enum arrays'() {
         setup:
             new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO]).save()

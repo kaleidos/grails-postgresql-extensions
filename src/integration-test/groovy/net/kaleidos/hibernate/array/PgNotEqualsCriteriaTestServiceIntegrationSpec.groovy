@@ -114,7 +114,7 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     }
 
     @Unroll
-    void 'check equals for #number in an array of strings'() {
+    void 'check equals for #movie in an array of strings'() {
         setup:
             new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
             new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
@@ -136,6 +136,31 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
             ["Spiderman", "Blade Runner", "Starwars"] | 3
             ["Spiderman", "Starwars", "Blade Runner"] | 4
             []                                        | 3
+    }
+
+    @Unroll
+    void 'check equals for #movie in an array of uuids'() {
+        setup:
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Starwars"])).save()
+        new Like(favoriteMovieUUIDs: []).save()
+
+        when:
+        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayNotEquals', movie)
+
+        then:
+        result.size() == resultSize
+
+        where:
+        movie                                                              | resultSize
+        UuidBuilder.createUUID("Starwars")                                 | 3
+        UuidBuilder.createUUIDs(["Starwars"])                              | 3
+        UuidBuilder.createUUIDs(["Starwars"]) as UUID[]                    | 3
+        UuidBuilder.createUUID("The Usual Suspects")                       | 4
+        UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"]) | 3
+        UuidBuilder.createUUIDs(["Spiderman", "Starwars", "Blade Runner"]) | 4
+        []                                                                 | 3
     }
 
     @Unroll
@@ -251,7 +276,18 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
             thrown HibernateException
 
         where:
-            movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
+            movie << [[1], ["Test", 1], [1L], ["Test", 1L], [UUID.randomUUID()]]
+    }
+
+    void 'search an invalid list inside the array of UUID'() {
+        when:
+        pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayNotEquals', movie)
+
+        then:
+        thrown HibernateException
+
+        where:
+        movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
     }
 
     void 'search an invalid list inside the array of enum'() {

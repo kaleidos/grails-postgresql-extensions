@@ -20,7 +20,7 @@ plugins {
     id "com.jfrog.bintray" version "1.2"
 }
 
-version '4.6.6'
+version '4.6.7'
 group 'org.grails.plugins'
 
 apply plugin: 'maven-publish'
@@ -81,7 +81,7 @@ dependencies {
     provided 'org.grails:grails-core'
     provided 'org.grails.plugins:hibernate'
 
-    provided 'org.postgresql:postgresql:9.2-1004-jdbc4'
+    provided 'org.postgresql:postgresql:9.4.1211.jre7'
 
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'commons-lang:commons-lang:2.6'

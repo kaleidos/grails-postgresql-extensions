@@ -124,7 +124,7 @@ class PgEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     }
 
     @Unroll
-    void 'check equals for #number in an array of strings'() {
+    void 'check equals for #movie in an array of strings'() {
         setup:
             new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
             new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
@@ -149,6 +149,34 @@ class PgEqualsCriteriaTestServiceIntegrationSpec extends Specification {
             ["The Matrix", "The Lord of the Rings"] as String[] | 1
             ["The Lord of the Rings", "The Matrix"] as String[] | 0
             [] as String[]                                      | 1
+    }
+
+    @Unroll
+    void 'check equals for #movie in an array of UUIDs'() {
+        setup:
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Starwars"])).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+        new Like(favoriteMovieUUIDs: []).save()
+
+        when:
+        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayEquals', movie)
+
+        then:
+        result.size() == resultSize
+
+        where:
+        movie                                                                      | resultSize
+        UuidBuilder.createUUID("Starwars")                                         | 1
+        UuidBuilder.createUUIDs(["Starwars"])                                      | 1
+        UuidBuilder.createUUIDs(["Starwars"]) as UUID[]                            | 1
+        UuidBuilder.createUUID("The Usual Suspects")                               | 0
+        UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])         | 1
+        []                                                                         | 1
+        UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"]) as UUID[] | 1
+        UuidBuilder.createUUIDs(["The Lord of the Rings", "The Matrix"]) as UUID[] | 0
+        [] as UUID[]                                                               | 1
     }
 
     @Unroll
@@ -267,6 +295,17 @@ class PgEqualsCriteriaTestServiceIntegrationSpec extends Specification {
 
         where:
             movie << [[1], ["Test", 1], [1L], ["Test", 1L]]
+    }
+
+    void 'search an invalid list inside the array of UUID'() {
+        when:
+        pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayEquals', movie)
+
+        then:
+        thrown HibernateException
+
+        where:
+        movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
     }
 
     void 'search an invalid list inside the array of enum'() {

@@ -137,6 +137,7 @@ class Like {
     Double[] favoriteDoubleNumbers = []
     String[] favoriteMovies = []
     Juice[] favoriteJuices = []
+    UUID[] favoriteMovieUUIDs = []
 
     static enum Juice {
         ORANGE(0),
@@ -154,6 +155,7 @@ class Like {
         favoriteDoubleNumbers type:ArrayType, params: [type: Double]
         favoriteMovies type:ArrayType, params: [type: String]
         favoriteJuices type:ArrayType, params: [type: Juice]
+        favoriteMovieUUIDs type:ArrayType, params: [type: UUID]
     }
 }
 ```
@@ -653,6 +655,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+4.6.7   | 01/Nov/2016 | Grails 3: Add UUID arrays. Thanks to [Tom Potts](https://twitter.com/karaken12). Fix [#87](https://github.com/kaleidos/grails-postgresql-extensions/issues/87)
 4.6.6   | 24/Apr/2016 | Grails 3: Migrate (almost) all Java code to Groovy + @CompileStatic. No new features added.
 4.6.5   | 31/Dec/2015 | Grails 3: Fix [#84](https://github.com/kaleidos/grails-postgresql-extensions/issues/84). Starting Grails 3.0.10 the default `sequence_per_table` parameter was not working.
 4.6.4   | 29/Dec/2015 | Grails 3: Cleanup and new jar file with the same functionality as previous version. It seems that version 4.6.3 is corrupted.
