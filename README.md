@@ -48,8 +48,8 @@ More native types and query methods will be added in the future.
 
 ## Installation
 
-The Grails 3 version only supports Hibernate 4.X. In `build.gradle` add the `jcenter` repository and the following
-dependency to install the plugin:
+The Grails 3 version supports both Hibernate 4.X (version 4.x.x of the plugin) and Hibernate 5.X (version 5.x.x of the
+plugin). In `build.gradle` add the `jcenter` repository and the following dependency to install the plugin:
 
 
 ```groovy
@@ -66,14 +66,14 @@ dependencies {
 }
 ```
 
-Please note that you also have to install the Grails Hibernate 4 plugin and the Postgresql jdbc driver. You can see
+Please note that you also have to install the Grails Hibernate plugin and the Postgresql jdbc driver. You can see
 all available Postgresql jdbc libraries versions at [MVN Repository](http://mvnrepository.com/artifact/org.postgresql/postgresql).
 
 ```groovy
 dependencies {
     ...
-    compile 'org.grails.plugins:hibernate:4.3.10.4'
-    provided 'org.postgresql:postgresql:9.4-1203-jdbc4'
+    compile 'org.grails.plugins:hibernate:4.3.10.4' // Please use the lastest version
+    provided 'org.postgresql:postgresql:9.4.1211.jre7'
     ...
 }
 ```
@@ -679,22 +679,24 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+4.6.8   | 03/Nov/2016 | Grails 3: Add support for generic Json/Jsonb criteria [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
 4.6.7   | 01/Nov/2016 | Grails 3: Add UUID arrays. Thanks to [Tom Potts](https://twitter.com/karaken12). Fix [#87](https://github.com/kaleidos/grails-postgresql-extensions/issues/87)
+5.0.0-RC1 | 28/Oct/2016 | Grails 3: Support for Hibernate 5. Thanks to Alexey Zhokhov and Eric Helgeson.
 4.6.6   | 24/Apr/2016 | Grails 3: Migrate (almost) all Java code to Groovy + @CompileStatic. No new features added.
 4.6.5   | 31/Dec/2015 | Grails 3: Fix [#84](https://github.com/kaleidos/grails-postgresql-extensions/issues/84). Starting Grails 3.0.10 the default `sequence_per_table` parameter was not working.
 4.6.4   | 29/Dec/2015 | Grails 3: Cleanup and new jar file with the same functionality as previous version. It seems that version 4.6.3 is corrupted.
 4.6.3   | 08/Dec/2015 | Grails 3: Add new criterias for Jsonb: contains and isContained.
-4.6.2   | 05/Dec/2015 | Grails 3: Cleanup old code for support Hstore in old Grails versions
-4.6.1   | 02/0ct/2015 | Plugin migrated to Grails 3
+4.6.2   | 05/Dec/2015 | Grails 3: Cleanup old code for support Hstore in old Grails versions.
+4.6.1   | 02/0ct/2015 | Plugin migrated to Grails 3.
 4.6.1   | 21/Sep/2015 | Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
 4.6.0   | 08/Sep/2015 | Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
-4.5.0   | 02/Jun/2015 | Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62), [#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67), [#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69)
-3.4.0   | 02/Jun/2015 | Hibernate 3.x. GR8Conf Hackergarten! Add Jsonb support for Hibernate 3.x [#64](https://github.com/kaleidos/grails-postgresql-extensions/issues/64)
+4.5.0   | 02/Jun/2015 | Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62), [#66](https://github.com/kaleidos/grails-postgresql-extensions/pull/66), [#67](https://github.com/kaleidos/grails-postgresql-extensions/pull/67), [#68](https://github.com/kaleidos/grails-postgresql-extensions/pull/68), [#69](https://github.com/kaleidos/grails-postgresql-extensions/pull/69).
+3.4.0   | 02/Jun/2015 | Hibernate 3.x. GR8Conf Hackergarten! Add Jsonb support for Hibernate 3.x [#64](https://github.com/kaleidos/grails-postgresql-extensions/issues/64).
 4.4.0   | 15/Mar/2015 | Hibernate 4.x. Add support for Jsonb.
 3.3.0   | 18/Aug/2014 | Hibernate 3.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
 4.3.0   | 17/Aug/2014 | Hibernate 4.x. Fix [#49](https://github.com/kaleidos/grails-postgresql-extensions/issues/49). Configure sequence per table or a global sequence for all tables.
-3.2.0   | 02/Aug/2014 | Hiberate 3.x. pgJsonHasFieldValue criteria.
-4.2.0   | 28/Jul/2014 | Hiberate 4.x. pgJsonHasFieldValue criteria.
+3.2.0   | 02/Aug/2014 | Hibernate 3.x. pgJsonHasFieldValue criteria.
+4.2.0   | 28/Jul/2014 | Hibernate 4.x. pgJsonHasFieldValue criteria.
 3.1.0   | 25/Jul/2014 | Add JSON support for Hibernate 3.x. It's now possible to store and read domain classes with map types persisted to json.
 4.1.0   | 24/Jul/2014 | Add JSON support. It's now possible to store and read domain classes with map types persisted to json.
 4.0.0   | 18/Jul/2014 | Version compatible with Hibernate 4.x.
