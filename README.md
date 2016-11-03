@@ -536,7 +536,31 @@ def result = TestMapJson.withCriteria {
 
 The previous criteria will return all the rows that have a `name` attribute in the json field `data` with the value `Iván`. In this example `obj1` and `obj3`.
 
+##### Generic criterion
 
+With this criterion you can use more operators using a syntax close to the one described in Postgresql documentation. To use it just use `pgJson`:
+
+
+```groovy
+def obj1 = new TestMapJson(data: [name: 'Iván', lastName: 'López', other: [followersCount: 150]]).save(flush: true)
+def obj2 = new TestMapJson(data: [name: 'Alonso', lastName: 'Torres', other: [followersCount: 148]]).save(flush: true)
+def obj3 = new TestMapJson(data: [name: 'Iván', lastName: 'Pérez', other: [followersCount: 149]]).save(flush: true)
+
+def result1 = TestMapJson.withCriteria {
+    pgJson 'data', '->>', 'name', 'ilike', '%iv%'
+}
+```
+
+The previous query will return all the rows that have a `name` attribute in the json field `data` containing `iv` (case insensitive). In this example `obj1` and `obj3`.
+
+
+```groovy
+def result2 = TestMapJson.withCriteria {
+    pgJson 'data', '#>>', '{other, followersCount}', '>', 149
+}
+```
+
+The previous query will return all the rows that have an `other` value whose `followersCount` value is greater than `149`. In this example `obj1`.
 
 #### JSONB
 
