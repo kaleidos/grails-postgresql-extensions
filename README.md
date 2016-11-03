@@ -652,6 +652,7 @@ Collaborations are appreciated :-)
 Release Notes
 -------------
 
+* 4.6.2 - 03/Nov/2016 - Hibernate 4.x. Add support for generic Json/Jsonb criterias [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
 * 4.6.1 - 21/Sep/2015 - Hibernate 4.x. Fix [#76](https://github.com/kaleidos/grails-postgresql-extensions/issues/76).
 * 4.6.0 - 08/Sep/2015 - Hibernate 4.x. Add support to order by a sql formula and by random. Fix [#72](https://github.com/kaleidos/grails-postgresql-extensions/issues/72).
 * 4.5.0 - 02/Jun/2015 - Hibernate 4.x. GR8Conf Hackergarten! Merge PRs: [#62](https://github.com/kaleidos/grails-postgresql-extensions/pull/62),
