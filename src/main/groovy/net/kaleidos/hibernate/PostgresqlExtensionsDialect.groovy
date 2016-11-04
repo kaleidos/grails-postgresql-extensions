@@ -1,20 +1,16 @@
 package net.kaleidos.hibernate
 
-import grails.util.Holders
 import groovy.transform.CompileStatic
 import net.kaleidos.hibernate.usertype.ArrayType
 import net.kaleidos.hibernate.usertype.HstoreMapType
 import net.kaleidos.hibernate.usertype.JsonMapType
 import net.kaleidos.hibernate.usertype.JsonbMapType
-import org.hibernate.dialect.PostgreSQL9Dialect
-import org.hibernate.id.enhanced.SequenceStyleGenerator
-import org.hibernate.service.ServiceRegistry
-import org.hibernate.type.Type
+import org.hibernate.dialect.PostgreSQL94Dialect
 
 import java.sql.Types
 
 @CompileStatic
-class PostgresqlExtensionsDialect extends PostgreSQL9Dialect {
+class PostgresqlExtensionsDialect extends PostgreSQL94Dialect {
 
     private static final String SEQUENCE_PER_TABLE = 'dataSource.postgresql.extensions.sequence_per_table'
 
@@ -35,46 +31,4 @@ class PostgresqlExtensionsDialect extends PostgreSQL9Dialect {
         registerColumnType(JsonMapType.SQLTYPE, 'json')
         registerColumnType(JsonbMapType.SQLTYPE, 'jsonb')
     }
-
-    /**
-     * Get the native identifier generator class.
-     *
-     * @return TableNameSequenceGenerator.
-     */
-    @Override
-    Class<?> getNativeIdentifierGeneratorClass() {
-        TableNameSequenceGenerator
-    }
-
-    /**
-     * Creates a sequence per table instead of the default behavior of one sequence.
-     * From <a href='http://www.hibernate.org/296.html'>http://www.hibernate.org/296.html</a>
-     */
-    static class TableNameSequenceGenerator extends SequenceStyleGenerator {
-
-        /**
-         * {@inheritDoc}
-         * If the parameters do not contain a {@link SequenceStyleGenerator#SEQUENCE} name, we
-         * assign one based on the table name.
-         */
-        @Override
-        void configure(Type type, Properties params, ServiceRegistry serviceRegistry) {
-            Boolean sequencePerTable = Holders.config.getProperty(SEQUENCE_PER_TABLE, Boolean, true)
-
-            if (sequencePerTable) {
-                if (!params.getProperty(SEQUENCE_PARAM)) {
-                    String tableName = params.getProperty(TABLE)
-                    String schemaName = params.getProperty('schemaName')
-                    if (schemaName) {
-                        params.setProperty(SCHEMA, schemaName)
-                    }
-                    if (tableName) {
-                        params.setProperty(SEQUENCE_PARAM, "seq_${tableName}")
-                    }
-                }
-            }
-            super.configure(type, params, serviceRegistry)
-        }
-    }
-
 }
