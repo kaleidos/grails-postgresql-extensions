@@ -64,7 +64,7 @@ jar {
 
 repositories {
     mavenLocal()
-    mavenCentral()
+    jcenter()
     maven { url 'https://repo.grails.org/grails/core' }
 }
 
