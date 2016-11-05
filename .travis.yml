@@ -3,6 +3,13 @@ jdk:
   - openjdk7
   - oraclejdk8
 
+env:
+  global:
+  - GIT_NAME="Iván López"
+  - GIT_EMAIL="lopez.ivan@gmail.com"
+  - secure: qdvGtJFbtvTJPZ9HbBC4DtPGLAeWQq5A1gX7u4xxfPBNw/Mkd7Z0/OrWiMuNMccDvqhiPAbauZRb3ZSE/KOWhqSKg6EAMeQpBgGUOrjXNBH6x0m2BthFkQhEVWrDVqGx+AuEbm7kRsNw6ec+kJ6oaBPjnHOfbPnGVro+4sGWSck=
+  - secure: ZYo6fjlQNV1Oyc+fcINeISvR3pUAQG/V9I28v0xs2hjDiAug4gPnaQgxhmpa1SfRo5vwk+Oi+eNG22K2ePmUqARz2K5REahEPvocRZwrEow7pvJGvsLwiDcJk/o20fLPcUJlxgAyJeOQYR+exg35TlfHQ0ZWPVj07HO/A+1KTeM=
+
 addons:
   postgresql: "9.4"
 
@@ -13,9 +20,10 @@ before_script:
   - psql -c 'create database pg_extensions_test;' -U postgres
   - psql -c "create user pg_extensions with password 'pg_extensions';" -U postgres
   - psql -c "grant all privileges on database pg_extensions_test to pg_extensions;" -U postgres
+  - rm -rf target
 
 script:
-  - ./gradlew clean build
+  - ./travis-build.sh
 
 notifications:
   email:

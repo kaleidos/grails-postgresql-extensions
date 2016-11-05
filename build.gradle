@@ -112,7 +112,7 @@ task wrapper(type: Wrapper) {
 
 bintray {
     pkg {
-        userOrg = 'kaleidos' // If you want to publish to an organization
+        userOrg = 'kaleidos'
         name = 'postgresql-extensions'
         issueTrackerUrl = 'https://github.com/kaleidosnet/grails-grails-postgresql-extensions/issues'
         vcsUrl = 'https://github.com/kaleidosnet/grails-grails-postgresql-extensions/issues'
@@ -120,8 +120,8 @@ bintray {
 }
 
 grailsPublish {
-    user = 'kaleidos'
-    key = 'key'
+    user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
+    key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
     userOrg = 'kaleidos'
     repo = 'plugins'
 
@@ -133,5 +133,5 @@ grailsPublish {
     vcsUrl = 'https://github.com/kaleidos/grails-postgresql-extensions.git'
     title = 'PostgreSQL Extensions'
     desc = 'This is a grails plugin that provides hibernate user types to use Postgresql native types. It also provides new criterias to query this new native types.'
-    developers = [kaleidos: 'Kaleidos']
+    developers = [ivan: 'Iván López']
 }
