@@ -11,6 +11,8 @@ Currently the plugin supports array, hstore, json and jsonb fields as well as so
 More native types and query methods will be added in the future.
 
 * [Installation](#installation)
+  * [Postgresql driver](#postgresql-driver)
+  * [Hibernate plugin](#hibernate-plugin)
 * [Configuration](#configuration)
 * [Native Types](#native-types)
   * [Arrays](#arrays)
@@ -36,6 +38,7 @@ More native types and query methods will be added in the future.
     * [Using json](#using-json)
     * [Criterias](#json-criterias)
         * [Has field value](#has-field-value)
+        * [Generic criterion](#generic-criterion)
   * [JSONB](#jsonb)
     * [Criterias](#jsonb-criterias)
         * [Contains](#contains)
@@ -49,7 +52,7 @@ More native types and query methods will be added in the future.
 
 ## Installation
 
-The Grails 3 version supports both Hibernate 4.X (version 4.x.x of the plugin) and Hibernate 5.X (version 5.x.x of the
+The Grails 3 version supports both Hibernate 4.X (versions 4.x.x of the plugin) and Hibernate 5.X (versions 5.x.x of the
 plugin). In `build.gradle` add the `jcenter` repository and the following dependency to install the plugin:
 
 
@@ -67,14 +70,59 @@ dependencies {
 }
 ```
 
-Please note that you also have to install the Grails Hibernate plugin and the Postgresql jdbc driver. You can see
-all available Postgresql jdbc libraries versions at [MVN Repository](http://mvnrepository.com/artifact/org.postgresql/postgresql).
+### Postgresql driver
+
+You also need to install the Postgresql jdbc driver. You can see all available Postgresql jdbc libraries versions at
+[MVN Repository](http://mvnrepository.com/artifact/org.postgresql/postgresql).
 
 ```groovy
 dependencies {
     ...
-    compile 'org.grails.plugins:hibernate:4.3.10.4' // Please use the lastest version
     provided 'org.postgresql:postgresql:9.4.1211.jre7'
+    ...
+}
+```
+
+### Hibernate plugin
+
+It's also necessary to install the Grails-Hibernate plugin. Depending if you use Hibernate 4 or Hibernate 5 you'll need
+different dependencies. Please make sure you use the latest versions of the plugin and the hibernate dependencies
+
+
+```groovy
+// Hibernate 4
+buildscript {
+    ...
+    dependencies {
+        ...
+        classpath "org.grails.plugins:hibernate4:6.0.3"
+    }
+}
+
+dependencies {
+    ...
+    compile "org.grails.plugins:hibernate4"
+    compile "org.hibernate:hibernate-core:4.3.11.Final"
+    compile "org.hibernate:hibernate-ehcache:4.3.11.Final"
+    ...
+}
+```
+
+```groovy
+// Hibernate 5
+buildscript {
+    ...
+    dependencies {
+        ...
+        classpath "org.grails.plugins:hibernate5:6.0.3"
+    }
+}
+
+dependencies {
+    ...
+    compile "org.grails.plugins:hibernate5"
+    compile "org.hibernate:hibernate-core:5.1.1.Final"
+    compile "org.hibernate:hibernate-ehcache:5.1.1.Final"
     ...
 }
 ```
@@ -102,7 +150,7 @@ hibernate:
 If you just only add the dialect, hibernate will create a new sequence for every table to generate the sequential ids
 used for the primary keys instead of a global sequence for all your tables.
 
-You can also deactivate this behaviour and create only one unique sequence for all the tables with the following
+If you're using Hibernate 4 you can also deactivate this behaviour and create only one unique sequence for all the tables with the following
 property in your datasource definition:
 
 ```yaml
@@ -112,6 +160,18 @@ dataSource:
       sequence_per_table: false
 }
 ```
+
+For Hibernate 5 add the following to `application.groovy`:
+
+```groovy
+grails.gorm.default.mapping = {
+    id generator: 'org.hibernate.id.enhanced.SequenceStyleGenerator', params: [prefer_sequence_per_entity: true]
+}
+```
+
+Please be aware that Hibernate 5 has changed the default name of the sequences so for a domain class `TestMapJson` the
+table name is `test_map_json` and the sequence name is `seq_test_map_json` in Hibernate 4 and `testmapjson_seq` in
+Hibernate 5.
 
 
 ## Native Types
@@ -525,7 +585,8 @@ The previous criteria will return all the rows that have a `name` attribute in t
 
 ##### Generic criterion
 
-With this criterion you can use more operators using a syntax close to the one described in Postgresql documentation. To use it just use `pgJson`:
+With this criterion you can use more operators using a syntax close to the one described in Postgresql documentation.
+To use it just use `pgJson`:
 
 
 ```groovy
@@ -538,7 +599,8 @@ def result1 = TestMapJson.withCriteria {
 }
 ```
 
-The previous query will return all the rows that have a `name` attribute in the json field `data` containing `iv` (case insensitive). In this example `obj1` and `obj3`.
+The previous query will return all the rows that have a `name` attribute in the json field `data` containing `iv`
+(case insensitive). In this example `obj1` and `obj3`.
 
 
 ```groovy
@@ -547,7 +609,8 @@ def result2 = TestMapJson.withCriteria {
 }
 ```
 
-The previous query will return all the rows that have an `other` value whose `followersCount` value is greater than `149`. In this example `obj1`.
+The previous query will return all the rows that have an `other` value whose `followersCount` value is greater than
+`149`. In this example `obj1`.
 
 ### Jsonb
 
@@ -680,9 +743,10 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+5.0.0   | 07/Nov/2016 | Grails 3: Add support for Hibernate 5.1. Upgrade dialect to Postgresql 9.4, Grails to 3.2.2 and GORM to 6.0.3.
 4.6.8   | 03/Nov/2016 | Grails 3: Add support for generic Json/Jsonb criteria [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
 4.6.7   | 01/Nov/2016 | Grails 3: Add UUID arrays. Thanks to [Tom Potts](https://twitter.com/karaken12). Fix [#87](https://github.com/kaleidos/grails-postgresql-extensions/issues/87)
-5.0.0-RC1 | 28/Oct/2016 | Grails 3: Support for Hibernate 5. Thanks to Alexey Zhokhov and Eric Helgeson.
+5.0.0-RC1 | 28/Oct/2016 | Grails 3: Add support for Hibernate 5. Thanks to Alexey Zhokhov and Eric Helgeson.
 4.6.6   | 24/Apr/2016 | Grails 3: Migrate (almost) all Java code to Groovy + @CompileStatic. No new features added.
 4.6.5   | 31/Dec/2015 | Grails 3: Fix [#84](https://github.com/kaleidos/grails-postgresql-extensions/issues/84). Starting Grails 3.0.10 the default `sequence_per_table` parameter was not working.
 4.6.4   | 29/Dec/2015 | Grails 3: Cleanup and new jar file with the same functionality as previous version. It seems that version 4.6.3 is corrupted.

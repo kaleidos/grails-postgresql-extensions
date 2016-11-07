@@ -62,6 +62,10 @@ class JsonMapType implements UserType {
 
     @Override
     Object deepCopy(Object value) throws HibernateException {
+        if (!value && value != null && value instanceof Map) {
+            return new HashMap()
+        }
+
         if (!value) {
             return null
         }
