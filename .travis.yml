@@ -18,8 +18,8 @@ sudo: false
 before_script:
   - psql -d template1 -c 'create extension hstore;' -U postgres
   - psql -c 'create database pg_extensions_test;' -U postgres
-  - psql -c "create user pg_extensions with password 'pg_extensions';" -U postgres
-  - psql -c "grant all privileges on database pg_extensions_test to pg_extensions;" -U postgres
+  - psql -c "create user postgres_extensions with password 'postgres_extensions';" -U postgres
+  - psql -c "grant all privileges on database pg_extensions_test to postgres_extensions;" -U postgres
   - rm -rf target
 
 script:
