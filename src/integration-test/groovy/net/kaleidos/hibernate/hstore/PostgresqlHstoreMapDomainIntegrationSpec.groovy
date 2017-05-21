@@ -97,37 +97,37 @@ class PostgresqlHstoreMapDomainIntegrationSpec extends Specification {
     @Unroll
     void 'save a domain class with a empty map and validate that is not dirty right after retrieval'() {
         setup:
-        def testHstoreMap = new TestHstoreMap(testAttributes: [:])
+            def testHstoreMap = new TestHstoreMap(testAttributes: [:])
 
         when: 'I save an instance'
-        testHstoreMap.save()
+            testHstoreMap.save()
 
         and: 'The instance is saved'
-        assert !testHstoreMap.hasErrors()
+            assert !testHstoreMap.hasErrors()
 
-        and: 'I retrieve it and check for dirty properties'
-        def retrievedTestHstoreMap = testHstoreMap.get(testHstoreMap.id)
+        and: 'I retrieve it and check for dirty properties in a new session'
+            def retrievedTestHstoreMap = TestHstoreMap.get(testHstoreMap.id)
 
-        then: 'It shouldn\'t be dirty right after db retrieval'
-        !retrievedTestHstoreMap.isDirty()
+        then: 'It should not be dirty right after db retrieval'
+            !retrievedTestHstoreMap.isDirty()
     }
 
     @Unroll
-    void 'save a domain class, modify it and validate that it\'s dirty'() {
+    void 'save a domain class, modify it and validate that it is dirty'() {
         setup:
-        def testHstoreMap = new TestHstoreMap(testAttributes: [:])
+            def testHstoreMap = new TestHstoreMap(testAttributes: [:])
 
         when: 'I save an instance'
-        testHstoreMap.save()
+            testHstoreMap.save()
 
         and: 'The instance is saved'
-        assert !testHstoreMap.hasErrors()
+            assert !testHstoreMap.hasErrors()
 
         and: 'I retrieve it and modify a property'
-        def retrievedTestHstoreMap = testHstoreMap.get(testHstoreMap.id)
-        retrievedTestHstoreMap.testAttributes << [foo: 'bar']
+            def retrievedTestHstoreMap = TestHstoreMap.get(testHstoreMap.id)
+            retrievedTestHstoreMap.testAttributes << [foo: 'bar']
 
-        then: 'It shouldn be dirty'
-        retrievedTestHstoreMap.isDirty()
+        then: 'It should be dirty'
+            retrievedTestHstoreMap.isDirty()
     }
 }
