@@ -743,7 +743,8 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
-5.0.1   | 21/May/2017 | Grails 3: Fix [#96](https://github.com/kaleidos/grails-postgresql-extensions/issues/96). Thanks to [jglapa](https://github.com/jglapa).
+5.0.1   | 21/May/2017 | Grails 3 (Hibernate 5): Fix [#96](https://github.com/kaleidos/grails-postgresql-extensions/issues/96). Thanks to [jglapa](https://github.com/jglapa).
+4.6.9   | 21/May/2017 | Grails 3 (Hibernate 4): Fix [#96](https://github.com/kaleidos/grails-postgresql-extensions/issues/96). Thanks to [jglapa](https://github.com/jglapa).
 5.0.0   | 07/Nov/2016 | Grails 3: Add support for Hibernate 5.1. Upgrade dialect to Postgresql 9.4, Grails to 3.2.2 and GORM to 6.0.3.
 4.6.8   | 03/Nov/2016 | Grails 3: Add support for generic Json/Jsonb criteria [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
 4.6.7   | 01/Nov/2016 | Grails 3: Add UUID arrays. Thanks to [Tom Potts](https://twitter.com/karaken12). Fix [#87](https://github.com/kaleidos/grails-postgresql-extensions/issues/87)
