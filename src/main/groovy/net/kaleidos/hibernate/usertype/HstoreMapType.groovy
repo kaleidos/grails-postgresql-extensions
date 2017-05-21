@@ -51,7 +51,7 @@ class HstoreMapType implements UserType {
     }
 
     Object deepCopy(Object value) throws HibernateException {
-        value ? new HashMap(value as Map) : null
+        value == null ? null : new HashMap(value as Map)
     }
 
     boolean isMutable() {
