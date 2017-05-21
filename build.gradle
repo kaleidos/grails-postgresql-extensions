@@ -120,8 +120,8 @@ bintray {
 }
 
 grailsPublish {
-    user = System.getenv("BINTRAY_USER") ?: project.bintrayUser
-    key = System.getenv("BINTRAY_KEY") ?: project.bintrayKey
+    user = System.getenv("BINTRAY_USER") ?: ''
+    key = System.getenv("BINTRAY_KEY") ?: ''
     userOrg = 'kaleidos'
     repo = 'plugins'
 
