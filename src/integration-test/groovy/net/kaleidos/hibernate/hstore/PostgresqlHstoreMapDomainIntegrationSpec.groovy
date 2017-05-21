@@ -93,4 +93,41 @@ class PostgresqlHstoreMapDomainIntegrationSpec extends Specification {
             [foo: "bar"]           | "foo"     | "bar"
             ["foo,bar": "baz,qux"] | "foo,bar" | "baz,qux"
     }
+
+    @Unroll
+    void 'save a domain class with a empty map and validate that is not dirty right after retrieval'() {
+        setup:
+            def testHstoreMap = new TestHstoreMap(testAttributes: [:])
+
+        when: 'I save an instance'
+            testHstoreMap.save()
+
+        and: 'The instance is saved'
+            assert !testHstoreMap.hasErrors()
+
+        and: 'I retrieve it and check for dirty properties in a new session'
+            def retrievedTestHstoreMap = TestHstoreMap.get(testHstoreMap.id)
+
+        then: 'It should not be dirty right after db retrieval'
+            !retrievedTestHstoreMap.isDirty()
+    }
+
+    @Unroll
+    void 'save a domain class, modify it and validate that it is dirty'() {
+        setup:
+            def testHstoreMap = new TestHstoreMap(testAttributes: [:])
+
+        when: 'I save an instance'
+            testHstoreMap.save()
+
+        and: 'The instance is saved'
+            assert !testHstoreMap.hasErrors()
+
+        and: 'I retrieve it and modify a property'
+            def retrievedTestHstoreMap = TestHstoreMap.get(testHstoreMap.id)
+            retrievedTestHstoreMap.testAttributes << [foo: 'bar']
+
+        then: 'It should be dirty'
+            retrievedTestHstoreMap.isDirty()
+    }
 }
