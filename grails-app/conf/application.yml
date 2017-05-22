@@ -19,8 +19,8 @@ dataSource:
     jmxExport: true
     driverClassName: org.postgresql.Driver
     dialect: net.kaleidos.hibernate.PostgresqlExtensionsDialect
-    username: pg_extensions
-    password: pg_extensions
+    username: postgres_extensions
+    password: postgres_extensions
     url: jdbc:postgresql://localhost/pg_extensions_test
     dbCreate: create
 
