@@ -1,7 +1,7 @@
 # Grails Postgresql Extensions
 
-[ ![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=4.6.10) ](https://bintray.com/kaleidos/plugins/postgresql-extensions/4.6.10/link)
-[ ![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=5.0.1) ](https://bintray.com/kaleidos/plugins/postgresql-extensions/5.0.1/link)
+[ ![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=4.7.0) ](https://bintray.com/kaleidos/plugins/postgresql-extensions/4.7.0/link)
+[ ![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg) ](https://bintray.com/kaleidos/plugins/postgresql-extensions/_latestVersion)
 [![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
 
 This is a grails plugin that provides hibernate user types to use Postgresql native types such as Array, Hstore, Json,
@@ -743,6 +743,8 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+5.1.0   | 22/May/2017 | Grails 3 (Hibernate 5): Change db credentials to make it compatible with Postgresql 9.6.
+4.7.0   | 22/May/2017 | Grails 3 (Hibernate 4): Change db credentials to make it compatible with Postgresql 9.6.
 5.0.1   | 21/May/2017 | Grails 3 (Hibernate 5): Fix [#96](https://github.com/kaleidos/grails-postgresql-extensions/issues/96). Thanks to [jglapa](https://github.com/jglapa).
 4.6.9   | 21/May/2017 | Grails 3 (Hibernate 4): Fix [#96](https://github.com/kaleidos/grails-postgresql-extensions/issues/96). Thanks to [jglapa](https://github.com/jglapa).
 5.0.0   | 07/Nov/2016 | Grails 3: Add support for Hibernate 5.1. Upgrade dialect to Postgresql 9.4, Grails to 3.2.2 and GORM to 6.0.3.
