@@ -40,4 +40,9 @@ class PgJsonExpression implements Criterion {
     TypedValue[] getTypedValues(Criteria criteria, CriteriaQuery criteriaQuery) throws HibernateException {
         new TypedValue(new StringType(), value) as TypedValue[]
     }
+
+    @Override
+    String toString() {
+        return "$propertyName $jsonOp '$jsonAttribute' $sqlOp '$value'"
+    }
 }
