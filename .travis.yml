@@ -1,7 +1,14 @@
+dist: precise
+sudo: required
 language: groovy
 jdk:
-  - openjdk7
+  - oraclejdk7
   - oraclejdk8
+
+#language: groovy
+#jdk:
+#  - oraclejdk7
+#  - oraclejdk8
 
 env:
   global:
