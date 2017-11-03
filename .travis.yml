@@ -5,11 +5,6 @@ jdk:
   - oraclejdk7
   - oraclejdk8
 
-#language: groovy
-#jdk:
-#  - oraclejdk7
-#  - oraclejdk8
-
 env:
   global:
   - GIT_NAME="Iván López"
