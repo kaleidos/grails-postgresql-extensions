@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import groovy.transform.CompileStatic
 import org.apache.commons.lang.ObjectUtils
 import org.hibernate.HibernateException
-import org.hibernate.engine.spi.SessionImplementor
+import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.usertype.UserType
 import org.postgresql.util.PGobject
 
@@ -44,7 +44,7 @@ class JsonMapType implements UserType {
     }
 
     @Override
-    Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         PGobject o = rs.getObject(names[0]) as PGobject
         String jsonString = o?.value
 
@@ -52,7 +52,7 @@ class JsonMapType implements UserType {
     }
 
     @Override
-    void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.OTHER)
         } else {
