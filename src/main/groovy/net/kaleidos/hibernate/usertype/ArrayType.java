@@ -2,7 +2,7 @@ package net.kaleidos.hibernate.usertype;
 
 import net.kaleidos.hibernate.utils.PgArrayUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.ParameterizedType;
 import org.hibernate.usertype.UserType;
 
@@ -149,7 +149,7 @@ public class ArrayType implements UserType, ParameterizedType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         Object result = null;
         Class typeArrayClass = java.lang.reflect.Array.newInstance(typeClass, 0).getClass();
         Array sqlArray = rs.getArray(names[0]);
@@ -169,7 +169,7 @@ public class ArrayType implements UserType, ParameterizedType {
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
         if (value == null) {
             st.setNull(index, Types.ARRAY);
             return;
