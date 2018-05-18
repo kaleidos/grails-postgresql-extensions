@@ -2,7 +2,6 @@ dist: precise
 sudo: required
 language: groovy
 jdk:
-  - oraclejdk7
   - oraclejdk8
 
 env:

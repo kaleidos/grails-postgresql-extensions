@@ -52,11 +52,6 @@ jar {
     exclude 'hibernate/**'
     exclude 'layouts/**'
     exclude 'spring/**'
-
-    doFirst {
-        File pd = new File(buildDir, 'classes/main/META-INF/grails-plugin.xml')
-        pd.text = pd.text.readLines().findAll { !it.contains('<resource>test.') }.join('\n')
-    }
 }
 
 repositories {
