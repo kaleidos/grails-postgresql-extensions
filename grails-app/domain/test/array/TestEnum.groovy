@@ -1,7 +1,9 @@
 package test.array
 
+import groovy.transform.ToString
 import net.kaleidos.hibernate.usertype.ArrayType
 
+@ToString
 class TestEnum {
 
     static enum Day {
@@ -14,7 +16,8 @@ class TestEnum {
         SUNDAY(6)
 
         final int id
-        Day(int id)  { this.id = id }
+
+        Day(int id) { this.id = id }
     }
 
     Day[] days
@@ -24,6 +27,7 @@ class TestEnum {
     }
 
     static constraints = {
-        days nullable:true
+        days nullable: true
     }
+
 }

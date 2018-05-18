@@ -12,4 +12,5 @@ class User {
     String toString() {
         name
     }
+
 }

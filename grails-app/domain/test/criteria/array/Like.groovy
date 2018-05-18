@@ -1,7 +1,9 @@
 package test.criteria.array
 
+import groovy.transform.ToString
 import net.kaleidos.hibernate.usertype.ArrayType
 
+@ToString
 class Like {
 
     static belongsTo = User
@@ -26,18 +28,20 @@ class Like {
         LEMON(8)
 
         private final int id
-        Juice(int id)  { this.id = id }
+
+        Juice(int id) { this.id = id }
     }
 
     static mapping = {
         table "pg_extensions_like"
 
-        favoriteNumbers type:ArrayType, params: [type: Integer]
-        favoriteMovies type:ArrayType, params: [type: String]
-        favoriteLongNumbers type:ArrayType, params: [type: Long]
-        favoriteJuices type:ArrayType, params: [type: Juice]
-        favoriteFloatNumbers type:ArrayType, params: [type: Float]
-        favoriteDoubleNumbers type:ArrayType, params: [type: Double]
-        favoriteMovieUUIDs type:ArrayType, params: [type: UUID]
+        favoriteNumbers type: ArrayType, params: [type: Integer]
+        favoriteMovies type: ArrayType, params: [type: String]
+        favoriteLongNumbers type: ArrayType, params: [type: Long]
+        favoriteJuices type: ArrayType, params: [type: Juice]
+        favoriteFloatNumbers type: ArrayType, params: [type: Float]
+        favoriteDoubleNumbers type: ArrayType, params: [type: Double]
+        favoriteMovieUUIDs type: ArrayType, params: [type: UUID]
     }
+
 }

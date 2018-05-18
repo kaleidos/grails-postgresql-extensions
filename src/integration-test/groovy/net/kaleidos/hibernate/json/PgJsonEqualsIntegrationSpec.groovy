@@ -1,26 +1,29 @@
 package net.kaleidos.hibernate.json
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.criteria.json.PgJsonTestSearchService
 import test.json.TestMapJson
 
 @Integration
-@Transactional
+@Rollback
 class PgJsonEqualsIntegrationSpec extends Specification {
 
-    @Autowired
-    PgJsonTestSearchService pgJsonTestSearchService
+    @Autowired PgJsonTestSearchService pgJsonTestSearchService
+
+    def setup() {
+        TestMapJson.executeUpdate('delete from TestMapJson')
+    }
 
     @Unroll
     void 'Test equals finding value: #value (json)'() {
         setup:
-            new TestMapJson(data: [name: 'Iván', lastName: 'López']).save(flush: true)
-            new TestMapJson(data: [name: 'Alonso', lastName: 'Torres']).save(flush: true)
-            new TestMapJson(data: [name: 'Iván', lastName: 'Pérez']).save(flush: true)
+            new TestMapJson(data: [name: 'Iván', lastName: 'López']).save(flush: true, failOnError: true)
+            new TestMapJson(data: [name: 'Alonso', lastName: 'Torres']).save(flush: true, failOnError: true)
+            new TestMapJson(data: [name: 'Iván', lastName: 'Pérez']).save(flush: true, failOnError: true)
 
         when:
             def result = pgJsonTestSearchService.search('pgJsonHasFieldValue', 'data', 'name', value)

@@ -751,7 +751,7 @@ Version | Date        | Comments
 5.0.0   | 07/Nov/2016 | Grails 3: Add support for Hibernate 5.1. Upgrade dialect to Postgresql 9.4, Grails to 3.2.2 and GORM to 6.0.3.
 4.6.8   | 03/Nov/2016 | Grails 3: Add support for generic Json/Jsonb criteria [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
 4.6.7   | 01/Nov/2016 | Grails 3: Add UUID arrays. Thanks to [Tom Potts](https://twitter.com/karaken12). Fix [#87](https://github.com/kaleidos/grails-postgresql-extensions/issues/87)
-5.0.0-RC1 | 28/Oct/2016 | Grails 3: Add support for Hibernate 5. Thanks to Alexey Zhokhov and Eric Helgeson.
+5.0.0-RC1 | 28/Oct/2016 | Grails 3: Add support for Hibernate 5. Thanks to [Alexey Zhokhov](https://github.com/donbeave/) and Eric Helgeson.
 4.6.6   | 24/Apr/2016 | Grails 3: Migrate (almost) all Java code to Groovy + @CompileStatic. No new features added.
 4.6.5   | 31/Dec/2015 | Grails 3: Fix [#84](https://github.com/kaleidos/grails-postgresql-extensions/issues/84). Starting Grails 3.0.10 the default `sequence_per_table` parameter was not working.
 4.6.4   | 29/Dec/2015 | Grails 3: Cleanup and new jar file with the same functionality as previous version. It seems that version 4.6.3 is corrupted.

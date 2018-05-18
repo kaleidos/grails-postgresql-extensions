@@ -5,32 +5,29 @@ buildscript {
     }
     repositories {
         mavenLocal()
-        maven { url 'https://repo.grails.org/grails/core' }
         mavenCentral()
+        jcenter()
+        maven { url 'https://repo.grails.org/grails/core' }
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "org.grails.plugins:hibernate5:$gormVersion"
-        classpath 'net.saliman:gradle-cobertura-plugin:2.3.2'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+        classpath "org.grails.plugins:hibernate5:${gormVersion - '.RELEASE'}"
+        classpath 'net.saliman:gradle-cobertura-plugin:2.5.4'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
     }
 }
 
-plugins {
-    id 'com.jfrog.bintray' version '1.2'
-}
-
-version '5.2.0'
+version '6.0.0'
 group 'org.grails.plugins'
 
-apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.grails.grails-plugin'
 apply plugin: 'org.grails.grails-plugin-publish'
 apply plugin: 'cobertura'
 apply plugin: 'com.github.kt3k.coveralls'
-
+apply plugin: 'com.jfrog.bintray'
 
 ext {
     gradleWrapperVersion = project.gradleWrapperVersion
@@ -39,8 +36,8 @@ ext {
     hibernateVersion = project.hibernateVersion
 }
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 cobertura {
     coverageExcludes = ['.*BootStrap.*', '.*test.*']
@@ -64,16 +61,9 @@ jar {
 
 repositories {
     mavenLocal()
+    mavenCentral()
     jcenter()
     maven { url 'https://repo.grails.org/grails/core' }
-}
-
-
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
 }
 
 dependencies {
@@ -86,15 +76,14 @@ dependencies {
     compile 'org.grails:grails-dependencies'
     compile 'org.grails:grails-web-boot'
     console 'org.grails:grails-console'
-    profile 'org.grails.profiles:web-plugin:3.1.0'
+
+    profile 'org.grails.profiles:web-plugin'
     provided 'org.grails:grails-plugin-services'
     provided 'org.grails:grails-plugin-domain-class'
     testCompile 'org.grails:grails-plugin-testing'
-    testCompile 'org.grails.plugins:geb'
-    testRuntime 'org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1'
-    testRuntime 'net.sourceforge.htmlunit:htmlunit:2.18'
+    testCompile 'org.grails:grails-gorm-testing-support'
 
-    provided 'org.postgresql:postgresql:9.4.1211.jre7'
+    provided 'org.postgresql:postgresql:42.2.2'
 
     // plugins
     provided 'org.grails.plugins:hibernate5'
@@ -104,6 +93,7 @@ dependencies {
     provided("org.hibernate:hibernate-ehcache:$hibernateVersion") {
         exclude group: 'net.sf.ehcache', module: 'ehcache'
     }
+    compile 'com.google.code.gson:gson:2.8.4'
 }
 
 task wrapper(type: Wrapper) {

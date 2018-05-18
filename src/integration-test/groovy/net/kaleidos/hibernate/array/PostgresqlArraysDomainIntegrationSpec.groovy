@@ -1,7 +1,7 @@
 package net.kaleidos.hibernate.array
 
-import grails.test.mixin.integration.Integration
-import org.springframework.transaction.annotation.Transactional
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.array.TestDouble
@@ -13,8 +13,18 @@ import test.array.TestString
 import test.array.TestUuid
 
 @Integration
-@Transactional
+@Rollback
 class PostgresqlArraysDomainIntegrationSpec extends Specification {
+
+    def setup() {
+        TestInteger.executeUpdate('delete from TestInteger')
+        TestLong.executeUpdate('delete from TestLong')
+        TestFloat.executeUpdate('delete from TestFloat')
+        TestDouble.executeUpdate('delete from TestDouble')
+        TestUuid.executeUpdate('delete from TestUuid')
+        TestString.executeUpdate('delete from TestString')
+        TestEnum.executeUpdate('delete from TestEnum')
+    }
 
     @Unroll
     void 'save a domain class with an integer array value #numbers'() {
@@ -22,7 +32,7 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
             def testInt = new TestInteger(integerNumbers: numbers)
 
         when:
-            testInt.save(flush: true)
+            testInt.save(flush: true, failOnError: true)
 
         then:
             testInt.hasErrors() == false
@@ -38,7 +48,7 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
             def testLong = new TestLong(longNumbers: numbers)
 
         when:
-            testLong.save(flush: true)
+            testLong.save(flush: true, failOnError: true)
 
         then:
             testLong.hasErrors() == false
@@ -54,7 +64,7 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
             def testFloat = new TestFloat(floatNumbers: numbers)
 
         when:
-            testFloat.save(flush: true)
+            testFloat.save(flush: true, failOnError: true)
 
         then:
             testFloat.hasErrors() == false
@@ -70,7 +80,7 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
             def testDouble = new TestDouble(doubleNumbers: numbers)
 
         when:
-            testDouble.save(flush: true)
+            testDouble.save(flush: true, failOnError: true)
 
         then:
             testDouble.hasErrors() == false
@@ -86,7 +96,7 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
             def testString = new TestString(stringArray: strings)
 
         when:
-            testString.save(flush: true)
+            testString.save(flush: true, failOnError: true)
 
         then:
             testString.hasErrors() == false
@@ -99,17 +109,17 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
     @Unroll
     void 'save a domain class with an UUID array value #uuids'() {
         setup:
-        def testUuid = new TestUuid(uuidArray: uuids)
+            def testUuid = new TestUuid(uuidArray: uuids)
 
         when:
-        testUuid.save(flush: true)
+            testUuid.save(flush: true, failOnError: true)
 
         then:
-        testUuid.hasErrors() == false
-        testUuid.uuidArray?.length == uuids?.size()
+            testUuid.hasErrors() == false
+            testUuid.uuidArray?.length == uuids?.size()
 
         where:
-        uuids << [null, [], [UUID.randomUUID()], [UUID.randomUUID(), UUID.randomUUID()], [UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()]]
+            uuids << [null, [], [UUID.randomUUID()], [UUID.randomUUID(), UUID.randomUUID()], [UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID()]]
     }
 
     @Unroll
@@ -117,7 +127,7 @@ class PostgresqlArraysDomainIntegrationSpec extends Specification {
         when:
             // Domain saving and retrieving should be in different sessions. Only in that case Hibernate will invoke
             // nullSafeGet on the corresponding user type and will not use current session's cache.
-            def id = TestEnum.withNewSession {
+            def id = TestEnum.withNewTransaction {
                 new TestEnum(days: days).save(flush: true, failOnError: true).id
             }
 

@@ -1,9 +1,9 @@
 package net.kaleidos.hibernate.array
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.hibernate.HibernateException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.criteria.array.Like
@@ -11,19 +11,23 @@ import test.criteria.array.PgArrayTestSearchService
 import test.criteria.array.User
 
 @Integration
-@Transactional
+@Rollback
 class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
 
-    @Autowired
-    PgArrayTestSearchService pgArrayTestSearchService
+    @Autowired PgArrayTestSearchService pgArrayTestSearchService
+
+    def setup() {
+        User.executeUpdate('delete from User')
+        Like.executeUpdate('delete from Like')
+    }
 
     @Unroll
     void 'search #number in an array of integers'() {
         setup:
-            new Like(favoriteNumbers: [3, 7, 20]).save()
-            new Like(favoriteNumbers: [5, 17, 9, 6, 20]).save()
-            new Like(favoriteNumbers: [3, 4, 20]).save()
-            new Like(favoriteNumbers: [9, 4, 20]).save()
+            new Like(favoriteNumbers: [3, 7, 20]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: [5, 17, 9, 6, 20]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: [3, 4, 20]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: [9, 4, 20]).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayContains', number)
@@ -52,10 +56,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'search #number in an array of longs'() {
         setup:
-            new Like(favoriteLongNumbers: [12383L, 2392348L, 3498239L]).save()
-            new Like(favoriteLongNumbers: [12383L, 98978L]).save()
-            new Like(favoriteLongNumbers: [-983893849L, 398432423L, 98978L]).save()
-            new Like(favoriteLongNumbers: [12383L]).save()
+            new Like(favoriteLongNumbers: [12383L, 2392348L, 3498239L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: [12383L, 98978L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: [-983893849L, 398432423L, 98978L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: [12383L]).save(flush: true, failOnError: true)
         when:
             def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayContains', number)
 
@@ -79,10 +83,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'search #number in an array of floats'() {
         setup:
-            new Like(favoriteFloatNumbers: [12383f, 2392348f, 3498239f]).save()
-            new Like(favoriteFloatNumbers: [12383f, 98978f]).save()
-            new Like(favoriteFloatNumbers: [-983893849f, 398432423f, 98978f]).save()
-            new Like(favoriteFloatNumbers: [12383f]).save()
+            new Like(favoriteFloatNumbers: [12383f, 2392348f, 3498239f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: [12383f, 98978f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: [-983893849f, 398432423f, 98978f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: [12383f]).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayContains', number)
@@ -107,10 +111,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'search #number in an array of double'() {
         setup:
-            new Like(favoriteDoubleNumbers: [12383d, 2392348d, 3498239d]).save()
-            new Like(favoriteDoubleNumbers: [12383d, 98978d]).save()
-            new Like(favoriteDoubleNumbers: [-983893849d, 398432423d, 98978d]).save()
-            new Like(favoriteDoubleNumbers: [12383d]).save()
+            new Like(favoriteDoubleNumbers: [12383d, 2392348d, 3498239d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: [12383d, 98978d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: [-983893849d, 398432423d, 98978d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: [12383d]).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayContains', number)
@@ -135,10 +139,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'search #movie in an array of strings'() {
         setup:
-            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
-            new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"]).save()
-            new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
+            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayContains', movie)
@@ -164,10 +168,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'search #movie in an array of UUIDs'() {
         setup:
-            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
-            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save()
-            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Casablanca", "Starwars"])).save(flush: true, failOnError: true)
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayContains', movie)
@@ -193,10 +197,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'search #juice in an array of enums'() {
         setup:
-            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
-            new Like(favoriteJuices: [Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save()
-            new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
-            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: [Like.Juice.PINEAPPLE, Like.Juice.GRAPE, Like.Juice.CARROT, Like.Juice.CRANBERRY]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO, Like.Juice.CARROT]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayContains', juice)
@@ -224,10 +228,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            def user4 = new User(name: 'Jonhny', like: new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save(flush: true, failOnError: true)
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.searchWithJoin('favoriteMovies', 'pgArrayContains', movie)
@@ -243,10 +247,10 @@ class PgContainsCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search in an array of strings with join with another domain class and or statement'() {
         setup:
-            def user1 = new User(name: 'John', like: new Like(favoriteNumbers: [3, 7], favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name: 'Peter', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name: 'Mary', like: new Like(favoriteNumbers: [3, 4], favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save()
-            def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteNumbers: [3, 7], favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            def user2 = new User(name: 'Peter', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            def user3 = new User(name: 'Mary', like: new Like(favoriteNumbers: [3, 4], favoriteMovies: ["Romeo & Juliet", "Casablanca", "Starwars"])).save(flush: true, failOnError: true)
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayContains', favoriteMovies: movie, favoriteNumbers: number)

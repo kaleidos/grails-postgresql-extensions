@@ -1,25 +1,28 @@
 package net.kaleidos.hibernate.json
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import test.criteria.json.PgJsonbTestSearchService
 import test.json.TestMapJsonb
 
 @Integration
-@Transactional
+@Rollback
 class PgJsonbIsContainedIntegrationSpec extends Specification {
 
-    @Autowired
-    PgJsonbTestSearchService pgJsonbTestSearchService
+    @Autowired PgJsonbTestSearchService pgJsonbTestSearchService
+
+    def setup() {
+        TestMapJsonb.executeUpdate('delete from TestMapJsonb')
+    }
 
     void 'Test some values'() {
         given:
-            def obj1 = new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true)
-            new TestMapJsonb(data: [b: 1, d: '2']).save(flush: true)
-            new TestMapJsonb(data: [a: 'test']).save(flush: true)
-            def obj4 = new TestMapJsonb(data: [b: '1', a: 'foo', c: 'test',]).save(flush: true)
+            def obj1 = new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [b: 1, d: '2']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [a: 'test']).save(flush: true, failOnError: true)
+            def obj4 = new TestMapJsonb(data: [b: '1', a: 'foo', c: 'test',]).save(flush: true, failOnError: true)
 
         when:
             def result = pgJsonbTestSearchService.search('pgJsonbIsContained', 'data', map)
@@ -35,7 +38,7 @@ class PgJsonbIsContainedIntegrationSpec extends Specification {
 
     void 'No matches with the same combination key/value'() {
         given:
-            new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true)
+            new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true, failOnError: true)
 
         when:
             def result = pgJsonbTestSearchService.search('pgJsonbIsContained', 'data', map)
@@ -49,10 +52,10 @@ class PgJsonbIsContainedIntegrationSpec extends Specification {
 
     void 'Only empty matched with empty map'() {
         given:
-            new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true)
-            new TestMapJsonb(data: [b: '2']).save(flush: true)
-            new TestMapJsonb(data: [a: 'test']).save(flush: true)
-            def obj4 = new TestMapJsonb(data: [:]).save(flush: true)
+            new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [b: '2']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [a: 'test']).save(flush: true, failOnError: true)
+            def obj4 = new TestMapJsonb(data: [:]).save(flush: true, failOnError: true)
 
         when:
             def result = pgJsonbTestSearchService.search('pgJsonbIsContained', 'data', map)
@@ -67,10 +70,10 @@ class PgJsonbIsContainedIntegrationSpec extends Specification {
 
     void 'No data matches with null'() {
         given:
-            new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true)
-            new TestMapJsonb(data: [b: '2']).save(flush: true)
-            new TestMapJsonb(data: [a: 'test']).save(flush: true)
-            new TestMapJsonb(data: [:]).save(flush: true)
+            new TestMapJsonb(data: [a: 'foo', b: '1']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [b: '2']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [a: 'test']).save(flush: true, failOnError: true)
+            new TestMapJsonb(data: [:]).save(flush: true, failOnError: true)
 
         when:
             def result = pgJsonbTestSearchService.search('pgJsonbIsContained', 'data', map)

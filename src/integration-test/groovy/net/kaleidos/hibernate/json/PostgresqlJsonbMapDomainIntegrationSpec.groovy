@@ -1,14 +1,18 @@
 package net.kaleidos.hibernate.json
 
-import grails.test.mixin.integration.Integration
-import org.springframework.transaction.annotation.Transactional
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.json.TestMapJsonb
 
 @Integration
-@Transactional
+@Rollback
 class PostgresqlJsonbMapDomainIntegrationSpec extends Specification {
+
+    def setup() {
+        TestMapJsonb.executeUpdate('delete from TestMapJsonb')
+    }
 
     @Unroll
     void 'save and read a domain class with a map #map to jsonb'() {
@@ -18,8 +22,8 @@ class PostgresqlJsonbMapDomainIntegrationSpec extends Specification {
         when:
             // Domain saving and retrieving should be in different sessions. Only in that case Hibernate will invoke
             // nullSafeGet on the corresponding user type and will not use current session's cache.
-            TestMapJsonb.withNewSession {
-                testMapJsonb.save(flush: true)
+            TestMapJsonb.withNewTransaction {
+                testMapJsonb.save(flush: true, failOnError: true)
             }
 
         then:
@@ -39,7 +43,7 @@ class PostgresqlJsonbMapDomainIntegrationSpec extends Specification {
             def testMapJsonb = new TestMapJsonb(data: value)
 
         when:
-            testMapJsonb.save(flush: true)
+            testMapJsonb.save(flush: true, failOnError: true)
 
         then:
             testMapJsonb.hasErrors() == false
