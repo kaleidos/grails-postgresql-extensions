@@ -1,10 +1,12 @@
 package grails.postgresql.extensions
 
+import grails.compiler.GrailsCompileStatic
 import grails.plugins.Plugin
 import net.kaleidos.hibernate.postgresql.criteria.ArrayCriterias
 import net.kaleidos.hibernate.postgresql.criteria.HstoreCriterias
 import net.kaleidos.hibernate.postgresql.criteria.JsonCriterias
 
+@GrailsCompileStatic
 class GrailsPostgresqlExtensionsGrailsPlugin extends Plugin {
 
     // the version or versions of Grails the plugin is designed for
