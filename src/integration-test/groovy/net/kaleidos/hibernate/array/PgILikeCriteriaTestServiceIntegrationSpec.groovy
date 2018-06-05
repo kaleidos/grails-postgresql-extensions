@@ -1,28 +1,31 @@
 package net.kaleidos.hibernate.array
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.criteria.array.Like
 import test.criteria.array.PgArrayTestSearchService
 
 @Integration
-@Transactional
+@Rollback
 class PgILikeCriteriaTestServiceIntegrationSpec extends Specification {
 
-    @Autowired
-    PgArrayTestSearchService pgArrayTestSearchService
+    @Autowired PgArrayTestSearchService pgArrayTestSearchService
+
+    def setup() {
+        Like.executeUpdate('delete from Like')
+    }
 
     @Unroll
     void "check ilike for #movie in an array of strings"() {
         setup:
-            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
-            new Like(favoriteMovies: ["Starwars"]).save()
-            new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies: []).save()
+            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Starwars"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayILike', movie)

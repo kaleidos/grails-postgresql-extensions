@@ -1,9 +1,9 @@
 package net.kaleidos.hibernate.array
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.hibernate.HibernateException
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.criteria.array.Like
@@ -11,19 +11,23 @@ import test.criteria.array.PgArrayTestSearchService
 import test.criteria.array.User
 
 @Integration
-@Transactional
+@Rollback
 class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
 
-    @Autowired
-    PgArrayTestSearchService pgArrayTestSearchService
+    @Autowired PgArrayTestSearchService pgArrayTestSearchService
+
+    def setup() {
+        User.executeUpdate('delete from User')
+        Like.executeUpdate('delete from Like')
+    }
 
     @Unroll
     void 'check equals for #number in an array of integers'() {
         setup:
-            new Like(favoriteNumbers: [3, 7, 20]).save()
-            new Like(favoriteNumbers: [17]).save()
-            new Like(favoriteNumbers: [9, 4, 20]).save()
-            new Like(favoriteNumbers: []).save()
+            new Like(favoriteNumbers: [3, 7, 20]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: [17]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: [9, 4, 20]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayNotEquals', number)
@@ -45,10 +49,10 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'check equals for #number in an array of longs'() {
         setup:
-            new Like(favoriteLongNumbers: [1L, 23L, 34L]).save()
-            new Like(favoriteLongNumbers: [7L]).save()
-            new Like(favoriteLongNumbers: [1L]).save()
-            new Like(favoriteLongNumbers: []).save()
+            new Like(favoriteLongNumbers: [1L, 23L, 34L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: [7L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: [1L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayNotEquals', number)
@@ -68,10 +72,10 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'check equals for #number in an array of floats'() {
         setup:
-            new Like(favoriteFloatNumbers: [12f, 23f, 34f]).save()
-            new Like(favoriteFloatNumbers: [12f, 98f]).save()
-            new Like(favoriteFloatNumbers: [12f]).save()
-            new Like(favoriteFloatNumbers: []).save()
+            new Like(favoriteFloatNumbers: [12f, 23f, 34f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: [12f, 98f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: [12f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayNotEquals', number)
@@ -92,10 +96,10 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'check equals for #number in an array of doubles'() {
         setup:
-            new Like(favoriteDoubleNumbers: [12d, 23d, 34d]).save()
-            new Like(favoriteDoubleNumbers: [12d, 98d]).save()
-            new Like(favoriteDoubleNumbers: [12d]).save()
-            new Like(favoriteDoubleNumbers: []).save()
+            new Like(favoriteDoubleNumbers: [12d, 23d, 34d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: [12d, 98d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: [12d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayNotEquals', number)
@@ -116,10 +120,10 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'check equals for #movie in an array of strings'() {
         setup:
-            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save()
-            new Like(favoriteMovies: ["Starwars"]).save()
-            new Like(favoriteMovies: []).save()
+            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: ["Starwars"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayNotEquals', movie)
@@ -141,35 +145,35 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
     @Unroll
     void 'check equals for #movie in an array of uuids'() {
         setup:
-        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
-        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save()
-        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Starwars"])).save()
-        new Like(favoriteMovieUUIDs: []).save()
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["Starwars"])).save(flush: true, failOnError: true)
+            new Like(favoriteMovieUUIDs: []).save(flush: true, failOnError: true)
 
         when:
-        def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayNotEquals', movie)
+            def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayNotEquals', movie)
 
         then:
-        result.size() == resultSize
+            result.size() == resultSize
 
         where:
-        movie                                                              | resultSize
-        UuidBuilder.createUUID("Starwars")                                 | 3
-        UuidBuilder.createUUIDs(["Starwars"])                              | 3
-        UuidBuilder.createUUIDs(["Starwars"]) as UUID[]                    | 3
-        UuidBuilder.createUUID("The Usual Suspects")                       | 4
-        UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"]) | 3
-        UuidBuilder.createUUIDs(["Spiderman", "Starwars", "Blade Runner"]) | 4
-        []                                                                 | 3
+            movie                                                              | resultSize
+            UuidBuilder.createUUID("Starwars")                                 | 3
+            UuidBuilder.createUUIDs(["Starwars"])                              | 3
+            UuidBuilder.createUUIDs(["Starwars"]) as UUID[]                    | 3
+            UuidBuilder.createUUID("The Usual Suspects")                       | 4
+            UuidBuilder.createUUIDs(["Spiderman", "Blade Runner", "Starwars"]) | 3
+            UuidBuilder.createUUIDs(["Spiderman", "Starwars", "Blade Runner"]) | 4
+            []                                                                 | 3
     }
 
     @Unroll
     void 'check equals for #juice in an array of enums'() {
         setup:
-            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save()
-            new Like(favoriteJuices: [Like.Juice.PINEAPPLE]).save()
-            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save()
-            new Like(favoriteJuices: []).save()
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.GRAPE]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: [Like.Juice.PINEAPPLE]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: [Like.Juice.ORANGE, Like.Juice.TOMATO, Like.Juice.CARROT]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayNotEquals', juice)
@@ -187,10 +191,10 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user4 = new User(name: 'Jonhny', like: new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.searchWithJoin('favoriteMovies', 'pgArrayNotEquals', movie)
@@ -206,10 +210,10 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search in an array of strings with join with another domain class and or statement'() {
         setup:
-            def user1 = new User(name: 'John', like: new Like(favoriteNumbers: [3, 7], favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name: 'Peter', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user3 = new User(name: 'Mary', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save()
-            def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteNumbers: [3, 7], favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            def user2 = new User(name: 'Peter', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            def user3 = new User(name: 'Mary', like: new Like(favoriteNumbers: [5, 17, 9, 6], favoriteMovies: ["Spiderman", "Blade Runner", "Starwars"])).save(flush: true, failOnError: true)
+            def user4 = new User(name: 'Jonhny', like: new Like(favoriteNumbers: [9, 4], favoriteMovies: ["Romeo & Juliet", "Blade Runner", "The Lord of the Rings"])).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.searchWithJoinByStringOrInteger('pgArrayNotEquals', favoriteMovies: movie, favoriteNumbers: number)
@@ -281,13 +285,13 @@ class PgNotEqualsCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search an invalid list inside the array of UUID'() {
         when:
-        pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayNotEquals', movie)
+            pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayNotEquals', movie)
 
         then:
-        thrown HibernateException
+            thrown HibernateException
 
         where:
-        movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
+            movie << [[1], ["Test", UUID.randomUUID()], [1L], [UUID.randomUUID(), 1L]]
     }
 
     void 'search an invalid list inside the array of enum'() {

@@ -22,7 +22,7 @@ dataSource:
     username: postgres_extensions
     password: postgres_extensions
     url: jdbc:postgresql://localhost/pg_extensions_test
-    dbCreate: create
+    dbCreate: create-drop
 
 hibernate:
     dialect: net.kaleidos.hibernate.PostgresqlExtensionsDialect

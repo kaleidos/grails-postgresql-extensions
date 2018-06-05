@@ -22,3 +22,9 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
 } else {
     root(ERROR, ['STDOUT'])
 }
+
+logger('org.hibernate.SQL', DEBUG)
+
+logger('org.hibernate.type', TRACE)
+
+logger('org.hibernate.tool.hbm2ddl', DEBUG)

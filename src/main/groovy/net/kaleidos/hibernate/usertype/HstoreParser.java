@@ -31,10 +31,10 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         this.length = rawValue == null ? 0 : rawValue.length();
     }
 
-    public Map<String,String> asMap() {
+    public Map<String, String> asMap() {
         HashMap<String, String> r = new HashMap<String, String>();
         try {
-            for (final HStoreIterator iterator = new HStoreIterator(); iterator.hasNext();) {
+            for (final HStoreIterator iterator = new HStoreIterator(); iterator.hasNext(); ) {
                 final HStoreEntry entry = iterator.rawNext();
                 r.put(entry.key, entry.value);
             }
@@ -44,7 +44,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         return r;
     }
 
-    private static class HStoreEntry implements Entry<String,String> {
+    private static class HStoreEntry implements Entry<String, String> {
         private String key;
         private String value;
 
@@ -75,7 +75,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         WaitingForKey, WaitingForEquals, WaitingForGreater, WaitingForValue, WaitingForComma
     }
 
-    private static final char[] QUOTE = {'"','\''};
+    private static final char[] QUOTE = {'"', '\''};
     private static final char NO_QUOTE_CHAR = '\0';
     private static final char EQUALS = '=';
     private static final char GREATER = '>';
@@ -107,6 +107,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             return lastReturned;
         }
 
+        @Override
         public Entry<String, String> next() throws NoSuchElementException, IllegalStateException {
             try {
                 return rawNext();
@@ -118,6 +119,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         /**
          * Advance in parsing the rawValue string and assign the nextValue
          * It creates a new nextElement or assigns null to it, if there are no more elements
+         *
          * @throws HstoreParseException
          */
         private void advance() throws HstoreParseException {
@@ -129,7 +131,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                     final char ch = value.charAt(++position);
                     switch (state) {
                     case WaitingForKey:
-                        if (Character.isWhitespace(ch)) continue;
+                        if (Character.isWhitespace(ch)) {
+                            continue;
+                        }
                         for (char q : QUOTE) {
                             if (ch == q) {
                                 currentQuoteChar = q;
@@ -145,7 +149,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                         state = ParseState.WaitingForEquals;
                         continue;
                     case WaitingForEquals:
-                        if (Character.isWhitespace(ch)) continue;
+                        if (Character.isWhitespace(ch)) {
+                            continue;
+                        }
                         if (ch == EQUALS) {
                             state = ParseState.WaitingForGreater;
                             continue;
@@ -162,7 +168,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                         throw new HstoreParseException("Expected '=>' key-value separator", position);
 
                     case WaitingForValue:
-                        if (Character.isWhitespace(ch)) continue;
+                        if (Character.isWhitespace(ch)) {
+                            continue;
+                        }
                         for (char q : QUOTE) {
                             if (ch == q) {
                                 currentQuoteChar = q;
@@ -181,7 +189,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
                         state = ParseState.WaitingForComma;
                         continue;
                     case WaitingForComma:
-                        if (Character.isWhitespace(ch)) continue;
+                        if (Character.isWhitespace(ch)) {
+                            continue;
+                        }
                         if (ch == COMMA) {
                             // we are done
                             break loop;
@@ -254,7 +264,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
         private String advanceWord(final char stopAtChar) throws HstoreParseException {
             final int firstWordPosition = position;
-            while(position < length) {
+            while (position < length) {
                 final char ch = value.charAt(position);
                 if (ch == currentQuoteChar) {
                     throw new HstoreParseException("Unexpected quote in word", position);
@@ -267,7 +277,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             // step back as we are already one char away
             position--;
             // substring is using quite a strange way of defining end position
-            return value.substring(firstWordPosition, position + 1 );
+            return value.substring(firstWordPosition, position + 1);
         }
 
         @Override
@@ -276,6 +286,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         }
     }
 
+    @Override
     public Iterator<Entry<String, String>> iterator() {
         try {
             return new HStoreIterator();

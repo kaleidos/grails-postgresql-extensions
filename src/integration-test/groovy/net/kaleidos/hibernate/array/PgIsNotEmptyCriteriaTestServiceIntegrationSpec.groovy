@@ -1,25 +1,29 @@
 package net.kaleidos.hibernate.array
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import test.criteria.array.Like
 import test.criteria.array.PgArrayTestSearchService
 import test.criteria.array.User
 
 @Integration
-@Transactional
+@Rollback
 class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
-    @Autowired
-    PgArrayTestSearchService pgArrayTestSearchService
+    @Autowired PgArrayTestSearchService pgArrayTestSearchService
+
+    def setup() {
+        User.executeUpdate('delete from User')
+        Like.executeUpdate('delete from Like')
+    }
 
     void 'search for empty integer arrays'() {
         setup:
-            new Like(favoriteNumbers: [3, 7, 20]).save()
-            new Like(favoriteNumbers: []).save()
-            new Like(favoriteNumbers: []).save()
+            new Like(favoriteNumbers: [3, 7, 20]).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: []).save(flush: true, failOnError: true)
+            new Like(favoriteNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteNumbers', 'pgArrayIsNotEmpty')
@@ -30,9 +34,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search for empty long arrays'() {
         setup:
-            new Like(favoriteLongNumbers: [3L, 7L, 20L]).save()
-            new Like(favoriteLongNumbers: []).save()
-            new Like(favoriteLongNumbers: []).save()
+            new Like(favoriteLongNumbers: [3L, 7L, 20L]).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: []).save(flush: true, failOnError: true)
+            new Like(favoriteLongNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteLongNumbers', 'pgArrayIsNotEmpty')
@@ -43,9 +47,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search for empty float arrays'() {
         setup:
-            new Like(favoriteFloatNumbers: [3f, 7f, 20f]).save()
-            new Like(favoriteFloatNumbers: []).save()
-            new Like(favoriteFloatNumbers: []).save()
+            new Like(favoriteFloatNumbers: [3f, 7f, 20f]).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: []).save(flush: true, failOnError: true)
+            new Like(favoriteFloatNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteFloatNumbers', 'pgArrayIsNotEmpty')
@@ -56,9 +60,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search for empty double arrays'() {
         setup:
-            new Like(favoriteDoubleNumbers: [3d, 7d, 20d]).save()
-            new Like(favoriteDoubleNumbers: []).save()
-            new Like(favoriteDoubleNumbers: []).save()
+            new Like(favoriteDoubleNumbers: [3d, 7d, 20d]).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: []).save(flush: true, failOnError: true)
+            new Like(favoriteDoubleNumbers: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteDoubleNumbers', 'pgArrayIsNotEmpty')
@@ -69,9 +73,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search for empty string arrays'() {
         setup:
-            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save()
-            new Like(favoriteMovies: []).save()
-            new Like(favoriteMovies: []).save()
+            new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"]).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: []).save(flush: true, failOnError: true)
+            new Like(favoriteMovies: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteMovies', 'pgArrayIsNotEmpty')
@@ -82,9 +86,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search for empty UUID arrays'() {
         setup:
-        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save()
-        new Like(favoriteMovieUUIDs: []).save()
-        new Like(favoriteMovieUUIDs: []).save()
+        new Like(favoriteMovieUUIDs: UuidBuilder.createUUIDs(["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+        new Like(favoriteMovieUUIDs: []).save(flush: true, failOnError: true)
+        new Like(favoriteMovieUUIDs: []).save(flush: true, failOnError: true)
 
         when:
         def result = pgArrayTestSearchService.search('favoriteMovieUUIDs', 'pgArrayIsNotEmpty')
@@ -95,9 +99,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search for empty enum arrays'() {
         setup:
-            new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO]).save()
-            new Like(favoriteJuices: []).save()
-            new Like(favoriteJuices: []).save()
+            new Like(favoriteJuices: [Like.Juice.APPLE, Like.Juice.TOMATO]).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: []).save(flush: true, failOnError: true)
+            new Like(favoriteJuices: []).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.search('favoriteJuices', 'pgArrayIsNotEmpty')
@@ -108,9 +112,9 @@ class PgIsNotEmptyCriteriaTestServiceIntegrationSpec extends Specification {
 
     void 'search in an array of strings with join with another domain class'() {
         setup:
-            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save()
-            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: [])).save()
-            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: [])).save()
+            def user1 = new User(name: 'John', like: new Like(favoriteMovies: ["The Matrix", "The Lord of the Rings"])).save(flush: true, failOnError: true)
+            def user2 = new User(name: 'Peter', like: new Like(favoriteMovies: [])).save(flush: true, failOnError: true)
+            def user3 = new User(name: 'Mary', like: new Like(favoriteMovies: [])).save(flush: true, failOnError: true)
 
         when:
             def result = pgArrayTestSearchService.searchWithJoin('favoriteMovies', 'pgArrayIsNotEmpty')

@@ -4,7 +4,7 @@ import spock.lang.Issue
 import spock.lang.Specification
 import spock.lang.Unroll
 
-public class HstoreHelperSpec extends Specification {
+class HstoreHelperSpec extends Specification {
 
     @Unroll
     void 'empty and null map to string'() {

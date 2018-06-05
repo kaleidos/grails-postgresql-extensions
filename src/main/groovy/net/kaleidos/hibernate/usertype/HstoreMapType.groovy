@@ -2,7 +2,7 @@ package net.kaleidos.hibernate.usertype
 
 import groovy.transform.CompileStatic
 import org.hibernate.HibernateException
-import org.hibernate.engine.spi.SessionImplementor
+import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.usertype.UserType
 
 import java.sql.PreparedStatement
@@ -38,14 +38,14 @@ class HstoreMapType implements UserType {
         x ? x.hashCode() : 0
     }
 
-    Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws HibernateException, SQLException {
         String col = names[0]
         String val = rs.getString(col)
 
         return HstoreHelper.toMap(val)
     }
 
-    void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) throws HibernateException, SQLException {
         String s = HstoreHelper.toString(value as Map)
         st.setObject(index, s, Types.OTHER)
     }

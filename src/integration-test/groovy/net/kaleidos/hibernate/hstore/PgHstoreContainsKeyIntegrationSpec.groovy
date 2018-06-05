@@ -1,24 +1,28 @@
 package net.kaleidos.hibernate.hstore
 
-import grails.test.mixin.integration.Integration
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.transaction.annotation.Transactional
 import spock.lang.Specification
 import test.criteria.hstore.PgHstoreTestSearchService
 import test.hstore.TestHstoreMap
 
 @Integration
-@Transactional
+@Rollback
 class PgHstoreContainsKeyIntegrationSpec extends Specification {
-    @Autowired
-    PgHstoreTestSearchService pgHstoreTestSearchService
+
+    @Autowired PgHstoreTestSearchService pgHstoreTestSearchService
+
+    def setup() {
+        TestHstoreMap.executeUpdate('delete from TestHstoreMap')
+    }
 
     void 'Test find hstore that contains key'() {
         setup:
-            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
-            new TestHstoreMap(name: "test2", testAttributes: ["b": "2"]).save(flush: true)
-            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
-            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true)
+            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true, failOnError: true)
+            new TestHstoreMap(name: "test2", testAttributes: ["b": "2"]).save(flush: true, failOnError: true)
+            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true, failOnError: true)
+            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true, failOnError: true)
 
         when:
             def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContainsKey', 'b')
@@ -33,10 +37,10 @@ class PgHstoreContainsKeyIntegrationSpec extends Specification {
 
     void 'Test find hstore that contains other key'() {
         setup:
-            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true)
-            new TestHstoreMap(name: "test2", testAttributes: ["b": "2"]).save(flush: true)
-            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true)
-            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true)
+            new TestHstoreMap(name: "test1", testAttributes: ["a": "test", "b": "1"]).save(flush: true, failOnError: true)
+            new TestHstoreMap(name: "test2", testAttributes: ["b": "2"]).save(flush: true, failOnError: true)
+            new TestHstoreMap(name: "test3", testAttributes: ["a": "test"]).save(flush: true, failOnError: true)
+            new TestHstoreMap(name: "test4", testAttributes: ["c": "test", "b": "3"]).save(flush: true, failOnError: true)
 
         when:
             def result = pgHstoreTestSearchService.search('testAttributes', 'pgHstoreContainsKey', 'X')
