@@ -743,6 +743,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+6.0.0   | 05/Jun/2018 | Grails 3: Add support for Hibernate 5.2. [#114](https://github.com/kaleidos/grails-postgresql-extensions/pull/114). Thanks to [Alexey Zhokhov](https://github.com/donbeave/) and [Feng Yu](https://github.com/abcfy2).
 5.2.0   | 03/Nov/2017 | Grails 3 (Hibernate 5): Merged [#107](https://github.com/kaleidos/grails-postgresql-extensions/pull/107) and [#109](https://github.com/kaleidos/grails-postgresql-extensions/pull/109).
 5.1.0   | 22/May/2017 | Grails 3 (Hibernate 5): Change db credentials to make it compatible with Postgresql 9.6.
 4.7.0   | 22/May/2017 | Grails 3 (Hibernate 4): Change db credentials to make it compatible with Postgresql 9.6.
@@ -751,7 +752,7 @@ Version | Date        | Comments
 5.0.0   | 07/Nov/2016 | Grails 3: Add support for Hibernate 5.1. Upgrade dialect to Postgresql 9.4, Grails to 3.2.2 and GORM to 6.0.3.
 4.6.8   | 03/Nov/2016 | Grails 3: Add support for generic Json/Jsonb criteria [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
 4.6.7   | 01/Nov/2016 | Grails 3: Add UUID arrays. Thanks to [Tom Potts](https://twitter.com/karaken12). Fix [#87](https://github.com/kaleidos/grails-postgresql-extensions/issues/87)
-5.0.0-RC1 | 28/Oct/2016 | Grails 3: Add support for Hibernate 5. Thanks to [Alexey Zhokhov](https://github.com/donbeave/) and Eric Helgeson.
+5.0.0-RC1 | 28/Oct/2016 | Grails 3: Add support for Hibernate 5. Thanks to [Alexey Zhokhov](https://github.com/donbeave/) and [Eric Helgeson](https://github.com/erichelgeson/).
 4.6.6   | 24/Apr/2016 | Grails 3: Migrate (almost) all Java code to Groovy + @CompileStatic. No new features added.
 4.6.5   | 31/Dec/2015 | Grails 3: Fix [#84](https://github.com/kaleidos/grails-postgresql-extensions/issues/84). Starting Grails 3.0.10 the default `sequence_per_table` parameter was not working.
 4.6.4   | 29/Dec/2015 | Grails 3: Cleanup and new jar file with the same functionality as previous version. It seems that version 4.6.3 is corrupted.
