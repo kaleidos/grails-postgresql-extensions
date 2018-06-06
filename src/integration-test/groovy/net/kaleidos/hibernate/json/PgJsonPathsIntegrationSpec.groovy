@@ -1,15 +1,19 @@
 package net.kaleidos.hibernate.json
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.json.TestMapJson
 
+@Integration
+@Rollback
 class PgJsonPathsIntegrationSpec extends Specification {
 
     def pgJsonTestSearchService
 
     @Unroll
-    void 'Test equals finding nested values (json)'() {
+    void 'Test equals finding nested values (json): a'() {
         setup:
         new TestMapJson(data: [name: 'Iván', lastName: 'López', nested: [a: 1, b: 2]]).save(flush: true)
         new TestMapJson(data: [name: 'Alonso', lastName: 'Torres', nested: [a: 2, b: 3]]).save(flush: true)
@@ -30,7 +34,7 @@ class PgJsonPathsIntegrationSpec extends Specification {
     }
 
     @Unroll
-    void 'Test equals finding nested values (json)'() {
+    void 'Test equals finding nested values (json): b'() {
         setup:
         new TestMapJson(data: [name: 'Iván', lastName: 'López', nested: [a: 1, b: 2]]).save(flush: true)
         new TestMapJson(data: [name: 'Alonso', lastName: 'Torres', nested: [a: 2, b: 3]]).save(flush: true)

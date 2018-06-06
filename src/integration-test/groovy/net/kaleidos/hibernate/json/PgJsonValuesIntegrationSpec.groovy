@@ -1,9 +1,13 @@
 package net.kaleidos.hibernate.json
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
 import spock.lang.Specification
 import spock.lang.Unroll
 import test.json.TestMapJson
 
+@Integration
+@Rollback
 class PgJsonValuesIntegrationSpec extends Specification {
 
     def pgJsonTestSearchService

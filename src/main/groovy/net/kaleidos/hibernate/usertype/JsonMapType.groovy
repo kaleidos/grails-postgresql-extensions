@@ -1,9 +1,9 @@
 package net.kaleidos.hibernate.usertype
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import grails.converters.JSON
 import groovy.transform.CompileStatic
 import org.apache.commons.lang.ObjectUtils
+import org.grails.web.json.JSONObject
 import org.hibernate.HibernateException
 import org.hibernate.engine.spi.SharedSessionContractImplementor
 import org.hibernate.usertype.UserType
@@ -21,7 +21,6 @@ class JsonMapType implements UserType {
     static int SQLTYPE = 90021
 
     private final Type userType = Map
-    private final Gson gson = new GsonBuilder().serializeNulls().create()
 
     @Override
     int[] sqlTypes() {
@@ -48,7 +47,7 @@ class JsonMapType implements UserType {
         PGobject o = rs.getObject(names[0]) as PGobject
         String jsonString = o?.value
 
-        gson.fromJson(jsonString, userType)
+        jsonString ? new JSONObject(jsonString) : null
     }
 
     @Override
@@ -56,7 +55,7 @@ class JsonMapType implements UserType {
         if (value == null) {
             st.setNull(index, Types.OTHER)
         } else {
-            st.setObject(index, gson.toJson(value, userType), Types.OTHER)
+            st.setObject(index, (value as JSON).toString(), Types.OTHER)
         }
     }
 
@@ -80,12 +79,12 @@ class JsonMapType implements UserType {
 
     @Override
     Serializable disassemble(Object value) throws HibernateException {
-        gson.toJson(value, userType)
+        (value as JSON).toString()
     }
 
     @Override
     Object assemble(Serializable cached, Object owner) throws HibernateException {
-        gson.fromJson((String) cached, userType)
+        new JSONObject(cached.toString())
     }
 
     @Override
