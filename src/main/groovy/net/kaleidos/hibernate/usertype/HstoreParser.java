@@ -18,17 +18,29 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
     private int length;
 
+    private static final String REGEX_BACKSLASH = "\\\\";
+    private static final String REGEX_DOUBLE_QUOTE = "\"";
+
+    private static final String BACKSLASH_PLACEHOLDER = "!#BS#!";
+    private static final String DOUBLE_QUOTE_PLACEHOLDER = "!#DQ#!";
+
     public HstoreParser(String rawValue) {
         this.type = "hstore";
-        this.value = rawValue;
-        this.length = rawValue == null ? 0 : rawValue.length();
+        setUnescapedValueAndLength(rawValue);
+    }
+
+    // To include a double quote or a backslash in a key or value, escape it with a backslash. (https://www.postgresql.org/docs/current/static/hstore.html)
+    private void setUnescapedValueAndLength(String rawValue) {
+        this.value = rawValue
+                .replaceAll(REGEX_BACKSLASH + REGEX_DOUBLE_QUOTE, DOUBLE_QUOTE_PLACEHOLDER)
+                .replaceAll(REGEX_BACKSLASH + REGEX_BACKSLASH, BACKSLASH_PLACEHOLDER);
+        this.length = this.value == null ? 0 : this.value.length();
     }
 
     @Override
     public void setValue(String rawValue) {
         Assert.state("hstore".equals(type), "HStore database type name should be 'hstore'");
-        this.value = rawValue;
-        this.length = rawValue == null ? 0 : rawValue.length();
+        setUnescapedValueAndLength(rawValue);
     }
 
     public Map<String,String> asMap() {
@@ -36,7 +48,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         try {
             for (final HStoreIterator iterator = new HStoreIterator(); iterator.hasNext();) {
                 final HStoreEntry entry = iterator.rawNext();
-                r.put(entry.key, entry.value);
+                r.put(replaceEscapePlaceholders(entry.key), replaceEscapePlaceholders(entry.value));
             }
         } catch (HstoreParseException e) {
             throw new IllegalStateException(e);
@@ -44,7 +56,13 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         return r;
     }
 
-    private static class HStoreEntry implements Entry<String,String> {
+    private String replaceEscapePlaceholders(String text) {
+        return text == null ? null : text
+                .replace(BACKSLASH_PLACEHOLDER, REGEX_BACKSLASH)
+                .replace(DOUBLE_QUOTE_PLACEHOLDER, REGEX_DOUBLE_QUOTE);
+    }
+
+    private static class HStoreEntry implements Entry<String, String> {
         private String key;
         private String value;
 
