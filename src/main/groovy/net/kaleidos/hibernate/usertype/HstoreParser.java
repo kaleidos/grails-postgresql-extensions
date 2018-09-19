@@ -18,8 +18,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
     private int length;
 
-    private static final String REGEX_BACKSLASH = "\\\\";
-    private static final String REGEX_DOUBLE_QUOTE = "\"";
+    private static final String BACKSLASH = "\\";
+    private static final String DOUBLE_QUOTE = "\"";
 
     private static final String BACKSLASH_PLACEHOLDER = "!#BS#!";
     private static final String DOUBLE_QUOTE_PLACEHOLDER = "!#DQ#!";
@@ -32,8 +32,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
     // To include a double quote or a backslash in a key or value, escape it with a backslash. (https://www.postgresql.org/docs/current/static/hstore.html)
     private void setUnescapedValueAndLength(String rawValue) {
         this.value = rawValue
-                .replaceAll(REGEX_BACKSLASH + REGEX_DOUBLE_QUOTE, DOUBLE_QUOTE_PLACEHOLDER)
-                .replaceAll(REGEX_BACKSLASH + REGEX_BACKSLASH, BACKSLASH_PLACEHOLDER);
+                .replace(BACKSLASH + DOUBLE_QUOTE, DOUBLE_QUOTE_PLACEHOLDER)
+                .replace(BACKSLASH + BACKSLASH, BACKSLASH_PLACEHOLDER);
         this.length = this.value == null ? 0 : this.value.length();
     }
 
@@ -58,8 +58,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
     private String replaceEscapePlaceholders(String text) {
         return text == null ? null : text
-                .replaceAll(BACKSLASH_PLACEHOLDER, REGEX_BACKSLASH)
-                .replaceAll(DOUBLE_QUOTE_PLACEHOLDER, REGEX_DOUBLE_QUOTE);
+                .replace(BACKSLASH_PLACEHOLDER, BACKSLASH)
+                .replace(DOUBLE_QUOTE_PLACEHOLDER, DOUBLE_QUOTE);
     }
 
     private static class HStoreEntry implements Entry<String, String> {
