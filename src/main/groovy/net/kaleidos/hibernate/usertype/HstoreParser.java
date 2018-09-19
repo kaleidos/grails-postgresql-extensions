@@ -18,8 +18,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
     private int length;
 
-    private static final String REGEX_BACKSLASH = "\\\\";
-    private static final String REGEX_DOUBLE_QUOTE = "\"";
+    private static final String BACKSLASH = "\\";
+    private static final String DOUBLE_QUOTE = "\"";
 
     private static final String BACKSLASH_PLACEHOLDER = "!#BS#!";
     private static final String DOUBLE_QUOTE_PLACEHOLDER = "!#DQ#!";
@@ -32,8 +32,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
     // To include a double quote or a backslash in a key or value, escape it with a backslash. (https://www.postgresql.org/docs/current/static/hstore.html)
     private void setUnescapedValueAndLength(String rawValue) {
         this.value = rawValue
-                .replaceAll(REGEX_BACKSLASH + REGEX_DOUBLE_QUOTE, DOUBLE_QUOTE_PLACEHOLDER)
-                .replaceAll(REGEX_BACKSLASH + REGEX_BACKSLASH, BACKSLASH_PLACEHOLDER);
+                .replace(BACKSLASH + DOUBLE_QUOTE, DOUBLE_QUOTE_PLACEHOLDER)
+                .replace(BACKSLASH + BACKSLASH, BACKSLASH_PLACEHOLDER);
         this.length = this.value == null ? 0 : this.value.length();
     }
 
@@ -43,10 +43,10 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         setUnescapedValueAndLength(rawValue);
     }
 
-    public Map<String,String> asMap() {
+    public Map<String, String> asMap() {
         HashMap<String, String> r = new HashMap<String, String>();
         try {
-            for (final HStoreIterator iterator = new HStoreIterator(); iterator.hasNext();) {
+            for (final HStoreIterator iterator = new HStoreIterator(); iterator.hasNext(); ) {
                 final HStoreEntry entry = iterator.rawNext();
                 r.put(replaceEscapePlaceholders(entry.key), replaceEscapePlaceholders(entry.value));
             }
@@ -58,8 +58,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
     private String replaceEscapePlaceholders(String text) {
         return text == null ? null : text
-                .replace(BACKSLASH_PLACEHOLDER, REGEX_BACKSLASH)
-                .replace(DOUBLE_QUOTE_PLACEHOLDER, REGEX_DOUBLE_QUOTE);
+                .replace(BACKSLASH_PLACEHOLDER, BACKSLASH)
+                .replace(DOUBLE_QUOTE_PLACEHOLDER, DOUBLE_QUOTE);
     }
 
     private static class HStoreEntry implements Entry<String, String> {
@@ -93,7 +93,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         WaitingForKey, WaitingForEquals, WaitingForGreater, WaitingForValue, WaitingForComma
     }
 
-    private static final char[] QUOTE = {'"','\''};
+    private static final char[] QUOTE = {'"', '\''};
     private static final char NO_QUOTE_CHAR = '\0';
     private static final char EQUALS = '=';
     private static final char GREATER = '>';
@@ -136,6 +136,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
         /**
          * Advance in parsing the rawValue string and assign the nextValue
          * It creates a new nextElement or assigns null to it, if there are no more elements
+         *
          * @throws HstoreParseException
          */
         private void advance() throws HstoreParseException {
@@ -143,9 +144,9 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             String elementValue = null;
             ParseState state = ParseState.WaitingForKey;
             loop:
-                while (position < length - 1) {
-                    final char ch = value.charAt(++position);
-                    switch (state) {
+            while (position < length - 1) {
+                final char ch = value.charAt(++position);
+                switch (state) {
                     case WaitingForKey:
                         if (Character.isWhitespace(ch)) continue;
                         for (char q : QUOTE) {
@@ -209,8 +210,8 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
                     default:
                         throw new IllegalStateException("Unknown HstoreParser state");
-                    }
-                } // loop
+                }
+            } // loop
             // here we either consumed whole string or we found a comma
             if (state == ParseState.WaitingForKey) {
                 // string was consumed when waiting for key, so we are done with processing
@@ -272,7 +273,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
 
         private String advanceWord(final char stopAtChar) throws HstoreParseException {
             final int firstWordPosition = position;
-            while(position < length) {
+            while (position < length) {
                 final char ch = value.charAt(position);
                 if (ch == currentQuoteChar) {
                     throw new HstoreParseException("Unexpected quote in word", position);
@@ -285,7 +286,7 @@ public class HstoreParser extends PGobject implements Iterable<Map.Entry<String,
             // step back as we are already one char away
             position--;
             // substring is using quite a strange way of defining end position
-            return value.substring(firstWordPosition, position + 1 );
+            return value.substring(firstWordPosition, position + 1);
         }
 
         @Override
