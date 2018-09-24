@@ -1,7 +1,9 @@
 # Grails Postgresql Extensions
 
-[ ![Download](https://api.bintray.com/packages/kaleidos/plugins/org.grails.plugins%3Apostgresql-extensions/images/download.svg) ](https://bintray.com/kaleidos/plugins/org.grails.plugins%3Apostgresql-extensions/_latestVersion)
-[![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=master)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
+#### THIS BRANCH (4.X) IS FOR GRAILS 3 AND HIBERNATE 4 ####
+
+[![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=4.8.0) ](https://bintray.com/kaleidos/plugins/postgresql-extensions/4.8.0/link)
+[![Build Status](https://travis-ci.org/kaleidos/grails-postgresql-extensions.svg?branch=4.x)](https://travis-ci.org/kaleidos/grails-postgresql-extensions)
 
 This is a grails plugin that provides hibernate user types to use Postgresql native types such as Array, Hstore, Json,
 Jsonb... from a Grails application. It also provides new criterias to query this new native types.
