@@ -744,6 +744,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+6.1.0   | 24/Sep/2018 | Grails 3 (Hibernate 5.2): Fix [#30](https://github.com/kaleidos/grails-postgresql-extensions/issues/30). Thanks to [John Keith](https://github.com/butters16) and [jglapa](https://github.com/jglapa).
 6.0.0   | 05/Jun/2018 | Grails 3: Add support for Hibernate 5.2. [#114](https://github.com/kaleidos/grails-postgresql-extensions/pull/114). Thanks to [Alexey Zhokhov](https://github.com/donbeave/) and [Feng Yu](https://github.com/abcfy2).
 5.2.0   | 03/Nov/2017 | Grails 3 (Hibernate 5): Merged [#107](https://github.com/kaleidos/grails-postgresql-extensions/pull/107) and [#109](https://github.com/kaleidos/grails-postgresql-extensions/pull/109).
 5.1.0   | 22/May/2017 | Grails 3 (Hibernate 5): Change db credentials to make it compatible with Postgresql 9.6.
