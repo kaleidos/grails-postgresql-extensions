@@ -679,6 +679,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+4.8.0   | 24/Sep/2018 | Grails 3: Fix [#30](https://github.com/kaleidos/grails-postgresql-extensions/issues/30). Thanks to [John Keith](https://github.com/butters16) and [jglapa](https://github.com/jglapa).
 4.7.0   | 22/May/2017 | Grails 3: Change db credentials to make it compatible with Postgresql 9.6.
 4.6.9   | 21/May/2017 | Grails 3: Fix [#96](https://github.com/kaleidos/grails-postgresql-extensions/issues/96). Thanks to [jglapa](https://github.com/jglapa).
 4.6.8   | 03/Nov/2016 | Grails 3: Add support for generic Json/Jsonb criteria [#95](https://github.com/kaleidos/grails-postgresql-extensions/pull/95). Thanks to Sabst.
