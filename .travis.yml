@@ -1,9 +1,8 @@
-dist: precise
-sudo: required
+dist: trusty
+sudo: false
 language: groovy
 jdk:
-  - oraclejdk7
-  - oraclejdk8
+  - openjdk7
 
 env:
   global:
@@ -15,8 +14,10 @@ env:
 addons:
   postgresql: "9.4"
 
-sudo: false
-
+before_install:
+  # Workaround for https://github.com/gradle/gradle/issues/2421:
+  # download all Gradle distributions with openjdk8
+  - JAVA_HOME=$(jdk_switcher home openjdk8) ./gradlew
 before_script:
   - psql -d template1 -c 'create extension hstore;' -U postgres
   - psql -c 'create database pg_extensions_test;' -U postgres
@@ -25,7 +26,7 @@ before_script:
   - rm -rf target
 
 script:
-  - ./travis-build.sh
+  - JAVA_HOME=$(jdk_switcher home openjdk7) "./travis-build.sh"
 
 notifications:
   email:
