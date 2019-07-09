@@ -18,7 +18,7 @@ buildscript {
     }
 }
 
-version '6.1.0'
+version '7.0.0'
 group 'org.grails.plugins'
 
 apply plugin: 'eclipse'
@@ -78,7 +78,7 @@ dependencies {
     testCompile 'org.grails:grails-plugin-testing'
     testCompile 'org.grails:grails-gorm-testing-support'
 
-    provided 'org.postgresql:postgresql:42.2.2'
+    provided 'org.postgresql:postgresql:42.2.6'
 
     // plugins
     provided 'org.grails.plugins:hibernate5'
@@ -89,10 +89,6 @@ dependencies {
         exclude group: 'net.sf.ehcache', module: 'ehcache'
     }
     compile 'com.google.code.gson:gson:2.8.4'
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = gradleWrapperVersion
 }
 
 bintray {
