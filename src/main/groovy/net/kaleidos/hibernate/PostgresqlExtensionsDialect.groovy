@@ -5,12 +5,12 @@ import net.kaleidos.hibernate.usertype.ArrayType
 import net.kaleidos.hibernate.usertype.HstoreMapType
 import net.kaleidos.hibernate.usertype.JsonMapType
 import net.kaleidos.hibernate.usertype.JsonbMapType
-import org.hibernate.dialect.PostgreSQL94Dialect
+import org.hibernate.dialect.PostgreSQL95Dialect
 
 import java.sql.Types
 
 @CompileStatic
-class PostgresqlExtensionsDialect extends PostgreSQL94Dialect {
+class PostgresqlExtensionsDialect extends PostgreSQL95Dialect {
 
     private static final String SEQUENCE_PER_TABLE = 'dataSource.postgresql.extensions.sequence_per_table'
 
