@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath "org.grails:grails-gradle-plugin:$grailsVersion"
-        classpath "org.grails.plugins:hibernate5:${gormVersion - '.RELEASE'}"
+        classpath "org.grails.plugins:hibernate5:7.0.0"
         classpath 'net.saliman:gradle-cobertura-plugin:2.5.4'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.8.2'
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0"
