@@ -1,6 +1,6 @@
 # Grails Postgresql Extensions
 
-#### THIS BRANCH (master) IS FOR GRAILS 3 AND HIBERNATE 5.2 ####
+#### THIS BRANCH (6.x) IS FOR GRAILS 3 AND HIBERNATE 5.2 ####
 
 [![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=4.8.0)](https://bintray.com/kaleidos/plugins/postgresql-extensions/4.8.0/link)
 [![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=5.3.0)](https://bintray.com/kaleidos/plugins/postgresql-extensions/5.3.0/link)
