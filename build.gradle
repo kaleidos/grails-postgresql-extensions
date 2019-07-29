@@ -115,3 +115,5 @@ grailsPublish {
     desc = 'This is a grails plugin that provides hibernate user types to use Postgresql native types. It also provides new criterias to query this new native types.'
     developers = [ivan: 'Iván López']
 }
+
+apply from: "${rootProject.projectDir}/gradle/testVerbose.gradle"
