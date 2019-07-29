@@ -1,6 +1,6 @@
 # Grails Postgresql Extensions
 
-#### THIS BRANCH (master) IS FOR GRAILS 3 AND HIBERNATE 5.2 ####
+#### THIS BRANCH (master) IS FOR GRAILS 4 AND HIBERNATE 5.4 ####
 
 [![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=4.8.0)](https://bintray.com/kaleidos/plugins/postgresql-extensions/4.8.0/link)
 [![Download](https://api.bintray.com/packages/kaleidos/plugins/postgresql-extensions/images/download.svg?version=5.3.0)](https://bintray.com/kaleidos/plugins/postgresql-extensions/5.3.0/link)
@@ -746,6 +746,7 @@ Collaborations are appreciated :-)
 
 Version | Date        | Comments
 ------- | ------------| ---------
+7.0.0   | 29/Jul/2019 | Grails 4 (Hibernate 5.4): Add support for Grails 4 and Hibernate 5.4. Thanks to [James Hardwick](https://github.com/jamesdh) and [Zhuravskiy Vitaliy](https://github.com/zhuravskiy).
 6.1.0   | 24/Sep/2018 | Grails 3 (Hibernate 5.2): Fix [#30](https://github.com/kaleidos/grails-postgresql-extensions/issues/30). Thanks to [John Keith](https://github.com/butters16) and [jglapa](https://github.com/jglapa).
 5.3.0   | 24/Sep/2018 | Grails 3 (Hibernate 5): Fix [#30](https://github.com/kaleidos/grails-postgresql-extensions/issues/30). Thanks to [John Keith](https://github.com/butters16) and [jglapa](https://github.com/jglapa).
 4.8.0   | 24/Sep/2018 | Grails 3 (Hibernate 4): Fix [#30](https://github.com/kaleidos/grails-postgresql-extensions/issues/30). Thanks to [John Keith](https://github.com/butters16) and [jglapa](https://github.com/jglapa).
