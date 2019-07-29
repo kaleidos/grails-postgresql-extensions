@@ -1,12 +1,18 @@
 package net.kaleidos.hibernate.json
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
+import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 import spock.lang.Unroll
+import test.criteria.json.PgJsonbTestSearchService
 import test.json.TestMapJsonb
 
+@Integration
+@Rollback
 class PgJsonbEqualsIntegrationSpec extends Specification {
 
-    def pgJsonbTestSearchService
+    @Autowired PgJsonbTestSearchService pgJsonbTestSearchService
 
     @Unroll
     void 'Test equals finding value: #value (jsonb)'() {

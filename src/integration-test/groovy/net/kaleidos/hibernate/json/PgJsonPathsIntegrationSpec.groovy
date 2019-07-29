@@ -1,15 +1,21 @@
 package net.kaleidos.hibernate.json
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
+import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 import spock.lang.Unroll
+import test.criteria.json.PgJsonTestSearchService
 import test.json.TestMapJson
 
+@Integration
+@Rollback
 class PgJsonPathsIntegrationSpec extends Specification {
 
-    def pgJsonTestSearchService
+    @Autowired PgJsonTestSearchService pgJsonTestSearchService
 
     @Unroll
-    void 'Test equals finding nested values (json)'() {
+    void 'Test equals finding nested values (json). sqlOp: equals'() {
         setup:
         new TestMapJson(data: [name: 'Iván', lastName: 'López', nested: [a: 1, b: 2]]).save(flush: true)
         new TestMapJson(data: [name: 'Alonso', lastName: 'Torres', nested: [a: 2, b: 3]]).save(flush: true)
@@ -30,7 +36,7 @@ class PgJsonPathsIntegrationSpec extends Specification {
     }
 
     @Unroll
-    void 'Test equals finding nested values (json)'() {
+    void 'Test equals finding nested values (json). sqlOp: greater than'() {
         setup:
         new TestMapJson(data: [name: 'Iván', lastName: 'López', nested: [a: 1, b: 2]]).save(flush: true)
         new TestMapJson(data: [name: 'Alonso', lastName: 'Torres', nested: [a: 2, b: 3]]).save(flush: true)

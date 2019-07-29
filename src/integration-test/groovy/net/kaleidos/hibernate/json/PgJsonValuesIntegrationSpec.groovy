@@ -1,12 +1,18 @@
 package net.kaleidos.hibernate.json
 
+import grails.gorm.transactions.Rollback
+import grails.testing.mixin.integration.Integration
+import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 import spock.lang.Unroll
+import test.criteria.json.PgJsonTestSearchService
 import test.json.TestMapJson
 
+@Integration
+@Rollback
 class PgJsonValuesIntegrationSpec extends Specification {
 
-    def pgJsonTestSearchService
+    @Autowired PgJsonTestSearchService pgJsonTestSearchService
 
     @Unroll
     void 'Test equals finding value: #value with condition is ilike (json)'() {
