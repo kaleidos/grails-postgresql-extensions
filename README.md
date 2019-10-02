@@ -132,7 +132,7 @@ dependencies {
 ## Configuration
 
 After install the plugin you have to use a new Postgresql Hibernate Dialect in your application. Add it to the
-`application.yml` file:
+`grails-app/conf/application.yml` file:
 
 ```yaml
 ---
@@ -163,7 +163,7 @@ dataSource:
 }
 ```
 
-For Hibernate 5 add the following to `application.groovy`:
+For Hibernate 5 add the following to `grails-app/conf/application.groovy`:
 
 ```groovy
 grails.gorm.default.mapping = {
